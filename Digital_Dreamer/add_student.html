@@ -1,0 +1,146 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
+  <title>Add Student - School Management System</title>  
+  
+  <!-- Font Awesome (optional for icons) -->  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />  
+
+  <style>  
+    body {  
+      margin: 0;  
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  
+      background-color: #f0f4f8;  
+      color: #333;  
+    }  
+    header {  
+      background-color: #004080;  
+      color: white;  
+      padding: 20px;  
+      text-align: center;  
+    }  
+    header h1 {  
+      margin: 0;  
+      font-size: 2rem;  
+    }  
+    .container {  
+      max-width: 800px;  
+      margin: 30px auto;  
+      padding: 0 20px;  
+    }  
+    /* Form container */  
+    .content-box {  
+      background: #fff;  
+      padding: 30px;  
+      border-radius: 12px;  
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);  
+    }  
+    h2 {  
+      color: #34495e;  
+      margin-top: 0;  
+    }  
+    /* Form styling */  
+    form {  
+      margin-top: 20px;  
+    }  
+    .form-group {  
+      margin-bottom: 15px;  
+    }  
+    label {  
+      display: block;  
+      margin-bottom: 5px;  
+      font-weight: 600;  
+    }  
+    input[type="text"], input[type="date"], input[type="email"], select {  
+      width: 100%;  
+      padding: 10px;  
+      border-radius: 8px;  
+      border: 1px solid #ccc;  
+      box-sizing: border-box;  
+    }  
+    /* Submit button */  
+    button {  
+      background-color: #2980b9;  
+      color: white;  
+      padding: 10px 20px;  
+      border: none;  
+      border-radius: 8px;  
+      font-size: 1rem;  
+      cursor: pointer;  
+      transition: background 0.3s, transform 0.2s;  
+    }  
+    button:hover {  
+      background-color: #3498db;  
+      transform: translateY(-2px);  
+    }  
+    /* Back button styles */  
+    .btn-back {  
+      display: inline-block;  
+      margin-top: 20px;  
+      background-color: #2980b9;  
+      color: #fff;  
+      padding: 10px 20px;  
+      border-radius: 8px;  
+      text-decoration: none;  
+      font-size: 1rem;  
+      transition: background 0.3s, transform 0.2s;  
+    }  
+    .btn-back:hover {  
+      background-color: #3498db;  
+      transform: translateY(-2px);  
+    }  
+    @media(max-width:600px){  
+      body {  
+        padding: 10px;  
+      }  
+      .content-box {  
+        padding: 20px;  
+      }  
+    }  
+  </style>  
+</head>  
+<body>  
+
+<header>  
+  <h1>Add New Student</h1>  
+</header>  
+
+<div class="container">  
+  <div class="content-box">  
+    <h2>Fill in Student Details</h2>  
+    <form id="addStudentForm" action="#" method="POST">  
+      <div class="form-group">  
+        <label for="studentName">Enter first name</label>  
+        <input type="text" id="studentName" name="studentName" placeholder="" required />  
+      </div> 
+       <div class="content-box">   
+    <form id="addStudentForm" action="#" method="POST">  
+      <div class="form-group">  
+        <label for="studentName">Second name</label>  
+        <input type="text" id="studentName" name="studentName" placeholder="" required />  
+      </div>   
+      <div class="form-group">  
+ <label>
+    Date of Birth:
+    <input type="date" id="dob">
+  </label>  
+      </div>  
+      <div class="form-group">  
+        <label for="class">Class</label>  
+        <select id="class" name="class" required>  
+          <option value="">Select Class</option>  
+          <option value="1">Class 1</option>  
+          <option value="2">Class 2</option>  
+          <option value="3">Class 3</option>  
+          <option value="4">Class 4</option>  
+          <option value="5">Class 5</option>  
+        </select>  
+      </div>  
+        <div class="form-group">  
+        <label for="studentName">Parent/Guardian Email</label>  
+        <input type="text" id="studentName" name="studentName" placeholder="Enter email" required />  
+      </div> 
+        <a href="dashboard.html" class="btn-back">Back to Dashboard</a>
+        <a href="dashboard.html" class="btn-back">Submit</a>

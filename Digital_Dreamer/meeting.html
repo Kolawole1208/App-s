@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meeting Page</title>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f4f8;
+      color: #333;
+    }
+
+    header {
+      background-color: #004080;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .content {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+
+    /* Meeting Details Style */
+    .meeting-info {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      margin-bottom: 30px;
+    }
+
+    /* Buttons styling */
+    .btn {
+      display: inline-block;
+      background-color: #2980b9;
+      color: #fff;
+      padding: 10px 20px;
+      margin-top: 15px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #3498db;
+      transform: translateY(-2px);
+    }
+
+    /* Schedule form styling */
+    .schedule-form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .schedule-form h2 {
+      margin-top: 0;
+      color: #34495e;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    input[type="text"], input[type="datetime-local"], textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    /* Footer styling */
+    footer {
+      text-align: center;
+      padding: 15px 20px;
+      background-color: #004080;
+      color: white;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Meeting Room</h1>
+</header>
+
+<div class="content">
+
+  <!-- Meeting Info Display -->
+  <div class="meeting-info">
+    <h2>Upcoming Meeting Details</h2>
+    <p><strong>Date & Time:</strong> August 5, 2025, 3:00 PM</p>
+    <p><strong>Agenda:</strong> Monthly Staff Meeting</p>
+    <p><strong>Participants:</strong> Teacher, Admin, Staff</p>
+    <p><strong>Meeting Link:</strong> <a href="https://example.com/join" target="_blank">Click here to join the meeting</a></p>
+  </div>
+
+  <!-- Buttons to Schedule or Join -->
+  <a href="#schedule" class="btn">Schedule New Meeting</a>
+  <a href="#join" class="btn">Join Meeting</a>
+
+  <!-- Schedule a New Meeting Form -->
+  <div id="schedule" style="margin-top:30px;">
+    <div class="schedule-form">
+      <h2>Schedule a New Meeting</h2>
+      <form id="scheduleForm" action="#" method="POST">
+        <div class="form-group">
+          <label for="title">Meeting Title</label>
+          <input type="text" id="title" name="title" placeholder="e.g., Weekly Review" required />
+        </div>
+        <div class="form-group">
+          <label for="datetime">Date & Time</label>
+          <input type="datetime-local" id="datetime" name="datetime" required />
+        </div>
+        <div class="form-group">
+          <label for="agenda">Agenda</label>
+          <textarea id="agenda" name="agenda" rows="3" placeholder="Meeting agenda..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="participants">Participants</label>
+          <input type="text" id="participants" name="participants" placeholder="Names or emails" />
+        </div>
+        <button type="submit" class="btn">Save Meeting</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Additional content or list of scheduled meetings could go here -->
+
+</div>
+
+<!-- Footer -->
+<footer>
+  &copy; 2025 School Management System. All rights reserved.
+</footer>
+
+</body>
+</html>

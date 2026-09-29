@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AutoHR Dashboard | Reliance Infosystems</title>
+
+  <!-- Icons & Font -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root{
+      /* Brand */
+      --brand: #0f9da5;         /* teal (main) */
+      --brand-600:#0a7e86;
+      --brand-soft:#e6f6f7;
+      --brand-text:#0b6b71;
+
+      /* Neutrals */
+      --bg:#f3f6fb;
+      --panel:#ffffff;
+      --ink:#0f172a;            /* slate-900 */
+      --muted:#64748b;          /* slate-500 */
+      --border:#e6eaf2;
+      --shadow: 0 8px 24px rgba(15, 23, 42, .06);
+      --radius: 14px;
+
+      /* Layout */
+      --sidebar: 280px;
+      --topbar: 72px;
+    }
+
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    /* Layout Grid */
+    .app{
+      display:grid;
+      grid-template-columns: var(--sidebar) 1fr;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar{
+      position: sticky; top:0;
+      height: 100vh;
+      background: #0b1f2f;
+      color: #e5f5f7;
+      box-shadow: inset -1px 0 0 rgba(255,255,255,.05);
+      padding: 20px 14px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      padding: 10px 12px; margin: 6px 6px 18px; border-radius: 12px;
+      background: rgba(255,255,255,.04);
+    }
+    .brand .logo{
+      width:40px;height:40px;border-radius:10px;
+      display:grid;place-items:center;
+      background: linear-gradient(135deg, var(--brand), var(--brand-600));
+      color:#fff; font-size:18px; box-shadow: 0 6px 18px rgba(15,157,165,.35);
+    }
+    .brand .org{
+      display:flex; flex-direction:column; line-height:1.1;
+    }
+    .org .name{ font-weight:700; letter-spacing:.2px; }
+    .org .sub{ font-size:12px; opacity:.8; }
+
+    .nav{
+      margin-top: 8px;
+    }
+    .nav h6{
+      font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+      color:#93aac5; margin:16px 10px 8px;
+    }
+    .nav a{
+      display:flex; align-items:center; gap:12px;
+      text-decoration:none; color:#e6eef7;
+      padding: 11px 12px; border-radius: 10px;
+      margin: 4px 6px; font-size:14px; font-weight:500;
+      transition: .2s ease;
+    }
+    .nav a i{ width:20px; opacity:.95; }
+    .nav a:hover{ background: rgba(255,255,255,.07); }
+    .nav a.active{
+      background: rgba(15,157,165,.18);
+      color:#ffffff;
+      outline: 1px solid rgba(255,255,255,.12);
+    }
+
+    /* Topbar */
+    .main{
+      padding: 18px 22px 28px;
+    }
+    .topbar{
+      height: var(--topbar);
+      background: var(--panel);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 12px 16px;
+      box-shadow: var(--shadow);
+    }
+    .title{
+      display:flex; align-items:center; gap:12px;
+      font-weight:700; letter-spacing:.2px;
+    }
+    .crumb{
+      color: var(--muted); font-weight:500; font-size:13px;
+    }
+    .actions{ display:flex; align-items:center; gap:10px; }
+    .btn{
+      border:1px solid var(--border); background:#fff; color:#0f172a;
+      padding:10px 14px; border-radius:10px; font-weight:600; font-size:14px;
+      display:flex; align-items:center; gap:10px; box-shadow: 0 1px 0 #fff inset;
+      transition:.2s ease; cursor:pointer;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn.teal{ background: var(--brand); color:#fff; border-color: transparent; }
+    .btn.icon{ width:42px; height:42px; justify-content:center; padding:0; }
+    .select{
+      border:1px solid var(--border); background:#fff; color:var(--ink);
+      padding:10px 12px; border-radius:10px; font-weight:600;
+    }
+
+    /* KPI cards row */
+    .kpis{
+      display:grid; grid-template-columns: repeat(5, 1fr);
+      gap: 18px; margin: 20px 0 14px;
+    }
+    .kpi{
+      background: var(--brand); color:#fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px 18px;
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .kpi .meta{ opacity:.95; font-weight:600; }
+    .kpi .value{ font-size:28px; font-weight:800; line-height:1; }
+    .kpi .icon{
+      width:46px; height:46px; border-radius:12px; display:grid; place-items:center;
+      background: rgba(255,255,255,.16);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.22);
+      font-size:20px;
+    }
+
+    /* Section */
+    .section{
+      background: var(--panel); border:1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 18px; margin-top: 18px;
+    }
+    .section h3{
+      margin: 2px 0 12px; font-size:18px;
+    }
+
+    /* Quick access grid */
+    .quick{
+      display:grid; grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .qa{
+      background:#fff; border:1px solid var(--border);
+      border-radius: 16px; padding: 26px 18px;
+      display:flex; flex-direction:column; align-items:center; gap:12px;
+      transition:.2s ease; text-align:center;
+    }
+    .qa:hover{
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(15,23,42,.08);
+    }
+    .qa .qa-icon{
+      width:54px; height:54px; border-radius:14px; display:grid; place-items:center;
+      background: var(--brand-soft); color: var(--brand-text);
+      font-size:22px; box-shadow: inset 0 0 0 1px #d8eef0;
+    }
+    .qa .qa-title{ font-weight:700; }
+    .qa .qa-note{ font-size:12px; color: var(--muted); }
+
+    /* Utilities */
+    .muted{ color: var(--muted); }
+
+    /* Responsive */
+    @media (max-width:1200px){
+      .kpis{ grid-template-columns: repeat(3,1fr); }
+      .quick{ grid-template-columns: repeat(3,1fr); }
+    }
+    @media (max-width:900px){
+      .app{ grid-template-columns: 88px 1fr; }
+      .brand .org{ display:none; }
+      .nav h6{ display:none; }
+      .nav a{ justify-content:center; }
+      .nav a span{ display:none; }
+    }
+    @media (max-width:720px){
+      .kpis{ grid-template-columns: repeat(2,1fr); }
+      .quick{ grid-template-columns: repeat(2,1fr); }
+      .sidebar{ display:none; }
+      .app{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" aria-label="Primary Navigation">
+      <div class="brand">
+        <div class="logo"><i class="fa-solid fa-user-gear"></i></div>
+        <div class="org">
+          <span class="name">AutoHR</span>
+          <span class="sub">Reliance Infosystems</span>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <h6>main</h6>
+        <a class="active" href="#"><i class="fa-solid fa-table-columns"></i><span>Dashboard</span></a>
+
+        <h6>people</h6>
+        <a href="#"><i class="fa-solid fa-users"></i><span>Employees</span></a>
+        <a href="#"><i class="fa-solid fa-id-badge"></i><span>Recruitment</span></a>
+        <a href="#"><i class="fa-solid fa-calendar-check"></i><span>Attendance</span></a>
+        <a href="#"><i class="fa-solid fa-umbrella-beach"></i><span>Leave</span></a>
+        <a href="#"><i class="fa-solid fa-sack-dollar"></i><span>Payroll</span></a>
+        <a href="#"><i class="fa-solid fa-chart-line"></i><span>Performance</span></a>
+        <a href="#"><i class="fa-solid fa-graduation-cap"></i><span>Training</span></a>
+
+        <h6>data</h6>
+        <a href="#"><i class="fa-solid fa-folder-open"></i><span>Documents</span></a>
+        <a href="#"><i class="fa-solid fa-file-lines"></i><span>Reports</span></a>
+
+        <h6>system</h6>
+        <a href="#"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+        <a href="#"><i class="fa-solid fa-life-ring"></i><span>Support</span></a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <!-- Topbar -->
+      <div class="topbar" role="banner">
+        <div>
+          <div class="title">HR Admin Dashboard</div>
+          <div class="crumb">Home / Human Resources</div>
+        </div>
+        <div class="actions">
+          <a href="Job Portal.html" class="btn teal"><i class="fa-solid fa-gauge-high"></i> Job Portal</a>
+          <select class="select" aria-label="Choose language">
+            <option>English</option>
+            <option>French</option>
+            <option>Spanish</option>
+          </select>
+          <button class="btn"><i class="fa-regular fa-user"></i> Account</button>
+          <button class="btn icon" aria-label="Notifications"><i class="fa-regular fa-bell"></i></button>
+        </div>
+      </div>
+
+      <!-- KPI Row -->
+      <section aria-label="Key metrics" class="kpis">
+        <div class="kpi">
+          <div>
+            <div class="meta">Total Employees</div>
+            <div class="value">312</div>
+          </div>
+          <div class="icon"><i class="fa-solid fa-users"></i></div>
+        </div>
+
+        <div class="kpi">
+          <div>
+            <div class="meta">Open Positions</div>
+            <div class="value">12</div>
+          </div>
+          <div class="icon"><i class="fa-solid fa-briefcase"></i></div>
+        </div>
+
+        <div class="kpi">
+          <div>
+            <div class="meta">Pending Leave</div>
+            <div class="value">17</div>
+          </div>
+          <div class="icon"><i class="fa-solid fa-plane-departure"></i></div>
+        </div>
+
+        <div class="kpi">
+          <div>
+            <div class="meta">Payroll Processed</div>
+            <div class="value">98%</div>
+          </div>
+          <div class="icon"><i class="fa-solid fa-sack-dollar"></i></div>
+        </div>
+
+        <div class="kpi">
+          <div>
+            <div class="meta">Active Trainings</div>
+            <div class="value">5</div>
+          </div>
+          <div class="icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+        </div>
+      </section>
+
+      <!-- Quick Access -->
+      <section class="section" aria-label="Quick Access">
+        <h3>Quick Access</h3>
+        <div class="quick">
+          <a href="#" class="qa">
+            <div class="qa-icon"><i class="fa-solid fa-user-plus"></i></div>
+            <div class="qa-title">Add Employee</div>
+            <div class="qa-note">Create a new profile</div>
+          </a>
+
+          <a href="#" class="qa">
+            <div class="qa-icon"><i class="fa-solid fa-address-book"></i></div>
+            <div class="qa-title">Employee Directory</div>
+            <div class="qa-note">Search & view records</div>
+          </a>
+
+          <a href="#" class="qa">
+            <div class="qa-icon"><i class="fa-solid fa-calendar-check"></i></div>
+            <div class="qa-title">Attendance</div>
+            <div class="qa-note">Daily logs & shifts</div>
+          </a>
+
+          <a href="#" class="qa">
+            <div class="qa-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+            <div class="qa-title">Leave Requests</div>
+            <div class="qa-note">Approve or reject</div>
+          </a>
+
+          <a href="#" class="qa">
+            <div class="qa-icon"><i class="fa-solid fa-money-check-dollar"></i></div>
+            <div class="qa-title">Payroll</div>
+            <div class="qa-note">Run this month’s payroll</div>
+          </a>
+
+          <a href="#" class="qa">
+            <div class="qa-icon"><i class="fa-solid fa-briefcase"></i></div>
+            <div class="qa-title">Recruitment</div>
+            <div class="qa-note">Jobs & applicants</div>
+          </a>
+
+          <a href="#" class="qa">
+            <div class="qa-icon"><i class="fa-solid fa-chart-line"></i></div>
+            <div class="qa-title">Performance</div>
+            <div class="qa-note">Reviews & goals</div>
+          </a>
+
+          <a href="#" class="qa">
+            <div class="qa-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+            <div class="qa-title">Training</div>
+            <div class="qa-note">Courses & enrollments</div>
+          </a>
+
+          <a href="#" class="qa">
+            <div class="qa-icon"><i class="fa-solid fa-folder-open"></i></div>
+            <div class="qa-title">Documents</div>
+            <div class="qa-note">Policies & templates</div>
+          </a>
+
+          <a href="#" class="qa">
+            <div class="qa-icon"><i class="fa-solid fa-file-lines"></i></div>
+            <div class="qa-title">Reports</div>
+            <div class="qa-note">Export insights</div>
+          </a>
+
+          <a href="#" class="qa">
+            <div class="qa-icon"><i class="fa-solid fa-comments"></i></div>
+            <div class="qa-title">Announcements</div>
+            <div class="qa-note">Company updates</div>
+          </a>
+
+          <a href="#" class="qa">
+            <div class="qa-icon"><i class="fa-solid fa-shield-heart"></i></div>
+            <div class="qa-title">Benefits</div>
+            <div class="qa-note">Health & perks</div>
+          </a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Optional: quick ripple tap feel on cards
+    document.querySelectorAll('.qa, .btn').forEach(el=>{
+      el.addEventListener('mousedown', ()=> el.style.transform='scale(.99)');
+      el.addEventListener('mouseup', ()=> el.style.transform='');
+      el.addEventListener('mouseleave', ()=> el.style.transform='');
+    });
+  </script>
+</body>
+</html>

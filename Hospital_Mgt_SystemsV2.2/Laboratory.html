@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Laboratory Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+    }
+    .header {
+      background-color: #6c63ff;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+    .nav {
+      display: flex;
+      background-color: #343a40;
+    }
+    .nav button {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      background: none;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    .nav button:hover, .nav button.active {
+      background-color: #495057;
+    }
+    .home-btn {
+      background-color: #6c757d;
+      padding: 10px 16px;
+      color: white;
+      text-decoration: none;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      border-radius: 5px;
+    }
+    .tab-content {
+      display: none;
+      padding: 20px;
+      background: white;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #dee2e6;
+      text-align: center;
+    }
+    th {
+      background-color: #e9ecef;
+    }
+    input[type="text"], select, textarea {
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+    }
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    .btn {
+      padding: 10px 16px;
+      margin-top: 10px;
+      border: none;
+      color: white;
+      cursor: pointer;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    .btn:hover {
+      opacity: 0.9;
+    }
+    .btn-add {
+      background-color: #28a745;
+    }
+    .btn-edit {
+      background-color: #ffc107;
+      color: #212529;
+    }
+    .btn-delete {
+      background-color: #dc3545;
+    }
+    .btn-print {
+      background-color: #007bff;
+    }
+    .btn-save {
+      background-color: #17a2b8;
+    }
+    .card-container {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 10px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .card {
+      background-color: #ffffff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 20px;
+      flex: 1;
+      min-width: 200px;
+      text-align: center;
+      border-radius: 8px;
+      transition: transform 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .chart-placeholder {
+      height: 200px;
+      background-color: #e9ecef;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-style: italic;
+    }
+    .action-btns {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    .status {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.8em;
+    }
+    .status-pending {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    .status-processing {
+      background-color: #cce5ff;
+      color: #004085;
+    }
+    .status-completed {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .test-icon {
+      font-size: 1.2em;
+      margin-right: 5px;
+    }
+    .lab-name {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: rgba(255,255,255,0.2);
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .print-only {
+      display: none;
+    }
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .print-content, .print-content * {
+        visibility: visible;
+      }
+      .print-content {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+      .no-print {
+        display: none;
+      }
+      .print-only {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<a href="Admin_Dashboard.html" class="home-btn">🏠 Home</a>
+
+<div class="header">
+  <div class="lab-name">🔬 Breath_Smart Medical Laboratory</div>
+  <h1>Laboratory Dashboard</h1>
+</div>
+
+<div class="nav">
+  <button class="tab-link active" onclick="switchTab(event, 'results')">🧪 View Test Results</button>
+  <button class="tab-link" onclick="switchTab(event, 'addTest')">➕ Add New Test</button>
+  <button class="tab-link" onclick="switchTab(event, 'report')">📊 Inventory Charts</button>
+</div>
+
+<div class="tab-content active" id="results">
+  <h2>Lab Test Results</h2>
+  <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search by Patient Name, Test or Doctor..." />
+
+  <table id="labTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Patient Name</th>
+        <th>Test Type</th>
+        <th>Doctor</th>
+        <th>Status</th>
+        <th>Date</th>
+        <th>Result</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>Ada Eze</td>
+        <td><i class="fas fa-tint test-icon"></i> Blood Test</td>
+        <td>Dr. Smith</td>
+        <td><span class="status status-completed">Completed</span></td>
+        <td>2025-08-08</td>
+        <td>Normal range</td>
+        <td class="action-btns">
+          <button class="btn btn-edit" onclick="editTest(1)"><i class="fas fa-edit"></i> Edit</button>
+          <button class="btn btn-delete" onclick="deleteTest(1)"><i class="fas fa-trash"></i> Delete</button>
+          <button class="btn btn-print" onclick="printTestResult(1)"><i class="fas fa-print"></i> Print</button>
+        </td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>John Yusuf</td>
+        <td><i class="fas fa-flask test-icon"></i> Urine Test</td>
+        <td>Dr. Johnson</td>
+        <td><span class="status status-pending">Pending</span></td>
+        <td>2025-08-06</td>
+        <td>Pending analysis</td>
+        <td class="action-btns">
+          <button class="btn btn-edit" onclick="editTest(2)"><i class="fas fa-edit"></i> Edit</button>
+          <button class="btn btn-delete" onclick="deleteTest(2)"><i class="fas fa-trash"></i> Delete</button>
+          <button class="btn btn-print" onclick="printTestResult(2)"><i class="fas fa-print"></i> Print</button>
+        </td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Maryam Bello</td>
+        <td><i class="fas fa-dna test-icon"></i> DNA Test</td>
+        <td>Dr. Williams</td>
+        <td><span class="status status-processing">Processing</span></td>
+        <td>2025-08-10</td>
+        <td>In progress</td>
+        <td class="action-btns">
+          <button class="btn btn-edit" onclick="editTest(3)"><i class="fas fa-edit"></i> Edit</button>
+          <button class="btn btn-delete" onclick="deleteTest(3)"><i class="fas fa-trash"></i> Delete</button>
+          <button class="btn btn-print" onclick="printTestResult(3)"><i class="fas fa-print"></i> Print</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="tab-content" id="addTest">
+  <h2>Add New Lab Test</h2>
+  <form id="addTestForm">
+    <div class="form-group">
+      <label for="patientName">Patient Name:</label>
+      <input type="text" id="patientName" required />
+    </div>
+    
+    <div class="form-group">
+      <label for="testType">Test Type:</label>
+      <select id="testType" required>
+        <option value="">-- Select Test Type --</option>
+        <option value="Blood Test"><i class="fas fa-tint"></i> Blood Test</option>
+        <option value="Urine Test"><i class="fas fa-flask"></i> Urine Test</option>
+        <option value="DNA Test"><i class="fas fa-dna"></i> DNA Test</option>
+        <option value="X-Ray"><i class="fas fa-x-ray"></i> X-Ray</option>
+        <option value="MRI Scan"><i class="fas fa-procedures"></i> MRI Scan</option>
+        <option value="CT Scan"><i class="fas fa-procedures"></i> CT Scan</option>
+        <option value="Ultrasound"><i class="fas fa-procedures"></i> Ultrasound</option>
+        <option value="ECG"><i class="fas fa-heartbeat"></i> ECG</option>
+        <option value="EEG"><i class="fas fa-brain"></i> EEG</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label for="doctor">Doctor in Charge:</label>
+      <input type="text" id="doctor" required />
+    </div>
+    
+    <div class="form-group">
+      <label for="status">Status:</label>
+      <select id="status" required>
+        <option value="Pending">Pending</option>
+        <option value="Processing">Processing</option>
+        <option value="Completed">Completed</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label for="testResult">Test Result:</label>
+      <textarea id="testResult" required></textarea>
+    </div>
+    
+    <button type="submit" class="btn btn-add"><i class="fas fa-plus"></i> Add Test</button>
+  </form>
+</div>
+
+<div class="tab-content" id="report">
+  <h2>📊 Lab Inventory Overview</h2>
+  <div class="card-container">
+    <div class="card">
+      <h3><i class="fas fa-vial"></i> Total Tests</h3>
+      <p><strong>42</strong></p>
+    </div>
+    <div class="card">
+      <h3><i class="fas fa-clock status-pending"></i> Pending Results</h3>
+      <p><strong>8</strong></p>
+    </div>
+    <div class="card">
+      <h3><i class="fas fa-cog status-processing"></i> Processing</h3>
+      <p><strong>12</strong></p>
+    </div>
+    <div class="card">
+      <h3><i class="fas fa-check-circle status-completed"></i> Completed</h3>
+      <p><strong>22</strong></p>
+    </div>
+  </div>
+  
+  <h3>Test Type Distribution</h3>
+  <div class="card-container">
+    <div class="card">
+      <h3><i class="fas fa-tint"></i> Blood Tests</h3>
+      <p><strong>18</strong></p>
+    </div>
+    <div class="card">
+      <h3><i class="fas fa-flask"></i> Urine Tests</h3>
+      <p><strong>10</strong></p>
+    </div>
+    <div class="card">
+      <h3><i class="fas fa-dna"></i> DNA Tests</h3>
+      <p><strong>5</strong></p>
+    </div>
+    <div class="card">
+      <h3><i class="fas fa-x-ray"></i> Imaging</h3>
+      <p><strong>9</strong></p>
+    </div>
+  </div>
+  
+  <div class="chart-placeholder">
+    📊 Chart will be displayed here (e.g., Test Types per Week)
+  </div>
+</div>
+
+<!-- Print Template -->
+<div id="printTemplate" style="display:none;">
+  <div class="print-content">
+    <div style="text-align:center; margin-bottom:20px;">
+      <h1 style="color:#6c63ff;">Central Medical Laboratory</h1>
+      <p>123 Medical Drive, Health City • Phone: (123) 456-7890</p>
+      <h2 style="border-bottom:2px solid #6c63ff; padding-bottom:10px;">LAB TEST RESULT</h2>
+    </div>
+    
+    <div style="margin-bottom:30px;">
+      <table style="width:100%; border-collapse:collapse;">
+        <tr>
+          <td style="padding:8px; border:1px solid #ddd; width:30%;"><strong>Patient Name:</strong></td>
+          <td style="padding:8px; border:1px solid #ddd;" id="printPatientName"></td>
+        </tr>
+        <tr>
+          <td style="padding:8px; border:1px solid #ddd;"><strong>Test Type:</strong></td>
+          <td style="padding:8px; border:1px solid #ddd;" id="printTestType"></td>
+        </tr>
+        <tr>
+          <td style="padding:8px; border:1px solid #ddd;"><strong>Doctor:</strong></td>
+          <td style="padding:8px; border:1px solid #ddd;" id="printDoctor"></td>
+        </tr>
+        <tr>
+          <td style="padding:8px; border:1px solid #ddd;"><strong>Date:</strong></td>
+          <td style="padding:8px; border:1px solid #ddd;" id="printDate"></td>
+        </tr>
+        <tr>
+          <td style="padding:8px; border:1px solid #ddd;"><strong>Status:</strong></td>
+          <td style="padding:8px; border:1px solid #ddd;" id="printStatus"></td>
+        </tr>
+      </table>
+    </div>
+    
+    <div style="margin-bottom:20px;">
+      <h3 style="border-bottom:1px solid #ddd; padding-bottom:5px;">Test Results</h3>
+      <div id="printTestResult" style="padding:10px; background-color:#f9f9f9; border-radius:5px;"></div>
+    </div>
+    
+    <div style="margin-top:40px; border-top:1px solid #ddd; padding-top:20px;">
+      <table style="width:100%;">
+        <tr>
+          <td style="width:50%;">
+            <p><strong>Lab Technician:</strong></p>
+            <p style="border-bottom:1px solid #ddd; width:80%; padding-bottom:20px;"></p>
+            <p>Signature & Date</p>
+          </td>
+          <td style="width:50%;">
+            <p><strong>Approved By:</strong></p>
+            <p style="border-bottom:1px solid #ddd; width:80%; padding-bottom:20px;"></p>
+            <p>Signature & Date</p>
+          </td>
+        </tr>
+      </table>
+    </div>
+    
+    <div class="print-only" style="margin-top:30px; font-size:0.8em; text-align:center;">
+      <p>This is an electronically generated report. No signature is required.</p>
+      <p>Printed on: <span id="printCurrentDate"></span></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Sample data for the lab tests
+  let labTests = [
+    {
+      id: 1,
+      patientName: "Ada Eze",
+      testType: "Blood Test",
+      doctor: "Dr. Smith",
+      status: "Completed",
+      date: "2025-08-08",
+      result: "Normal range: WBC 5.6, RBC 4.8, HGB 14.2, PLT 220"
+    },
+    {
+      id: 2,
+      patientName: "John Yusuf",
+      testType: "Urine Test",
+      doctor: "Dr. Johnson",
+      status: "Pending",
+      date: "2025-08-06",
+      result: "Pending analysis"
+    },
+    {
+      id: 3,
+      patientName: "Maryam Bello",
+      testType: "DNA Test",
+      doctor: "Dr. Williams",
+      status: "Processing",
+      date: "2025-08-10",
+      result: "In progress - sample processing completed, awaiting analysis"
+    }
+  ];
+
+  // Initialize the table with sample data
+  function initializeTable() {
+    const tableBody = document.querySelector("#labTable tbody");
+    tableBody.innerHTML = "";
+    
+    labTests.forEach(test => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${test.id}</td>
+        <td>${test.patientName}</td>
+        <td><i class="${getTestIcon(test.testType)} test-icon"></i> ${test.testType}</td>
+        <td>${test.doctor}</td>
+        <td><span class="status status-${test.status.toLowerCase()}">${test.status}</span></td>
+        <td>${test.date}</td>
+        <td>${test.result}</td>
+        <td class="action-btns">
+          <button class="btn btn-edit" onclick="editTest(${test.id})"><i class="fas fa-edit"></i> Edit</button>
+          <button class="btn btn-delete" onclick="deleteTest(${test.id})"><i class="fas fa-trash"></i> Delete</button>
+          <button class="btn btn-print" onclick="printTestResult(${test.id})"><i class="fas fa-print"></i> Print</button>
+        </td>
+      `;
+      tableBody.appendChild(row);
+    });
+  }
+
+  // Get appropriate icon for test type
+  function getTestIcon(testType) {
+    const icons = {
+      "Blood Test": "fas fa-tint",
+      "Urine Test": "fas fa-flask",
+      "DNA Test": "fas fa-dna",
+      "X-Ray": "fas fa-x-ray",
+      "MRI Scan": "fas fa-procedures",
+      "CT Scan": "fas fa-procedures",
+      "Ultrasound": "fas fa-procedures",
+      "ECG": "fas fa-heartbeat",
+      "EEG": "fas fa-brain"
+    };
+    return icons[testType] || "fas fa-vial";
+  }
+
+  // Switch between tabs
+  function switchTab(evt, tabId) {
+    document.querySelectorAll(".tab-content").forEach(tab => tab.classList.remove("active"));
+    document.getElementById(tabId).classList.add("active");
+
+    document.querySelectorAll(".tab-link").forEach(btn => btn.classList.remove("active"));
+    evt.currentTarget.classList.add("active");
+  }
+
+  // Search functionality
+  function searchTable() {
+    const filter = document.getElementById("searchInput").value.toLowerCase();
+    const rows = document.querySelectorAll("#labTable tbody tr");
+
+    rows.forEach(row => {
+      const cells = row.getElementsByTagName("td");
+      const match = cells[1].textContent.toLowerCase().includes(filter) ||
+                    cells[2].textContent.toLowerCase().includes(filter) ||
+                    cells[3].textContent.toLowerCase().includes(filter);
+      row.style.display = match ? "" : "none";
+    });
+  }
+
+  // Add new test
+  document.getElementById("addTestForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const newId = labTests.length > 0 ? Math.max(...labTests.map(test => test.id)) + 1 : 1;
+    
+    const newTest = {
+      id: newId,
+      patientName: document.getElementById("patientName").value,
+      testType: document.getElementById("testType").value,
+      doctor: document.getElementById("doctor").value,
+      status: document.getElementById("status").value,
+      date: new Date().toISOString().split('T')[0],
+      result: document.getElementById("testResult").value
+    };
+
+    labTests.push(newTest);
+    initializeTable();
+    document.getElementById("addTestForm").reset();
+    switchTab({currentTarget: document.querySelector(".nav button:nth-child(1)")}, 'results');
+  });
+
+  // Edit test
+  function editTest(id) {
+    const test = labTests.find(t => t.id === id);
+    if (!test) return;
+
+    // Create a modal or form for editing
+    const editForm = `
+      <h2>Edit Lab Test #${test.id}</h2>
+      <form id="editTestForm" style="margin-top:20px;">
+        <div class="form-group">
+          <label for="editPatientName">Patient Name:</label>
+          <input type="text" id="editPatientName" value="${test.patientName}" required />
+        </div>
+        
+        <div class="form-group">
+          <label for="editTestType">Test Type:</label>
+          <select id="editTestType" required>
+            <option value="Blood Test" ${test.testType === "Blood Test" ? "selected" : ""}>Blood Test</option>
+            <option value="Urine Test" ${test.testType === "Urine Test" ? "selected" : ""}>Urine Test</option>
+            <option value="DNA Test" ${test.testType === "DNA Test" ? "selected" : ""}>DNA Test</option>
+            <option value="X-Ray" ${test.testType === "X-Ray" ? "selected" : ""}>X-Ray</option>
+            <option value="MRI Scan" ${test.testType === "MRI Scan" ? "selected" : ""}>MRI Scan</option>
+            <option value="CT Scan" ${test.testType === "CT Scan" ? "selected" : ""}>CT Scan</option>
+            <option value="Ultrasound" ${test.testType === "Ultrasound" ? "selected" : ""}>Ultrasound</option>
+            <option value="ECG" ${test.testType === "ECG" ? "selected" : ""}>ECG</option>
+            <option value="EEG" ${test.testType === "EEG" ? "selected" : ""}>EEG</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="editDoctor">Doctor in Charge:</label>
+          <input type="text" id="editDoctor" value="${test.doctor}" required />
+        </div>
+        
+        <div class="form-group">
+          <label for="editStatus">Status:</label>
+          <select id="editStatus" required>
+            <option value="Pending" ${test.status === "Pending" ? "selected" : ""}>Pending</option>
+            <option value="Processing" ${test.status === "Processing" ? "selected" : ""}>Processing</option>
+            <option value="Completed" ${test.status === "Completed" ? "selected" : ""}>Completed</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="editTestResult">Test Result:</label>
+          <textarea id="editTestResult" required>${test.result}</textarea>
+        </div>
+        
+        <button type="button" class="btn btn-save" onclick="saveTest(${id})"><i class="fas fa-save"></i> Save Changes</button>
+        <button type="button" class="btn btn-delete" onclick="closeEditForm()" style="background-color:#6c757d;"><i class="fas fa-times"></i> Cancel</button>
+      </form>
+    `;
+
+    // Show the edit form in the results tab
+    const resultsTab = document.getElementById("results");
+    resultsTab.innerHTML = editForm;
+  }
+
+  // Save edited test
+  function saveTest(id) {
+    const testIndex = labTests.findIndex(t => t.id === id);
+    if (testIndex === -1) return;
+
+    labTests[testIndex] = {
+      id: id,
+      patientName: document.getElementById("editPatientName").value,
+      testType: document.getElementById("editTestType").value,
+      doctor: document.getElementById("editDoctor").value,
+      status: document.getElementById("editStatus").value,
+      date: labTests[testIndex].date, // Keep original date
+      result: document.getElementById("editTestResult").value
+    };
+
+    // Reinitialize the table and switch back to view mode
+    initializeTable();
+    document.getElementById("results").innerHTML = `
+      <h2>Lab Test Results</h2>
+      <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search by Patient Name, Test or Doctor..." />
+      <table id="labTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Patient Name</th>
+            <th>Test Type</th>
+            <th>Doctor</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Result</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    `;
+    initializeTable();
+  }
+
+  // Close edit form without saving
+  function closeEditForm() {
+    document.getElementById("results").innerHTML = `
+      <h2>Lab Test Results</h2>
+      <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search by Patient Name, Test or Doctor..." />
+      <table id="labTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Patient Name</th>
+            <th>Test Type</th>
+            <th>Doctor</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Result</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    `;
+    initializeTable();
+  }
+
+  // Delete test
+  function deleteTest(id) {
+    if (confirm("Are you sure you want to delete this test?")) {
+      labTests = labTests.filter(test => test.id !== id);
+      initializeTable();
+    }
+  }
+
+  // Print test result
+  function printTestResult(id) {
+    const test = labTests.find(t => t.id === id);
+    if (!test) return;
+
+    // Populate the print template
+    document.getElementById("printPatientName").textContent = test.patientName;
+    document.getElementById("printTestType").textContent = test.testType;
+    document.getElementById("printDoctor").textContent = test.doctor;
+    document.getElementById("printDate").textContent = test.date;
+    document.getElementById("printStatus").textContent = test.status;
+    document.getElementById("printTestResult").textContent = test.result;
+    
+    // Set current date
+    const now = new Date();
+    document.getElementById("printCurrentDate").textContent = now.toLocaleDateString() + " " + now.toLocaleTimeString();
+    
+    // Clone the print template and show it
+    const printContent = document.getElementById("printTemplate").cloneNode(true);
+    printContent.style.display = "block";
+    document.body.appendChild(printContent);
+    
+    // Print and then remove the clone
+    window.print();
+    document.body.removeChild(printContent);
+  }
+
+  // Initialize the table when page loads
+  window.onload = initializeTable;
+</script>
+
+</body>
+</html>

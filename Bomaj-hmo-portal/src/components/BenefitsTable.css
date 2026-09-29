@@ -1,0 +1,77 @@
+.benefits-section {
+  background: white;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.benefits-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.benefits-table thead {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #eaeaea;
+}
+
+.benefits-table th {
+  padding: 18px 20px;
+  text-align: left;
+  font-weight: 600;
+  color: #1a237e;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.benefits-table tbody tr {
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s ease;
+}
+
+.benefits-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.benefits-table td {
+  padding: 18px 20px;
+  font-size: 15px;
+}
+
+.benefit-name {
+  color: #333;
+  font-weight: 500;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.status-covered {
+  background-color: rgba(76, 175, 80, 0.15);
+  color: #2e7d32;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.status-not-covered {
+  background-color: rgba(244, 67, 54, 0.15);
+  color: #c62828;
+  border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.status-pending {
+  background-color: rgba(255, 193, 7, 0.15);
+  color: #ff8f00;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}

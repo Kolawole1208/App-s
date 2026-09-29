@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bomaj Pharmacist International</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, rgba(26, 35, 126, 0.85), rgba(40, 53, 147, 0.85));
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background-image: url('pngtree-pharmaceutical-medicine-on-white-background-image_13182873.png'), 
+                        linear-gradient(135deg, #1a237e, #283593);
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-blend-mode: overlay;
+    }
+
+    .dashboard-container {
+      display: flex;
+      width: 100%;
+      max-width: 1200px;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      min-height: 90vh;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 280px;
+      background: linear-gradient(180deg, #35675a, #35675a);
+      color: white;
+      padding: 30px 25px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      color: green;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .pharmacy-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 25px 0 8px 0;
+    }
+
+    .pharmacy-subtitle {
+      font-size: 14px;
+      color: #9fa8da;
+      margin-bottom: 40px;
+    }
+
+    .nav-section {
+      margin-bottom: 25px;
+    }
+
+    .nav-title {
+      font-size: 14px;
+      color: #f3f4f9;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .nav-item {
+      padding: 12px 15px;
+      margin-bottom: 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: block;
+      text-decoration: none;
+      color: white;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-item.active {
+      background: rgba(255, 255, 255, 0.15);
+      font-weight: 600;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      background: #f8f9fa;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 20px 40px;
+      border-bottom: 1px solid #ddd;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .header h1 {
+      color: green;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .header p {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .header-buttons {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .header-btn {
+      background-color: #0d47a1;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+      white-space: nowrap;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+    }
+
+    .header-btn:hover {
+      background-color: #1565c0;
+      transform: translateY(-2px);
+    }
+
+    .content-area {
+      padding: 40px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    /* Pharmacist Image Section */
+    .pharmacist-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .pharmacist-image {
+      width: 300px;
+      height: 300px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      border: 5px solid #0d47a1;
+    }
+
+    .pharmacist-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .pharmacist-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1a237e, #0d47a1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+    }
+
+    .pharmacist-placeholder i {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+
+    .welcome-text {
+      text-align: center;
+      max-width: 500px;
+    }
+
+    .welcome-text h2 {
+      color: #1a237e;
+      font-size: 28px;
+      margin-bottom: 15px;
+    }
+
+    .welcome-text p {
+      color: #666;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* Footer Styles */
+    .footer {
+      background-color: #0d47a1;
+      color: white;
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    /* New Marquee Styles */
+    .footer-marquee {
+      overflow: hidden;
+      white-space: nowrap;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px 0;
+      background: transparent;
+      margin-bottom: 15px;
+    }
+
+    .footer-marquee__inner {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 18s linear infinite;
+      font-size: 16px;
+      color: rgba(255,255,255,0.95);
+      font-weight: 600;
+    }
+
+    .footer-marquee__inner:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .footer-icons {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      margin-bottom: 15px;
+    }
+
+    .footer-icons a {
+      color: white;
+      font-size: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background 0.3s ease, transform 0.2s ease;
+      text-decoration: none;
+    }
+
+    .footer-icons a:hover {
+      background: white;
+      color: #0d47a1;
+      transform: translateY(-3px);
+    }
+
+    .contact-btn {
+      background-color: white;
+      color: #0d47a1;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+      margin-bottom: 15px;
+    }
+
+    .contact-btn:hover {
+      background-color: #1565c0;
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    .footer-note {
+      font-size: 13px;
+      opacity: 0.8;
+    }
+
+    /* AI Chatbot Styles */
+    .chatbot-container {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+    }
+
+    .chatbot-toggle {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #35675a, #2a5249);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      border: none;
+      color: white;
+      font-size: 24px;
+    }
+
+    .chatbot-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .chatbot-window {
+      position: absolute;
+      bottom: 80px;
+      right: 0;
+      width: 350px;
+      height: 500px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      border: 2px solid #35675a;
+    }
+
+    .chatbot-window.active {
+      display: flex;
+    }
+
+    .chatbot-header {
+      background: linear-gradient(135deg, #35675a, #2a5249);
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chatbot-header h3 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+    }
+
+    .chatbot-header i {
+      color: #4fc3f7;
+    }
+
+    .close-chatbot {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 5px;
+      transition: transform 0.3s ease;
+    }
+
+    .close-chatbot:hover {
+      transform: scale(1.2);
+    }
+
+    .chatbot-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: #f8f9fa;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 12px 15px;
+      border-radius: 18px;
+      line-height: 1.4;
+      position: relative;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .user-message {
+      background: #0d47a1;
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 5px;
+    }
+
+    .bot-message {
+      background: white;
+      color: #333;
+      border: 1px solid #ddd;
+      align-self: flex-start;
+      border-bottom-left-radius: 5px;
+    }
+
+    .bot-typing {
+      display: flex;
+      gap: 5px;
+      padding: 12px 15px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 18px;
+      align-self: flex-start;
+      border-bottom-left-radius: 5px;
+    }
+
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      background: #35675a;
+      border-radius: 50%;
+      animation: typing 1.4s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes typing {
+      0%, 80%, 100% { transform: scale(0.7); opacity: 0.5; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    .chatbot-input {
+      padding: 15px;
+      background: white;
+      border-top: 1px solid #ddd;
+      display: flex;
+      gap: 10px;
+    }
+
+    .chatbot-input input {
+      flex: 1;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 25px;
+      outline: none;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+    }
+
+    .chatbot-input input:focus {
+      border-color: #35675a;
+    }
+
+    .send-button {
+      width: 45px;
+      height: 45px;
+      background: #35675a;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .send-button:hover {
+      background: #2a5249;
+      transform: scale(1.05);
+    }
+
+    .chatbot-suggestions {
+      padding: 10px 15px;
+      background: #f0f7ff;
+      border-top: 1px solid #e0e0e0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .suggestion-chip {
+      padding: 8px 12px;
+      background: white;
+      border: 1px solid #35675a;
+      border-radius: 20px;
+      font-size: 12px;
+      color: #35675a;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .suggestion-chip:hover {
+      background: #35675a;
+      color: white;
+    }
+
+    /* Responsive Section */
+    @media (max-width: 768px) {
+      .dashboard-container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+      }
+
+      .header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .header h1 {
+        font-size: 20px;
+      }
+
+      .header p {
+        font-size: 13px;
+        margin-bottom: 10px;
+      }
+
+      .header-buttons {
+        justify-content: center;
+      }
+
+      .header-btn {
+        padding: 8px 20px;
+        font-size: 14px;
+      }
+
+      .content-area {
+        padding: 20px;
+      }
+
+      .pharmacist-image {
+        width: 250px;
+        height: 250px;
+      }
+
+      .footer-marquee__inner {
+        animation-duration: 25s;
+        font-size: 15px;
+      }
+
+      .chatbot-container {
+        bottom: 20px;
+        right: 20px;
+      }
+
+      .chatbot-window {
+        width: 300px;
+        height: 450px;
+        right: -50px;
+      }
+
+      .chatbot-window.active {
+        right: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .chatbot-window {
+        width: 280px;
+        height: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo">
+        <div class="logo-icon">B</div>
+        <div class="logo-text">Bomaj International</div>
+      </div>
+
+      <div class="pharmacy-title">Bomaj Pharmacist International</div>
+      <div class="pharmacy-subtitle">Global Pharmaceutical Solutions</div>
+
+      <div class="nav-section">
+        <div class="nav-title">MAIN</div>
+        <a href="index.html" class="nav-item active">Dashboard</a>
+        <a href="hmo.html" class="nav-item">HMO</a>
+        <a href="Orders.html" class="nav-item">Orders</a>
+        <a href="Doctor.html" class="nav-item">Doctors</a>
+        <a href="Pharmacist.html" class="nav-item">Pharmacist</a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-title">ANALYTICS</div>
+        <a href="#" class="nav-item">Customer</a>
+        <a href="Review.html" class="nav-item">Review</a>
+        <a href="#" class="nav-item">Report</a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-title">SUPPORT</div>
+        <a href="About.html" class="nav-item">About</a>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="header">
+        <div>
+          <h1>Welcome to Bomaj Pharmacist International Dashboard</h1>
+          <p>Select an option from the sidebar to continue.</p>
+        </div>
+        <div class="header-buttons">
+          <a href="AdminLogin.html" class="header-btn">Admin</a>
+          <a href="Staff login.html" class="header-btn">Staff</a>
+        </div>
+      </div>
+
+      <div class="content-area">
+        <!-- Pharmacist Image Section -->
+        <div class="pharmacist-section">
+          <div class="pharmacist-image">
+            <img src="Career-1.jpg" alt="Professional Pharmacist" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"300\" height=\"300\" viewBox=\"0 0 300 300\"><rect width=\"300\" height=\"300\" fill=\"%231a237e\"/><text x=\"50%\" y=\"50%\" font-family=\"Arial\" font-size=\"24\" fill=\"white\" text-anchor=\"middle\" dy=\".3em\">Pharmacist Image</text></svg>'">
+          </div>
+          
+          <div class="welcome-text">
+            <h2>Professional Pharmaceutical Care</h2>
+            <p>Our team of certified pharmacists is dedicated to providing the highest quality healthcare solutions and personalized patient care.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="footer-marquee" aria-label="Company tagline">
+          <div class="footer-marquee__inner">
+            Empowering global healthcare through innovation and trusted pharmaceutical solutions.
+          </div>
+        </div>
+
+        <button class="contact-btn">Contact Us</button>
+        <div class="footer-icons">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+        <p class="footer-note">&copy; 2025 Bomaj Pharmacist International. All rights reserved.</p>
+      </footer>
+    </div>
+  </div>
+
+  <!-- AI Chatbot -->
+  <div class="chatbot-container">
+    <div class="chatbot-window" id="chatbotWindow">
+      <div class="chatbot-header">
+        <h3><i class="fas fa-robot"></i> Pharma AI Assistant</h3>
+        <button class="close-chatbot" id="closeChatbot">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="chatbot-messages" id="chatMessages">
+        <div class="message bot-message">
+          Hello! I'm your Pharma AI Assistant. How can I help you with medication, prescriptions, or pharmacy services today?
+        </div>
+        <div class="message bot-message">
+          You can ask me about:
+          • Drug information and side effects
+          • Prescription queries
+          • Pharmacy services
+          • Medication management
+          • Healthcare advice
+        </div>
+      </div>
+      <div class="chatbot-suggestions">
+        <div class="suggestion-chip" onclick="sendSuggestion(this)">Drug interactions</div>
+        <div class="suggestion-chip" onclick="sendSuggestion(this)">Side effects</div>
+        <div class="suggestion-chip" onclick="sendSuggestion(this)">Prescription refill</div>
+        <div class="suggestion-chip" onclick="sendSuggestion(this)">Store hours</div>
+      </div>
+      <div class="chatbot-input">
+        <input type="text" id="chatInput" placeholder="Type your question here..." onkeypress="handleKeyPress(event)">
+        <button class="send-button" onclick="sendMessage()">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+    <button class="chatbot-toggle" id="chatbotToggle">
+      <i class="fas fa-robot"></i>
+    </button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Navigation active state
+      const navItems = document.querySelectorAll('.nav-item');
+      navItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+          if (this.getAttribute('href') === '#') {
+            e.preventDefault();
+          }
+          navItems.forEach(i => i.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+
+      // Contact button functionality
+      const contactBtn = document.querySelector('.contact-btn');
+      if (contactBtn) {
+        contactBtn.addEventListener('click', function() {
+          alert('Contact us at: contact@bomajpharmacist.com\nPhone: +1-234-567-8900');
+        });
+      }
+
+      // AI Chatbot functionality
+      const chatbotToggle = document.getElementById('chatbotToggle');
+      const chatbotWindow = document.getElementById('chatbotWindow');
+      const closeChatbot = document.getElementById('closeChatbot');
+      const chatInput = document.getElementById('chatInput');
+      const chatMessages = document.getElementById('chatMessages');
+
+      // Toggle chatbot window
+      chatbotToggle.addEventListener('click', () => {
+        chatbotWindow.classList.toggle('active');
+      });
+
+      closeChatbot.addEventListener('click', () => {
+        chatbotWindow.classList.remove('active');
+      });
+
+      // Chatbot knowledge base
+      const knowledgeBase = {
+        // Pharmacy services
+        'services': 'We offer comprehensive pharmaceutical services including prescription filling, medication therapy management, immunization services, health screenings, medication delivery, and patient counseling.',
+        'hours': 'Our pharmacy is open Monday-Friday: 8AM-9PM, Saturday: 9AM-6PM, Sunday: 10AM-4PM.',
+        'location': 'We are located at 123 Healthcare Ave, Medical District, City. Free parking available.',
+        'delivery': 'Yes, we offer free prescription delivery within a 10-mile radius. Same-day delivery available for orders placed before 2PM.',
+        'refill': 'You can refill prescriptions through our mobile app, website, or by calling our pharmacy directly at (555) 123-4567.',
+        
+        // Medication information
+        'drug information': 'I can provide information about medications including uses, dosages, side effects, and interactions. Please specify which medication you\'re asking about.',
+        'side effects': 'All medications can have side effects. Common ones include nausea, dizziness, or headache. Serious side effects should be reported to your doctor immediately.',
+        'interactions': 'Drug interactions can occur when medications affect each other\'s effectiveness or increase side effects. Always inform your pharmacist about all medications you\'re taking.',
+        'storage': 'Most medications should be stored at room temperature, away from moisture and direct sunlight. Some require refrigeration.',
+        
+        // Health advice
+        'antibiotics': 'Antibiotics should be taken exactly as prescribed, even if you feel better. Never share antibiotics or use leftover prescriptions.',
+        'vaccines': 'We offer all recommended vaccines including flu shots, COVID-19 vaccines, shingles vaccines, and travel immunizations.',
+        'chronic conditions': 'We provide specialized care for chronic conditions like diabetes, hypertension, and asthma with personalized medication management.',
+        
+        // Insurance and payments
+        'insurance': 'We accept most major insurance plans including Medicare and Medicaid. Please bring your insurance card for verification.',
+        'prescription cost': 'Prescription costs vary based on medication and insurance coverage. Our pharmacists can help find cost-saving options like generic alternatives.',
+        'generic': 'Generic medications contain the same active ingredients as brand-name drugs but are typically more affordable and equally effective.',
+        
+        // Emergency
+        'overdose': 'If you suspect an overdose, call emergency services immediately (911 in the US) or contact your local poison control center.',
+        'allergic reaction': 'For severe allergic reactions (difficulty breathing, swelling), seek emergency medical help immediately. For mild reactions, contact your doctor.',
+        
+        // General pharmacy
+        'pharmacist consultation': 'Our pharmacists are available for free consultations to discuss medications, side effects, and health concerns.',
+        'medication disposal': 'We accept expired or unused medications for safe disposal. Never flush medications down the toilet.',
+        'travel health': 'We provide travel health consultations and can recommend necessary vaccines and medications for your destination.'
+      };
+
+      // Function to get AI response
+      function getAIResponse(userInput) {
+        const input = userInput.toLowerCase();
+        let response = '';
+        
+        // Check for specific keywords
+        for (const [keyword, answer] of Object.entries(knowledgeBase)) {
+          if (input.includes(keyword)) {
+            response = answer;
+            break;
+          }
+        }
+        
+        // If no specific keyword found, provide general response
+        if (!response) {
+          if (input.includes('hello') || input.includes('hi') || input.includes('hey')) {
+            response = 'Hello! How can I assist you with your pharmacy needs today?';
+          } else if (input.includes('thank')) {
+            response = 'You\'re welcome! Is there anything else I can help you with regarding your medications or pharmacy services?';
+          } else if (input.includes('bye') || input.includes('goodbye')) {
+            response = 'Goodbye! Remember to take your medications as prescribed and contact us if you have any concerns.';
+          } else {
+            response = 'I understand you\'re asking about: "' + userInput + '". As a pharmaceutical AI, I specialize in medication-related questions. Could you provide more details or ask about specific drugs, prescriptions, or pharmacy services? For immediate medical concerns, please contact your healthcare provider.';
+          }
+        }
+        
+        // Add disclaimer for medical advice
+        response += '\n\n⚠️ *Disclaimer: This information is for educational purposes only. Always consult with a healthcare professional for medical advice.*';
+        
+        return response;
+      }
+
+      // Function to add message to chat
+      function addMessage(text, isUser = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+        messageDiv.textContent = text;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      // Function to show typing indicator
+      function showTypingIndicator() {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'bot-typing';
+        typingDiv.id = 'typingIndicator';
+        typingDiv.innerHTML = `
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        `;
+        chatMessages.appendChild(typingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      // Function to remove typing indicator
+      function removeTypingIndicator() {
+        const typingIndicator = document.getElementById('typingIndicator');
+        if (typingIndicator) {
+          typingIndicator.remove();
+        }
+      }
+
+      // Function to send message
+      window.sendMessage = function() {
+        const userInput = chatInput.value.trim();
+        if (!userInput) return;
+        
+        // Add user message
+        addMessage(userInput, true);
+        chatInput.value = '';
+        
+        // Show typing indicator
+        showTypingIndicator();
+        
+        // Get AI response after delay
+        setTimeout(() => {
+          removeTypingIndicator();
+          const aiResponse = getAIResponse(userInput);
+          addMessage(aiResponse, false);
+        }, 1500);
+      };
+
+      // Function to handle suggestion chips
+      window.sendSuggestion = function(chip) {
+        const suggestion = chip.textContent;
+        chatInput.value = suggestion;
+        sendMessage();
+      };
+
+      // Function to handle Enter key
+      window.handleKeyPress = function(event) {
+        if (event.key === 'Enter') {
+          sendMessage();
+        }
+      };
+
+      // Auto-open chatbot on page load
+      setTimeout(() => {
+        chatbotWindow.classList.add('active');
+      }, 2000);
+    });
+  </script>
+</body>
+</html>

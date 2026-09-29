@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Breath_Smart Regional Hospital - Medicine Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(120deg, #fdfdfd, #f8f8f8);
+      margin: 0;
+    }
+    header {
+      background-color: green;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px;
+    }
+    .cards {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .card {
+      background: #fafafa;
+      flex: 1;
+      min-width: 200px;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .card h2 {
+      color: green;
+      font-size: 2em;
+      background: #ffe6e6;
+      padding: 8px;
+      border-radius: 6px;
+    }
+    form {
+      background: #fafafa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    form h3 {
+      margin-bottom: 10px;
+      color: green;
+      background: #ffe6e6;
+      padding: 6px;
+      border-radius: 4px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 8px;
+      margin: 6px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background: green;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: green;
+    }
+  </style>
+</head>
+<body>
+
+<h1><header>Breath_Smart Regional Hospital - Medicine Dashboard</header></h1>
+
+<div class="container">
+
+  <!-- Statistics Cards -->
+  <div class="cards">
+    <div class="card">
+      <h2 id="totalMedicines">0</h2>
+      <p>Total Medicines</p>
+    </div>
+    <div class="card">
+      <h2 id="medicinesInStock">0</h2>
+      <p>Medicines In Stock</p>
+    </div>
+    <div class="card">
+      <h2 id="lowStock">0</h2>
+      <p>Low Stock Alerts</p>
+    </div>
+  </div>
+
+  <!-- Add Medicine Form -->
+  <form id="medicineForm">
+    <h3>Add New Medicine</h3>
+    <input type="text" id="medicineName" placeholder="Medicine Name" required>
+    <select id="medicineType" required>
+      <option value="">Select Medicine Type</option>
+      <option>Tablet</option>
+      <option>Capsule</option>
+      <option>Syrup</option>
+      <option>Injection</option>
+      <option>Ointment</option>
+    </select>
+    <input type="number" id="medicineQuantity" placeholder="Quantity" min="1" required>
+    <input type="date" id="expiryDate" required>
+    <button type="submit">Add Medicine</button>
+  </form>
+
+  <!-- Request Medicine Form -->
+  <form id="requestForm">
+    <h3>Request Medicine</h3>
+    <input type="text" id="requestWard" placeholder="Ward/Department" required>
+    <select id="requestMedicine" required>
+      <option value="">Select Medicine</option>
+      <!-- Options will be dynamically loaded -->
+    </select>
+    <input type="number" id="requestQty" placeholder="Quantity Needed" min="1" required>
+    <button type="submit">Request Medicine</button>
+  </form>
+
+</div>
+
+<script>
+  let totalMedicines = parseInt(localStorage.getItem("totalMedicines")) || 0;
+  let medicinesInStock = parseInt(localStorage.getItem("medicinesInStock")) || 0;
+  let lowStock = parseInt(localStorage.getItem("lowStock")) || 0;
+  let medicineList = JSON.parse(localStorage.getItem("medicineList")) || [];
+
+  function updateDashboard() {
+    document.getElementById("totalMedicines").textContent = totalMedicines;
+    document.getElementById("medicinesInStock").textContent = medicinesInStock;
+    document.getElementById("lowStock").textContent = lowStock;
+    let requestMedicineSelect = document.getElementById("requestMedicine");
+    requestMedicineSelect.innerHTML = '<option value="">Select Medicine</option>';
+    medicineList.forEach(med => {
+      requestMedicineSelect.innerHTML += `<option>${med.name}</option>`;
+    });
+  }
+
+  document.getElementById("medicineForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    let name = document.getElementById("medicineName").value;
+    let type = document.getElementById("medicineType").value;
+    let qty = parseInt(document.getElementById("medicineQuantity").value);
+    let expiry = document.getElementById("expiryDate").value;
+    
+    totalMedicines++;
+    medicinesInStock += qty;
+    if (qty < 10) lowStock++;
+
+    medicineList.push({ name, type, qty, expiry });
+    localStorage.setItem("medicineList", JSON.stringify(medicineList));
+    localStorage.setItem("totalMedicines", totalMedicines);
+    localStorage.setItem("medicinesInStock", medicinesInStock);
+    localStorage.setItem("lowStock", lowStock);
+
+    updateDashboard();
+    this.reset();
+  });
+
+  document.getElementById("requestForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    let medicineName = document.getElementById("requestMedicine").value;
+    let qty = parseInt(document.getElementById("requestQty").value);
+
+    let medicine = medicineList.find(med => med.name === medicineName);
+    if (medicine && medicine.qty >= qty) {
+      medicine.qty -= qty;
+      medicinesInStock -= qty;
+      if (medicine.qty < 10) lowStock++;
+    }
+    localStorage.setItem("medicineList", JSON.stringify(medicineList));
+    localStorage.setItem("medicinesInStock", medicinesInStock);
+    localStorage.setItem("lowStock", lowStock);
+
+    updateDashboard();
+    this.reset();
+  });
+
+  updateDashboard();
+</script>
+
+</body>
+</html>

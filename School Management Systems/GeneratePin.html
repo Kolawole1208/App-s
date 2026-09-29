@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pin Generation System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #1a5276;
+            --secondary: #2980b9;
+            --accent: #e67e22;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --text: #333;
+            --white: #fff;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .section {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(26, 82, 118, 0.2);
+        }
+
+        .pins-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .pin-card {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .pin-label {
+            font-weight: 600;
+            margin-right: 10px;
+            color: var(--primary);
+            min-width: 80px;
+        }
+
+        .pin-value {
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            letter-spacing: 1px;
+            background-color: var(--white);
+            padding: 8px 12px;
+            border-radius: 4px;
+            flex: 1;
+            border: 1px dashed #ccc;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: var(--white);
+        }
+
+        .btn-success:hover {
+            background-color: #219653;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: var(--white);
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-warning {
+            background-color: var(--warning);
+            color: var(--white);
+        }
+
+        .btn-warning:hover {
+            background-color: #e67e22;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-section {
+            background-color: var(--light);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .upload-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .pins-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>Generate Pin</h1>
+                <p>Pin Generation and Management System</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Generate Pin Section -->
+        <section class="section">
+            <h2 class="section-title">GENERATE PIN</h2>
+            
+            <div class="form-group">
+                <label for="term-select">TERM</label>
+                <select id="term-select">
+                    <option value="">--select--</option>
+                    <option value="first">First Term</option>
+                    <option value="second">Second Term</option>
+                    <option value="third">Third Term</option>
+                </select>
+            </div>
+            
+            <div class="pins-container">
+                <div class="pin-card">
+                    <span class="pin-label">GEN PIN:</span>
+                    <span class="pin-value">0071230251319245</span>
+                </div>
+                <div class="pin-card">
+                    <span class="pin-label">GEN PIN:</span>
+                    <span class="pin-value">0031478608132300</span>
+                </div>
+                <div class="pin-card">
+                    <span class="pin-label">GEN PIN:</span>
+                    <span class="pin-value">0051344046000595</span>
+                </div>
+                <div class="pin-card">
+                    <span class="pin-label">GEN PIN:</span>
+                    <span class="pin-value">0012583532605298</span>
+                </div>
+                <div class="pin-card">
+                    <span class="pin-label">GEN PIN:</span>
+                    <span class="pin-value">0009487364350715</span>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary">
+                    <i class="fas fa-sync-alt"></i> Generate More Pins
+                </button>
+                <button class="btn btn-success">
+                    <i class="fas fa-download"></i> Download Pins
+                </button>
+            </div>
+        </section>
+
+        <!-- View Uploaded Pin Section -->
+        <section class="section">
+            <h2 class="section-title">View Uploaded Pin</h2>
+            
+            <div class="form-group">
+                <label for="view-term-select">TERM</label>
+                <select id="view-term-select">
+                    <option value="">--select--</option>
+                    <option value="first">First Term</option>
+                    <option value="second">Second Term</option>
+                    <option value="third">Third Term</option>
+                </select>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary">
+                    <i class="fas fa-eye"></i> VIEW UPLOADED PIN
+                </button>
+                <button class="btn btn-warning">
+                    <i class="fas fa-times"></i> LEAVE THIS PAGE
+                </button>
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>FIRST TERM PINS</th>
+                            <th>SERIAL NUMBERS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2590332316401929</td>
+                            <td>201812060</td>
+                            <td>
+                                <button class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> DELETE
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2535671207944767</td>
+                            <td>201812061</td>
+                            <td>
+                                <button class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> DELETE
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2538440930705941</td>
+                            <td>201812062</td>
+                            <td>
+                                <button class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> DELETE
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>253096005004455</td>
+                            <td>201812063</td>
+                            <td>
+                                <button class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> DELETE
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2541093650958233</td>
+                            <td>201812064</td>
+                            <td>
+                                <button class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> DELETE
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3854763638594033</td>
+                            <td>201812065</td>
+                            <td>
+                                <button class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> DELETE
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3894270473953673</td>
+                            <td>201812066</td>
+                            <td>
+                                <button class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> DELETE
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Upload Pin Section -->
+        <section class="section">
+            <div class="upload-section">
+                <h3 class="upload-title">UPLOAD PIN</h3>
+                <div class="action-buttons">
+                    <button class="btn btn-success">
+                        <i class="fas fa-upload"></i> UPLOAD PIN FILE
+                    </button>
+                    <button class="btn btn-warning">
+                        <i class="fas fa-times"></i> LEAVE THIS PAGE
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2023 Pin Generation System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Generate random pins
+        function generateRandomPin() {
+            let pin = '';
+            for (let i = 0; i < 16; i++) {
+                pin += Math.floor(Math.random() * 10);
+            }
+            return pin;
+        }
+
+        // Generate more pins functionality
+        document.querySelector('.btn-primary').addEventListener('click', function() {
+            const pinCards = document.querySelectorAll('.pin-card .pin-value');
+            pinCards.forEach(card => {
+                card.textContent = generateRandomPin();
+            });
+            
+            // Show success message
+            alert('New pins generated successfully!');
+        });
+
+        // Download pins functionality
+        document.querySelector('.btn-success').addEventListener('click', function() {
+            const pins = [];
+            document.querySelectorAll('.pin-card .pin-value').forEach(card => {
+                pins.push(card.textContent);
+            });
+            
+            // In a real application, this would download a file
+            alert('Pins downloaded:\n' + pins.join('\n'));
+        });
+
+        // View uploaded pins functionality
+        document.querySelectorAll('.btn-primary')[1].addEventListener('click', function() {
+            const selectedTerm = document.getElementById('view-term-select').value;
+            if (!selectedTerm) {
+                alert('Please select a term first');
+                return;
+            }
+            
+            // In a real application, this would fetch pins for the selected term
+            alert(`Showing pins for ${selectedTerm} term`);
+        });
+
+        // Leave page functionality
+        document.querySelectorAll('.btn-warning').forEach(button => {
+            button.addEventListener('click', function() {
+                if (confirm('Are you sure you want to leave this page?')) {
+                    // In a real application, this would navigate away
+                    alert('Redirecting to dashboard...');
+                }
+            });
+        });
+
+        // Delete pin functionality
+        document.querySelectorAll('.btn-danger').forEach(button => {
+            button.addEventListener('click', function() {
+                const pin = this.closest('tr').querySelector('td:first-child').textContent;
+                if (confirm(`Are you sure you want to delete pin: ${pin}?`)) {
+                    // In a real application, this would delete the pin from the database
+                    this.closest('tr').remove();
+                    alert('Pin deleted successfully!');
+                }
+            });
+        });
+
+        // Upload pin functionality
+        document.querySelectorAll('.btn-success')[1].addEventListener('click', function() {
+            // In a real application, this would open a file upload dialog
+            alert('Please select a pin file to upload');
+        });
+    </script>
+</body>
+</html>

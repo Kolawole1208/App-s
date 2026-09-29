@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Assistant Chat - Bomaj Medical</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0d5528 0%, #0a3d1f 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .chat-app-container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Enhanced Chat Header */
+        .chat-header {
+            background: linear-gradient(135deg, #075e54 0%, #0a4d40 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #25d366, #128C7E, #075e54);
+        }
+
+        .chat-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .chat-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            background: linear-gradient(135deg, #25d366, #128C7E);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .chat-details {
+            flex: 1;
+        }
+
+        .brand-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 3px;
+        }
+
+        .brand-name h1 {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #fff, #d4f8e8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .brand-badge {
+            background: linear-gradient(135deg, #25d366, #128C7E);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .tagline {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .status-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #25d366;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 10px #25d366;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .consultation-btn {
+            background: linear-gradient(135deg, #25d366, #128C7E);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 6px 15px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+            white-space: nowrap;
+            box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
+        }
+
+        .consultation-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .header-action-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            position: relative;
+        }
+
+        .header-action-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .action-tooltip {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 11px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .header-action-btn:hover .action-tooltip {
+            opacity: 1;
+            visibility: visible;
+            bottom: -35px;
+        }
+
+        /* Messages Container */
+        .messages-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #e5ddd5;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none"><rect width="100" height="100" fill="%23e5ddd5"/><path d="M0,0 L100,100" stroke="%23d1c7be" stroke-width="1"/><path d="M100,0 L0,100" stroke="%23d1c7be" stroke-width="1"/></svg>');
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 75%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            position: relative;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.received {
+            background: white;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+            margin-right: auto;
+        }
+
+        .message.sent {
+            background: #dcf8c6;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+            margin-left: auto;
+        }
+
+        .message-time {
+            font-size: 11px;
+            margin-top: 5px;
+            opacity: 0.7;
+            text-align: right;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .message-time i {
+            font-size: 9px;
+        }
+
+        .message-content {
+            line-height: 1.5;
+            font-size: 15px;
+        }
+
+        .message-sender {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #075e54;
+        }
+
+        /* Welcome Message */
+        .welcome-message {
+            text-align: center;
+            margin: 20px 0;
+            color: #666;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #075e54;
+        }
+
+        /* Message Input Area */
+        .message-input-area {
+            padding: 15px;
+            background: #f0f0f0;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            border-top: 1px solid #ddd;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            background: white;
+            border-radius: 25px;
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            padding: 10px 0;
+            background: transparent;
+        }
+
+        .attach-btn, .emoji-btn {
+            background: transparent;
+            border: none;
+            color: #666;
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .attach-btn:hover, .emoji-btn:hover {
+            color: #075e54;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #075e54, #0c7c62);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 4px 10px rgba(7, 94, 84, 0.3);
+        }
+
+        .send-btn:hover {
+            background: linear-gradient(135deg, #0c7c62, #075e54);
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(7, 94, 84, 0.4);
+        }
+
+        .send-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .quick-action-btn {
+            background: white;
+            border: 1px solid #075e54;
+            color: #075e54;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+
+        .quick-action-btn:hover {
+            background: #075e54;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(7, 94, 84, 0.2);
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 10px 15px;
+            background: white;
+            border-radius: 18px;
+            align-self: flex-start;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 3px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+
+        /* Professional Badges */
+        .professional-badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .professional-badge {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            padding: 6px 12px;
+            font-size: 11px;
+            color: #075e54;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 600;
+        }
+
+        /* Scrollbar Styling */
+        .messages-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .messages-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+        }
+
+        /* Clear Chat Button */
+        .clear-chat-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 6px 15px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+            margin-left: auto;
+            margin-right: 10px;
+        }
+
+        .clear-chat-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        /* Confirmation Modal */
+        .confirmation-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-icon {
+            font-size: 40px;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        .modal-btn {
+            padding: 10px 25px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .modal-btn.confirm {
+            background: linear-gradient(135deg, #ff6b6b, #ff4757);
+            color: white;
+        }
+
+        .modal-btn.cancel {
+            background: #f1f2f6;
+            color: #333;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .chat-app-container {
+                max-width: 100%;
+                min-height: 100vh;
+                border-radius: 0;
+            }
+            
+            body {
+                padding: 0;
+                background: #075e54;
+            }
+            
+            .chat-header {
+                padding: 12px 15px;
+                flex-wrap: wrap;
+            }
+            
+            .brand-name h1 {
+                font-size: 20px;
+            }
+            
+            .tagline {
+                font-size: 11px;
+            }
+            
+            .header-actions {
+                position: absolute;
+                right: 15px;
+                top: 12px;
+            }
+            
+            .consultation-btn {
+                position: absolute;
+                right: 15px;
+                top: 55px;
+            }
+            
+            .clear-chat-btn {
+                position: absolute;
+                right: 15px;
+                top: 90px;
+                font-size: 11px;
+                padding: 5px 12px;
+            }
+            
+            .messages-container {
+                padding: 15px;
+            }
+            
+            .professional-badges {
+                gap: 8px;
+            }
+            
+            .professional-badge {
+                font-size: 10px;
+                padding: 5px 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .chat-info {
+                gap: 12px;
+            }
+            
+            .chat-avatar {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+            
+            .brand-name h1 {
+                font-size: 18px;
+            }
+            
+            .consultation-btn {
+                font-size: 11px;
+                padding: 5px 12px;
+            }
+            
+            .clear-chat-btn {
+                top: 85px;
+                font-size: 10px;
+                padding: 4px 10px;
+            }
+        }
+
+        /* Message Status Icons */
+        .status-sent { color: #999; }
+        .status-delivered { color: #4caf50; }
+        .status-read { color: #4caf50; }
+
+        /* Certification Seal */
+        .certification-seal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, gold, #ffd700);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #075e54;
+            font-size: 12px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-app-container">
+        <!-- Enhanced Chat Header -->
+        <div class="chat-header">
+            <div class="chat-info">
+                <div class="chat-avatar">
+                    <i class="fas fa-user-md"></i>
+                    <div class="certification-seal">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+                <div class="chat-details">
+                    <div class="brand-name">
+                        <h1>BOMAJ</h1>
+                        <span class="brand-badge">MD</span>
+                    </div>
+                    <div class="tagline">International Global Pharmaceutical Solutions</div>
+                    <div class="status-line">
+                        <span class="status-dot"></span>
+                        <span>24/7 Online Medical Support</span>
+                        <button class="consultation-btn" id="speakWithDoctor">
+                            <i class="fas fa-comment-medical"></i>
+                            Speak with Doctor
+                        </button>
+                        <button class="clear-chat-btn" id="clearChatBtn">
+                            <i class="fas fa-trash-alt"></i>
+                            Clear Chat
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="header-actions">
+                <button class="header-action-btn" id="infoBtn" title="Medical Info">
+                    <i class="fas fa-info-circle"></i>
+                    <span class="action-tooltip">Medical Info</span>
+                </button>
+                <button class="header-action-btn" id="emergencyBtn" title="Emergency Help">
+                    <i class="fas fa-ambulance"></i>
+                    <span class="action-tooltip">Emergency</span>
+                </button>
+                <button class="header-action-btn" id="recordsBtn" title="Medical Records">
+                    <i class="fas fa-file-medical"></i>
+                    <span class="action-tooltip">Records</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Professional Badges -->
+        <div class="professional-badges">
+            <div class="professional-badge">
+                <i class="fas fa-shield-alt"></i>
+                HIPAA Compliant
+            </div>
+            <div class="professional-badge">
+                <i class="fas fa-clock"></i>
+                24/7 Availability
+            </div>
+            <div class="professional-badge">
+                <i class="fas fa-certificate"></i>
+                Certified Doctors
+            </div>
+            <div class="professional-badge">
+                <i class="fas fa-lock"></i>
+                Secure & Private
+            </div>
+        </div>
+        
+        <!-- Messages Container -->
+        <div class="messages-container" id="messagesContainer">
+            <!-- Welcome Message -->
+            <div class="welcome-message">
+                <p><i class="fas fa-heartbeat" style="color: #075e54; margin-right: 8px;"></i>
+                Welcome to BOMAJ Medical! Your health is our priority. Start by describing your symptoms or medical concerns.</p>
+            </div>
+            
+            <!-- Initial Messages -->
+            <div class="message received">
+                <div class="message-sender">Medical Assistant</div>
+                <div class="message-content">Hello! I'm your certified medical assistant from BOMAJ International. How can I help you today?</div>
+                <div class="message-time">Today, 10:00 AM <i class="fas fa-check-double status-read"></i></div>
+            </div>
+            
+            <!-- Messages will be dynamically added here -->
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="quick-actions" id="quickActions">
+            <button class="quick-action-btn" id="quickSymptom">
+                <i class="fas fa-thermometer"></i> Report Symptoms
+            </button>
+            <button class="quick-action-btn" id="quickMedication">
+                <i class="fas fa-pills"></i> Medication Query
+            </button>
+            <button class="quick-action-btn" id="quickAppointment">
+                <i class="fas fa-calendar-check"></i> Book Appointment
+            </button>
+            <button class="quick-action-btn" id="quickEmergency">
+                <i class="fas fa-exclamation-triangle"></i> Urgent Help
+            </button>
+        </div>
+        
+        <!-- Message Input Area -->
+        <div class="message-input-area">
+            <div class="input-wrapper">
+                <button class="attach-btn" id="attachBtn" title="Attach File">
+                    <i class="fas fa-paperclip"></i>
+                </button>
+                <input type="text" class="message-input" id="messageInput" placeholder="Type your medical concern...">
+                <button class="emoji-btn" id="emojiBtn" title="Emoji">
+                    <i class="far fa-smile"></i>
+                </button>
+            </div>
+            <button class="send-btn" id="sendBtn" disabled>
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="confirmation-modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3>Clear Chat History</h3>
+            <p>Are you sure you want to clear all chat history? This action cannot be undone.</p>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" id="cancelClear">Cancel</button>
+                <button class="modal-btn confirm" id="confirmClear">Clear Chat</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Patient chat data - starts fresh on every page load
+        let chatMessages = [
+            {
+                sender: 'assistant',
+                content: 'Hello! I\'m your certified medical assistant from BOMAJ International. How can I help you today?',
+                time: getCurrentTime(),
+                status: 'read'
+            }
+        ];
+
+        // Enhanced assistant responses
+        const assistantResponses = {
+            bomajIntro: [
+                "At BOMAJ International, we prioritize your health with global pharmaceutical excellence.",
+                "Thank you for choosing BOMAJ International for your medical needs.",
+                "BOMAJ's team of certified professionals is here to assist you 24/7."
+            ],
+            symptoms: [
+                "I understand you're experiencing symptoms. As part of BOMAJ's comprehensive care, can you describe them in more detail?",
+                "How long have you been experiencing these symptoms? Our medical team needs to know for proper assessment.",
+                "Are you experiencing any pain? If yes, on a scale of 1-10, how would you rate it?",
+                "Have you taken any medication for these symptoms? This helps BOMAJ pharmacists provide accurate guidance."
+            ],
+            medication: [
+                "Please tell me the name of the medication you're inquiring about. BOMAJ pharmacists can provide detailed information.",
+                "Are you experiencing any side effects from your current medication? Our pharmaceutical team can advise on alternatives.",
+                "When was the last time you took this medication? This helps our medical team assess your situation.",
+                "I recommend consulting with a BOMAJ pharmacist about medication interactions and proper usage."
+            ],
+            appointment: [
+                "I can help you schedule an appointment with BOMAJ's certified doctors. What type of specialist do you need?",
+                "When would you like to schedule the appointment? We have availability across multiple time zones.",
+                "Do you have any preferred days or times? BOMAJ offers flexible scheduling options.",
+                "I'll check BOMAJ's available slots and get back to you shortly with confirmation."
+            ],
+            emergency: [
+                "🚨 URGENT BOMAJ ALERT: If this is a life-threatening emergency, please call 911 or go to the nearest emergency room immediately.",
+                "For urgent but non-life-threatening concerns, I can connect you with BOMAJ's on-call doctor immediately.",
+                "Please describe the emergency so I can provide appropriate guidance from BOMAJ's medical team."
+            ],
+            general: [
+                "Thank you for sharing that information with BOMAJ International.",
+                "I'll make a note of this for BOMAJ's medical team review.",
+                "Your health is our priority at BOMAJ International. Let me help you further.",
+                "BOMAJ's global pharmaceutical network ensures you receive the best possible care."
+            ]
+        };
+
+        // Get current time in readable format
+        function getCurrentTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const dateString = now.toLocaleDateString([], { month: 'short', day: 'numeric' });
+            return `${dateString}, ${timeString}`;
+        }
+
+        // Initialize the chat
+        document.addEventListener('DOMContentLoaded', function() {
+            // Start with fresh chat on every page load
+            initializeFreshChat();
+            renderMessages();
+            setupEventListeners();
+            
+            // Add professional intro message after a delay
+            setTimeout(addProfessionalIntro, 1000);
+        });
+
+        // Initialize fresh chat (no localStorage)
+        function initializeFreshChat() {
+            chatMessages = [
+                {
+                    sender: 'assistant',
+                    content: 'Hello! I\'m your certified medical assistant from BOMAJ International. How can I help you today?',
+                    time: getCurrentTime(),
+                    status: 'read'
+                }
+            ];
+        }
+
+        // Add professional introduction
+        function addProfessionalIntro() {
+            if (chatMessages.length <= 1) { // Only if it's a new conversation
+                const introMessages = [
+                    "Welcome to BOMAJ International Global Pharmaceutical Solutions.",
+                    "Our certified medical team is available 24/7 to assist you with any health concerns.",
+                    "You can discuss symptoms, medication queries, appointments, or request emergency assistance.",
+                    "All conversations are private, secure, and HIPAA compliant."
+                ];
+                
+                introMessages.forEach((msg, index) => {
+                    setTimeout(() => {
+                        const introMessage = {
+                            sender: 'assistant',
+                            content: msg,
+                            time: getCurrentTime(),
+                            status: 'read'
+                        };
+                        
+                        chatMessages.push(introMessage);
+                        renderMessages();
+                    }, index * 1500);
+                });
+            }
+        }
+
+        // Clear all chat messages
+        function clearChatHistory() {
+            // Hide confirmation modal
+            document.getElementById('confirmationModal').style.display = 'none';
+            
+            // Reset chat messages
+            initializeFreshChat();
+            
+            // Re-render messages
+            renderMessages();
+            
+            // Show confirmation
+            showNotification("Chat history cleared successfully");
+            
+            // Add professional intro again after clearing
+            setTimeout(addProfessionalIntro, 1000);
+        }
+
+        // Render all messages
+        function renderMessages() {
+            const container = document.getElementById('messagesContainer');
+            container.innerHTML = '';
+            
+            // Add welcome message
+            const welcomeMsg = document.createElement('div');
+            welcomeMsg.className = 'welcome-message';
+            welcomeMsg.innerHTML = '<p><i class="fas fa-heartbeat" style="color: #075e54; margin-right: 8px;"></i>Welcome to BOMAJ Medical! Your health is our priority. Start by describing your symptoms or medical concerns.</p>';
+            container.appendChild(welcomeMsg);
+            
+            // Add all messages
+            chatMessages.forEach((msg, index) => {
+                const messageElement = createMessageElement(msg, index);
+                container.appendChild(messageElement);
+            });
+            
+            // Scroll to bottom
+            container.scrollTop = container.scrollHeight;
+            
+            // Update send button state
+            updateSendButton();
+        }
+
+        // Create a message element
+        function createMessageElement(msg, index) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${msg.sender === 'patient' ? 'sent' : 'received'}`;
+            
+            let statusIcon = 'fa-check';
+            let statusClass = 'status-sent';
+            
+            if (msg.status === 'delivered') {
+                statusClass = 'status-delivered';
+            } else if (msg.status === 'read') {
+                statusIcon = 'fa-check-double';
+                statusClass = 'status-read';
+            }
+            
+            if (msg.sender === 'assistant') {
+                messageDiv.innerHTML = `
+                    <div class="message-sender">BOMAJ Medical Assistant</div>
+                    <div class="message-content">${msg.content}</div>
+                    <div class="message-time">${msg.time} <i class="fas ${statusIcon} ${statusClass}"></i></div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="message-content">${msg.content}</div>
+                    <div class="message-time">${msg.time} <i class="fas ${statusIcon} ${statusClass}"></i></div>
+                `;
+            }
+            
+            return messageDiv;
+        }
+
+        // Show typing indicator
+        function showTypingIndicator() {
+            const container = document.getElementById('messagesContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.innerHTML = `
+                <div class="chat-avatar" style="width: 30px; height: 30px; font-size: 14px;">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div style="font-size: 12px; color: #075e54; font-weight: 600;">BOMAJ Assistant</div>
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            container.appendChild(typingDiv);
+            container.scrollTop = container.scrollHeight;
+            return typingDiv;
+        }
+
+        // Generate assistant response
+        function generateAssistantResponse(userMessage) {
+            const lowerMessage = userMessage.toLowerCase();
+            
+            // Check for BOMAJ mentions
+            if (lowerMessage.includes('bomaj') || lowerMessage.includes('international')) {
+                return assistantResponses.bomajIntro[Math.floor(Math.random() * assistantResponses.bomajIntro.length)];
+            }
+            
+            // Check for other keywords
+            if (lowerMessage.includes('symptom') || lowerMessage.includes('pain') || lowerMessage.includes('fever') || lowerMessage.includes('headache')) {
+                return assistantResponses.symptoms[Math.floor(Math.random() * assistantResponses.symptoms.length)];
+            } else if (lowerMessage.includes('medication') || lowerMessage.includes('pill') || lowerMessage.includes('drug') || lowerMessage.includes('prescription')) {
+                return assistantResponses.medication[Math.floor(Math.random() * assistantResponses.medication.length)];
+            } else if (lowerMessage.includes('appointment') || lowerMessage.includes('schedule') || lowerMessage.includes('book') || lowerMessage.includes('meeting')) {
+                return assistantResponses.appointment[Math.floor(Math.random() * assistantResponses.appointment.length)];
+            } else if (lowerMessage.includes('emergency') || lowerMessage.includes('urgent') || lowerMessage.includes('911') || lowerMessage.includes('help')) {
+                return assistantResponses.emergency[Math.floor(Math.random() * assistantResponses.emergency.length)];
+            } else {
+                return assistantResponses.general[Math.floor(Math.random() * assistantResponses.general.length)];
+            }
+        }
+
+        // Send message
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const messageText = input.value.trim();
+            
+            if (!messageText) return;
+            
+            // Add patient message
+            const patientMessage = {
+                sender: 'patient',
+                content: messageText,
+                time: getCurrentTime(),
+                status: 'sent'
+            };
+            
+            chatMessages.push(patientMessage);
+            renderMessages();
+            
+            // Clear input
+            input.value = '';
+            
+            // Show typing indicator
+            const typingIndicator = showTypingIndicator();
+            
+            // Generate and add assistant response after delay
+            setTimeout(() => {
+                // Remove typing indicator
+                typingIndicator.remove();
+                
+                // Generate response
+                const assistantResponse = generateAssistantResponse(messageText);
+                
+                // Add assistant message
+                const assistantMessage = {
+                    sender: 'assistant',
+                    content: assistantResponse,
+                    time: getCurrentTime(),
+                    status: 'read'
+                };
+                
+                // Update previous message status
+                if (chatMessages.length > 0) {
+                    chatMessages[chatMessages.length - 1].status = 'read';
+                }
+                
+                chatMessages.push(assistantMessage);
+                renderMessages();
+                
+                // Check for emergency keywords
+                if (messageText.toLowerCase().includes('emergency') || messageText.toLowerCase().includes('911')) {
+                    showEmergencyAlert();
+                }
+            }, 1500 + Math.random() * 2000);
+        }
+
+        // Update send button state
+        function updateSendButton() {
+            const input = document.getElementById('messageInput');
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = !input.value.trim();
+        }
+
+        // Show emergency alert
+        function showEmergencyAlert() {
+            const alertDiv = document.createElement('div');
+            alertDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(135deg, #ff4444, #cc0000);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 5px 20px rgba(255, 68, 68, 0.4);
+                z-index: 1000;
+                animation: slideDown 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                max-width: 90%;
+                text-align: center;
+                border: 2px solid white;
+            `;
+            alertDiv.innerHTML = `
+                <i class="fas fa-exclamation-triangle" style="font-size: 24px;"></i>
+                <div>
+                    <strong style="font-size: 16px;">BOMAJ EMERGENCY ALERT</strong><br>
+                    <small>If this is life-threatening, call 911 or go to nearest ER immediately.</small>
+                </div>
+                <i class="fas fa-times" style="cursor: pointer; margin-left: 10px;" onclick="this.parentElement.remove()"></i>
+            `;
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                if (alertDiv.parentElement) {
+                    alertDiv.style.animation = 'slideUp 0.3s ease';
+                    setTimeout(() => alertDiv.remove(), 300);
+                }
+            }, 8000);
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Send message on button click
+            document.getElementById('sendBtn').addEventListener('click', sendMessage);
+            
+            // Send message on Enter key
+            document.getElementById('messageInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            // Update send button state on input
+            document.getElementById('messageInput').addEventListener('input', updateSendButton);
+            
+            // Clear chat button
+            document.getElementById('clearChatBtn').addEventListener('click', () => {
+                document.getElementById('confirmationModal').style.display = 'flex';
+            });
+            
+            // Confirmation modal buttons
+            document.getElementById('cancelClear').addEventListener('click', () => {
+                document.getElementById('confirmationModal').style.display = 'none';
+            });
+            
+            document.getElementById('confirmClear').addEventListener('click', clearChatHistory);
+            
+            // Close modal when clicking outside
+            document.getElementById('confirmationModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('confirmationModal')) {
+                    document.getElementById('confirmationModal').style.display = 'none';
+                }
+            });
+            
+            // Speak with doctor button
+            document.getElementById('speakWithDoctor').addEventListener('click', () => {
+                document.getElementById('messageInput').value = "I'd like to speak with a doctor directly.";
+                updateSendButton();
+                showNotification("Request sent to connect with BOMAJ doctor");
+            });
+            
+            // Quick action buttons
+            document.getElementById('quickSymptom').addEventListener('click', () => {
+                document.getElementById('messageInput').value = "I'm experiencing some symptoms I'd like to discuss with BOMAJ medical team.";
+                updateSendButton();
+            });
+            
+            document.getElementById('quickMedication').addEventListener('click', () => {
+                document.getElementById('messageInput').value = "I have a question about my medication for BOMAJ pharmacists.";
+                updateSendButton();
+            });
+            
+            document.getElementById('quickAppointment').addEventListener('click', () => {
+                document.getElementById('messageInput').value = "I'd like to book an appointment with a BOMAJ certified doctor.";
+                updateSendButton();
+            });
+            
+            document.getElementById('quickEmergency').addEventListener('click', () => {
+                document.getElementById('messageInput').value = "URGENT: I need immediate medical assistance from BOMAJ.";
+                updateSendButton();
+            });
+            
+            // Info button
+            document.getElementById('infoBtn').addEventListener('click', () => {
+                const infoMessage = {
+                    sender: 'assistant',
+                    content: 'BOMAJ International Global Pharmaceutical Solutions provides 24/7 medical assistance. You can discuss symptoms, medications, appointments, or any health concerns with our certified professionals. All communications are HIPAA compliant and secure.',
+                    time: getCurrentTime(),
+                    status: 'read'
+                };
+                chatMessages.push(infoMessage);
+                renderMessages();
+            });
+            
+            // Emergency button
+            document.getElementById('emergencyBtn').addEventListener('click', () => {
+                if (confirm('🚨 BOMAJ EMERGENCY PROTOCOL 🚨\n\nIf this is a life-threatening emergency:\n1. Call 911 immediately\n2. Go to the nearest emergency room\n\nBOMAJ Medical Team will coordinate with emergency services.\n\nClick OK to continue with online assistance.')) {
+                    document.getElementById('messageInput').value = "EMERGENCY: I need immediate medical assistance from BOMAJ.";
+                    updateSendButton();
+                }
+            });
+            
+            // Records button
+            document.getElementById('recordsBtn').addEventListener('click', () => {
+                const recordsMessage = {
+                    sender: 'assistant',
+                    content: 'BOMAJ maintains secure medical records for all patients. To access your records or share them with another provider, please visit our patient portal or speak with our medical records department.',
+                    time: getCurrentTime(),
+                    status: 'read'
+                };
+                chatMessages.push(recordsMessage);
+                renderMessages();
+            });
+            
+            // Attach button
+            document.getElementById('attachBtn').addEventListener('click', () => {
+                alert('BOMAJ Secure File Upload:\nYou can attach photos of symptoms, prescriptions, lab results, or medical reports. All files are encrypted and HIPAA compliant.');
+            });
+            
+            // Emoji button
+            document.getElementById('emojiBtn').addEventListener('click', () => {
+                alert('Emoji picker would appear here in a full implementation.');
+            });
+            
+            // Add CSS animations for alerts
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideDown {
+                    from { transform: translate(-50%, -100%); opacity: 0; }
+                    to { transform: translate(-50%, 0); opacity: 1; }
+                }
+                @keyframes slideUp {
+                    from { transform: translate(-50%, 0); opacity: 1; }
+                    to { transform: translate(-50%, -100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #075e54, #0c7c62);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                z-index: 1000;
+                animation: slideInRight 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                max-width: 300px;
+                border-left: 4px solid #25d366;
+            `;
+            notification.innerHTML = `
+                <i class="fas fa-bell" style="font-size: 20px;"></i>
+                <div>
+                    <strong>BOMAJ Notification</strong><br>
+                    <small>${message}</small>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+            
+            // Add notification animation styles
+            if (!document.querySelector('#notificationStyles')) {
+                const notificationStyle = document.createElement('style');
+                notificationStyle.id = 'notificationStyles';
+                notificationStyle.textContent = `
+                    @keyframes slideInRight {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                    @keyframes slideOutRight {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(notificationStyle);
+            }
+        }
+    </script>
+</body>
+</html>

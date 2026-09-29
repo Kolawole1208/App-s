@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podcasts | MediaBlog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Navigation styles */
+        nav {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #3498db;
+        }
+        
+        .nav-links a.active {
+            color: #3498db;
+            font-weight: 600;
+        }
+        
+        /* Main content styles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        
+        .page-header p {
+            color: #7f8c8d;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Search Section */
+        .search-section {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .search-container {
+            display: flex;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .search-input {
+            flex-grow: 1;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 30px 0 0 30px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .search-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 0 30px 30px 0;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .search-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .search-info {
+            text-align: center;
+            margin-top: 1rem;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        /* Podcast intro */
+        .podcast-intro {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #9b59b6, #3498db);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .podcast-intro h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .podcast-intro p {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Featured podcast */
+        .featured-podcast {
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .featured-content {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+        
+        .featured-image {
+            border-radius: 10px;
+            overflow: hidden;
+            height: 300px;
+        }
+        
+        .featured-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .featured-info h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        .featured-meta {
+            display: flex;
+            color: #7f8c8d;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .featured-meta span {
+            margin-right: 1rem;
+        }
+        
+        .featured-description {
+            color: #555;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+        
+        .podcast-player {
+            background-color: #2c3e50;
+            padding: 1.5rem;
+            color: white;
+        }
+        
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .play-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        
+        .play-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .progress-bar {
+            flex-grow: 1;
+            height: 6px;
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .progress {
+            position: absolute;
+            height: 100%;
+            background-color: #3498db;
+            border-radius: 3px;
+            width: 30%;
+        }
+        
+        .time {
+            font-size: 0.9rem;
+            color: #ecf0f1;
+        }
+        
+        /* Filter controls */
+        .filter-controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-btn {
+            background-color: #fff;
+            border: 2px solid #3498db;
+            color: #3498db;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        /* Podcast grid */
+        .podcast-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .podcast-item {
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .podcast-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .podcast-image {
+            height: 180px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .podcast-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .podcast-item:hover .podcast-image img {
+            transform: scale(1.05);
+        }
+        
+        .podcast-category {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(52, 152, 219, 0.8);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .podcast-content {
+            padding: 1.5rem;
+        }
+        
+        .podcast-content h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .podcast-meta {
+            display: flex;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .podcast-meta span {
+            margin-right: 1rem;
+        }
+        
+        .podcast-description {
+            color: #555;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .podcast-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .listen-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: #3498db;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .listen-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .duration {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        /* No results message */
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #7f8c8d;
+            grid-column: 1 / -1;
+        }
+        
+        /* Subscribe section */
+        .subscribe-section {
+            background-color: #2c3e50;
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .subscribe-section h2 {
+            margin-bottom: 1rem;
+        }
+        
+        .subscribe-section p {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            color: #ecf0f1;
+        }
+        
+        .platforms {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .platform {
+            background-color: rgba(255,255,255,0.1);
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        
+        .platform:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+        
+        .newsletter-form {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .newsletter-form input {
+            flex-grow: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 4px 0 0 4px;
+        }
+        
+        .newsletter-form button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .newsletter-form button:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 3rem 2rem;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #3498db;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #34495e;
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 992px) {
+            .featured-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .podcast-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-links li {
+                margin: 0.5rem;
+            }
+            
+            .podcast-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .newsletter-form input,
+            .newsletter-form button {
+                width: 100%;
+                border-radius: 4px;
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">MediaBlog</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="podcasts.html" class="active">Podcasts</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-header">
+            <h1>Podcasts</h1>
+            <p>Listen to engaging conversations, stories, and insights on various topics</p>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search podcasts by title, date, category, or content...">
+                <button class="search-btn" id="searchBtn">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+            <div class="search-info">
+                Try searching for "technology", "June 2023", "interview", or any keyword
+            </div>
+        </div>
+
+        <div class="podcast-intro">
+            <h2>Welcome to My Audio Journey</h2>
+            <p>As a passionate content creator, I explore fascinating topics through conversations with interesting people. Each episode is a deep dive into ideas, stories, and perspectives that matter.</p>
+        </div>
+
+        <!-- Featured Podcast -->
+        <div class="featured-podcast">
+            <div class="featured-content">
+                <div class="featured-image">
+                    <img src="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Featured Podcast">
+                </div>
+                <div class="featured-info">
+                    <h2>The Future of Digital Creativity</h2>
+                    <div class="featured-meta">
+                        <span>June 15, 2023</span>
+                        <span>Interview</span>
+                        <span>45 min</span>
+                    </div>
+                    <div class="featured-description">
+                        <p>In this special episode, I sit down with renowned digital artist Maya Johnson to discuss how technology is reshaping creative expression. We explore everything from AI-generated art to virtual reality experiences and what it means to be an artist in the digital age.</p>
+                        <p>Maya shares her journey from traditional painting to digital mastery and offers valuable insights for aspiring creators.</p>
+                    </div>
+                    <div class="podcast-actions">
+                        <a href="#" class="listen-btn">
+                            <i class="fas fa-play"></i> Listen Now
+                        </a>
+                        <span class="duration">45:22</span>
+                    </div>
+                </div>
+            </div>
+            <div class="podcast-player">
+                <div class="player-controls">
+                    <button class="play-btn">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                    <div class="time">14:32 / 45:22</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="filter-controls">
+            <button class="filter-btn active" data-filter="all">All Episodes</button>
+            <button class="filter-btn" data-filter="interview">Interviews</button>
+            <button class="filter-btn" data-filter="storytelling">Storytelling</button>
+            <button class="filter-btn" data-filter="educational">Educational</button>
+            <button class="filter-btn" data-filter="tech">Technology</button>
+        </div>
+
+        <!-- Podcast Grid -->
+        <div class="podcast-grid" id="podcastGrid">
+            <!-- Podcast items will be dynamically inserted here -->
+        </div>
+
+        <!-- Subscribe Section -->
+        <div class="subscribe-section">
+            <h2>Never Miss an Episode</h2>
+            <p>Subscribe to my podcast on your favorite platform and get new episodes delivered automatically.</p>
+            
+            <div class="platforms">
+                <a href="#" class="platform">
+                    <i class="fab fa-spotify"></i> Spotify
+                </a>
+                <a href="#" class="platform">
+                    <i class="fab fa-apple"></i> Apple Podcasts
+                </a>
+                <a href="#" class="platform">
+                    <i class="fab fa-google"></i> Google Podcasts
+                </a>
+                <a href="#" class="platform">
+                    <i class="fas fa-rss"></i> RSS Feed
+                </a>
+            </div>
+            
+            <h3>Or get updates by email</h3>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Your email address" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>MediaBlog</h3>
+                <p>Sharing stories through visuals, words, and sounds. Join me on this creative journey.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="podcasts.html">Podcasts</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="about.html">About Me</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Connect With Me</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                    <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+                    <li><a href="#"><i class="fab fa-youtube"></i> YouTube</a></li>
+                    <li><a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2023 MediaBlog. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Podcast data - 20 episodes with details
+        const podcastData = [
+            {
+                id: 1,
+                title: "The Future of Digital Creativity",
+                category: "interview",
+                date: "June 15, 2023",
+                duration: "45:22",
+                description: "A conversation with digital artist Maya Johnson about technology's impact on creative expression.",
+                fullDescription: "In this special episode, I sit down with renowned digital artist Maya Johnson to discuss how technology is reshaping creative expression. We explore everything from AI-generated art to virtual reality experiences and what it means to be an artist in the digital age. Maya shares her journey from traditional painting to digital mastery and offers valuable insights for aspiring creators.",
+                image: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 2,
+                title: "Storytelling Through Sound",
+                category: "educational",
+                date: "June 8, 2023",
+                duration: "38:15",
+                description: "Exploring the art of audio storytelling and how to create immersive experiences for listeners.",
+                fullDescription: "In this episode, we dive deep into the art of audio storytelling. I share techniques for creating immersive experiences that captivate listeners from the first second. We discuss everything from narrative structure and character development to sound design and music selection. Whether you're a podcaster, audio producer, or just love a good story, this episode is packed with practical advice and inspiring examples.",
+                image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 3,
+                title: "My Journey as a Content Creator",
+                category: "storytelling",
+                date: "June 1, 2023",
+                duration: "52:40",
+                description: "A personal reflection on my creative journey, challenges faced, and lessons learned along the way.",
+                fullDescription: "In this more personal episode, I share my journey as a content creator - from my first awkward attempts at making videos to building a community around my work. I discuss the challenges I've faced, the mistakes I've made, and the lessons I've learned along the way. This is an honest conversation about the realities of creative work, dealing with imposter syndrome, and finding your unique voice in a crowded digital landscape.",
+                image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 4,
+                title: "AI in Creative Industries",
+                category: "tech",
+                date: "May 25, 2023",
+                duration: "41:30",
+                description: "Examining how artificial intelligence is transforming creative work and what it means for the future.",
+                fullDescription: "Artificial intelligence is no longer science fiction - it's transforming creative industries right now. In this episode, I explore how AI tools are being used in writing, design, music, and visual arts. I speak with creators who are embracing these technologies and others who have concerns about their impact. We discuss the ethical implications, the potential for new forms of expression, and how human creativity might evolve alongside intelligent machines.",
+                image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 5,
+                title: "The Power of Visual Storytelling",
+                category: "educational",
+                date: "May 18, 2023",
+                duration: "36:55",
+                description: "How compelling visuals can enhance narratives and create more engaging content.",
+                fullDescription: "They say a picture is worth a thousand words, but how can we use visuals to tell even more powerful stories? In this episode, I break down the elements of visual storytelling and how they can be applied across different media. From photography and video to graphic design and data visualization, we explore techniques for creating images that don't just show but truly communicate. I share examples from my own work and discuss common pitfalls to avoid.",
+                image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 6,
+                title: "Conversations with a Travel Photographer",
+                category: "interview",
+                date: "May 11, 2023",
+                duration: "49:20",
+                description: "An inspiring discussion with travel photographer Alex Chen about capturing cultures and landscapes.",
+                fullDescription: "Join me for an inspiring conversation with travel photographer Alex Chen, whose work has taken him to over 60 countries. Alex shares incredible stories from his journeys, from remote villages in Mongolia to bustling cities in South America. We discuss the ethics of travel photography, how to respectfully document other cultures, and the technical challenges of working in diverse environments. Alex also offers practical advice for aspiring travel photographers on everything from gear selection to building a portfolio.",
+                image: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 7,
+                title: "Building Creative Habits",
+                category: "educational",
+                date: "May 4, 2023",
+                duration: "33:45",
+                description: "Strategies for developing consistent creative practices that lead to meaningful work.",
+                fullDescription: "How do we move from sporadic bursts of inspiration to consistent creative output? In this episode, I explore the science and psychology behind building sustainable creative habits. We discuss everything from morning routines and workspace design to dealing with creative blocks and maintaining motivation over the long term. I share my own system for staying productive while avoiding burnout, and we hear from listeners about what works for them.",
+                image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 8,
+                title: "The Ethics of Digital Content",
+                category: "tech",
+                date: "April 27, 2023",
+                duration: "44:10",
+                description: "Navigating the complex ethical questions that arise in today's digital content landscape.",
+                fullDescription: "As content creators, we face ethical questions every day - from how we represent others to the environmental impact of our work. In this thought-provoking episode, I explore the complex ethical landscape of digital content creation. We discuss issues like cultural appropriation, disclosure of sponsorships, the environmental cost of digital storage, and the responsibility we have to our audiences. This is not about finding easy answers, but about asking better questions.",
+                image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 9,
+                title: "Finding Your Creative Voice",
+                category: "storytelling",
+                date: "April 20, 2023",
+                duration: "39:25",
+                description: "A exploration of how to discover and develop your unique perspective as a creator.",
+                fullDescription: "What does it mean to have a 'creative voice' and how do we find ours? In this episode, I explore the journey of discovering and developing your unique perspective as a creator. We discuss the tension between inspiration and imitation, the role of personal experience in shaping our work, and how to stay true to yourself while still growing and evolving. I share exercises that have helped me clarify my own voice and we hear from listeners about their experiences.",
+                image: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 10,
+                title: "The Business of Creativity",
+                category: "educational",
+                date: "April 13, 2023",
+                duration: "47:50",
+                description: "Practical advice for turning creative passion into a sustainable career or business.",
+                fullDescription: "Many of us start creating for the love of it, but at some point, we might want to make it more than just a hobby. In this episode, I tackle the business side of creativity - from pricing your work and finding clients to building a brand and scaling your operations. I share my own mistakes and successes, and we discuss how to balance commercial considerations with artistic integrity. Whether you're looking to go full-time or just earn a little from your passion, this episode offers practical guidance.",
+                image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 11,
+                title: "Mindfulness for Creators",
+                category: "educational",
+                date: "April 6, 2023",
+                duration: "35:15",
+                description: "How mindfulness practices can enhance creativity and help manage the stresses of creative work.",
+                fullDescription: "In this calming episode, I explore the intersection of mindfulness and creativity. We discuss how meditation, breathwork, and other mindfulness practices can help creators overcome blocks, manage anxiety, and access deeper levels of inspiration. I share simple techniques that can be incorporated into any creative routine, and we explore the science behind why mindfulness can be such a powerful tool for anyone in a creative field.",
+                image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 12,
+                title: "The Science of Color",
+                category: "educational",
+                date: "March 30, 2023",
+                duration: "42:20",
+                description: "Exploring how color theory influences perception and emotion in visual media.",
+                fullDescription: "Color is one of the most powerful tools in a creator's arsenal, but how does it actually work? In this episode, we dive deep into the science and psychology of color. We explore everything from basic color theory to the neurological effects different colors have on viewers. I share practical tips for using color effectively in photography, design, and video, and we discuss how cultural differences can influence color perception.",
+                image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 13,
+                title: "Documentary Filmmaking Insights",
+                category: "interview",
+                date: "March 23, 2023",
+                duration: "51:10",
+                description: "A conversation with award-winning documentary filmmaker Sarah Williams about telling true stories.",
+                fullDescription: "Join me for a fascinating conversation with Sarah Williams, an award-winning documentary filmmaker whose work has shed light on important social issues. Sarah shares her process for finding compelling stories, gaining the trust of subjects, and balancing journalistic integrity with artistic expression. We discuss the ethical challenges of documentary work and how the genre is evolving in the digital age. Sarah also offers advice for aspiring documentarians looking to make their first film.",
+                image: "https://images.unsplash.com/photo-1485846234645-a62644f84728?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 14,
+                title: "The Future of Social Media",
+                category: "tech",
+                date: "March 16, 2023",
+                duration: "38:45",
+                description: "How emerging platforms and technologies are changing the way we connect and share online.",
+                fullDescription: "Social media is constantly evolving, and the changes happening now will shape how we communicate for years to come. In this episode, I explore emerging platforms, new features, and the technologies driving the next wave of social media. We discuss everything from the rise of audio-based platforms to the potential impact of VR and AR on social connection. I also share thoughts on how creators can adapt to these changes while staying true to their values.",
+                image: "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 15,
+                title: "Creative Collaboration",
+                category: "educational",
+                date: "March 9, 2023",
+                duration: "44:30",
+                description: "Strategies for successful creative partnerships and collaborative projects.",
+                fullDescription: "Some of the most amazing creative work happens when talented people come together. In this episode, I explore the art of creative collaboration - from finding the right partners to navigating the challenges of working together. We discuss communication strategies, dividing responsibilities, handling creative differences, and knowing when a collaboration has run its course. I share stories from my own collaborative projects and what I've learned from both successes and failures.",
+                image: "https://images.unsplash.com/photo-1552664688-cf412ec27db2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 16,
+                title: "Urban Photography Techniques",
+                category: "educational",
+                date: "March 2, 2023",
+                duration: "36:20",
+                description: "Tips and techniques for capturing the energy and stories of city environments.",
+                fullDescription: "Cities are full of stories waiting to be told through photography. In this episode, I share my approach to urban photography, from technical considerations like camera settings and composition to the more conceptual aspects of finding narratives in the urban landscape. We discuss everything from street photography and architectural shots to capturing the unique character of different neighborhoods. Whether you're shooting in a bustling metropolis or a small town, this episode will help you see urban environments with fresh eyes.",
+                image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 17,
+                title: "The Psychology of Creativity",
+                category: "educational",
+                date: "February 23, 2023",
+                duration: "49:55",
+                description: "Exploring what psychological research tells us about the creative process and creative minds.",
+                fullDescription: "What's actually happening in our brains when we're being creative? In this episode, we dive into the psychology of creativity, exploring research on everything from the personality traits of creative people to the cognitive processes behind innovative thinking. We discuss the role of daydreaming, the connection between mental health and creativity, and practical ways to cultivate a more creative mindset based on psychological principles.",
+                image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 18,
+                title: "Music Production for Visual Media",
+                category: "educational",
+                date: "February 16, 2023",
+                duration: "41:15",
+                description: "How to create and select music that enhances visual stories in film, video, and multimedia.",
+                fullDescription: "The right music can transform a visual piece from good to unforgettable. In this episode, I explore the art of music production for visual media. We discuss everything from basic music theory for non-musicians to working with composers and selecting existing music for your projects. I share tips for creating emotional impact through music and how to avoid common pitfalls when pairing sound with visuals.",
+                image: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 19,
+                title: "Sustainable Content Creation",
+                category: "educational",
+                date: "February 9, 2023",
+                duration: "37:40",
+                description: "How to create meaningful content while minimizing environmental impact and avoiding burnout.",
+                fullDescription: "As creators, we have a responsibility to consider the impact of our work - both on ourselves and the planet. In this episode, I explore the concept of sustainable content creation. We discuss everything from the environmental cost of digital storage and equipment to strategies for maintaining creative energy over the long term. I share my approach to creating work that matters without sacrificing wellbeing or contributing unnecessarily to environmental problems.",
+                image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 20,
+                title: "The Art of the Interview",
+                category: "educational",
+                date: "February 2, 2023",
+                duration: "43:25",
+                description: "Techniques for conducting engaging interviews that reveal authentic stories and insights.",
+                fullDescription: "A great interview can be transformative - for both the interviewer and the audience. In this episode, I share everything I've learned about conducting compelling interviews. We discuss preparation strategies, question formulation, active listening techniques, and how to create an environment where subjects feel comfortable sharing authentically. Whether you're interviewing experts for a podcast or conducting research for a project, these techniques will help you get to the heart of the story.",
+                image: "https://images.unsplash.com/photo-1589903308904-1010c2294adc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            }
+        ];
+
+        // Function to render podcast items
+        function renderPodcasts(items) {
+            const podcastGrid = document.getElementById('podcastGrid');
+            podcastGrid.innerHTML = '';
+            
+            if (items.length === 0) {
+                podcastGrid.innerHTML = '<div class="no-results"><h3>No podcasts found</h3><p>Try adjusting your search or filter criteria</p></div>';
+                return;
+            }
+            
+            items.forEach(item => {
+                const podcastItem = document.createElement('div');
+                podcastItem.className = `podcast-item ${item.category}`;
+                podcastItem.setAttribute('data-category', item.category);
+                podcastItem.innerHTML = `
+                    <div class="podcast-image">
+                        <img src="${item.image}" alt="${item.title}">
+                        <span class="podcast-category">${item.category.charAt(0).toUpperCase() + item.category.slice(1)}</span>
+                    </div>
+                    <div class="podcast-content">
+                        <h3>${item.title}</h3>
+                        <div class="podcast-meta">
+                            <span>${item.date}</span>
+                            <span>${item.duration}</span>
+                        </div>
+                        <p class="podcast-description">${item.description}</p>
+                        <div class="podcast-actions">
+                            <a href="#" class="listen-btn">
+                                <i class="fas fa-play"></i> Listen
+                            </a>
+                            <span class="duration">${item.duration}</span>
+                        </div>
+                    </div>
+                `;
+                
+                podcastGrid.appendChild(podcastItem);
+            });
+        }
+        
+        // Function to filter podcast items
+        function filterPodcasts(category) {
+            const items = category === 'all' 
+                ? podcastData 
+                : podcastData.filter(item => item.category === category);
+            
+            renderPodcasts(items);
+            
+            // Update active filter button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        // Function to search podcasts
+        function searchPodcasts(query) {
+            if (!query.trim()) {
+                // If search is empty, show all podcasts
+                const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+                filterPodcasts(activeFilter);
+                return;
+            }
+            
+            const lowerQuery = query.toLowerCase();
+            const results = podcastData.filter(item => {
+                return (
+                    item.title.toLowerCase().includes(lowerQuery) ||
+                    item.description.toLowerCase().includes(lowerQuery) ||
+                    item.fullDescription.toLowerCase().includes(lowerQuery) ||
+                    item.category.toLowerCase().includes(lowerQuery) ||
+                    item.date.toLowerCase().includes(lowerQuery)
+                );
+            });
+            
+            renderPodcasts(results);
+        }
+        
+        // Initialize podcast page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Render all items initially
+            renderPodcasts(podcastData);
+            
+            // Add event listeners to filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const filter = this.getAttribute('data-filter');
+                    filterPodcasts(filter);
+                });
+            });
+            
+            // Search functionality
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            
+            searchBtn.addEventListener('click', function() {
+                searchPodcasts(searchInput.value);
+            });
+            
+            searchInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    searchPodcasts(searchInput.value);
+                }
+            });
+            
+            // Play button functionality for featured podcast
+            const playBtn = document.querySelector('.play-btn');
+            let isPlaying = false;
+            
+            playBtn.addEventListener('click', function() {
+                isPlaying = !isPlaying;
+                const icon = this.querySelector('i');
+                
+                if (isPlaying) {
+                    icon.classList.remove('fa-play');
+                    icon.classList.add('fa-pause');
+                    this.style.backgroundColor = '#e74c3c';
+                } else {
+                    icon.classList.remove('fa-pause');
+                    icon.classList.add('fa-play');
+                    this.style.backgroundColor = '#3498db';
+                }
+            });
+            
+            // Progress bar interaction
+            const progressBar = document.querySelector('.progress-bar');
+            const progress = document.querySelector('.progress');
+            
+            progressBar.addEventListener('click', function(e) {
+                const clickX = e.offsetX;
+                const width = this.offsetWidth;
+                const percentage = (clickX / width) * 100;
+                progress.style.width = percentage + '%';
+                
+                // Update time (this would be more complex in a real player)
+                const totalSeconds = 45 * 60 + 22; // 45:22 in seconds
+                const newSeconds = Math.floor((percentage / 100) * totalSeconds);
+                const minutes = Math.floor(newSeconds / 60);
+                const seconds = newSeconds % 60;
+                document.querySelector('.time').textContent = 
+                    `${minutes}:${seconds < 10 ? '0' : ''}${seconds} / 45:22`;
+            });
+        });
+    </script>
+</body>
+</html>

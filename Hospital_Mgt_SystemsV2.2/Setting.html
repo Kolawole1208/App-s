@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .header {
+      background-color: green;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      position: relative;
+    }
+
+    /* Navbar */
+    .nav {
+      background-color: green;
+      display: flex;
+      justify-content: center;
+      padding: 10px 0;
+    }
+
+    .nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 16px;
+      padding: 8px 15px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .nav a:hover,
+    .nav a.active {
+      background-color: green;
+      color: #ffffff;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .setting-group {
+      margin-bottom: 30px;
+    }
+
+    .setting-group h3 {
+      margin-bottom: 10px;
+      color: #007bff;
+      border-bottom: 2px solid #f0f0f0;
+      padding-bottom: 5px;
+    }
+
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .setting-item label {
+      flex: 1;
+      font-weight: bold;
+    }
+
+    .setting-item input[type="text"],
+    .setting-item input[type="email"],
+    .setting-item input[type="password"],
+    .setting-item select {
+      flex: 2;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .save-btn {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .save-btn:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <div class="header">
+    <i class="fas fa-cogs"></i> Settings Dashboard
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav">
+    <a href="Admin_Dashboard.html" class="active"><i class="fas fa-home"></i> Home</a>
+    <a href="Sign.html" class="active"><i class="fas fa-sign"></i> Sign</a>
+    <a href="Security.html" class="active"><i class="fas fa-life-ring"></i> Emmergency/Security</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- General Settings -->
+    <div class="setting-group">
+      <h3>General Settings</h3>
+      <div class="setting-item">
+        <label>Hospital Name</label>
+        <input type="text" placeholder="Enter hospital name" />
+      </div>
+      <div class="setting-item">
+        <label>Admin Email</label>
+        <input type="email" placeholder="admin@example.com" />
+      </div>
+      <div class="setting-item">
+        <label>Time Zone</label>
+        <select>
+          <option value="Africa/Lagos">Africa/Lagos</option>
+          <option value="America/New_York">America/New York</option>
+          <option value="Europe/London">Europe/London</option>
+          <option value="Europe/London">Asian/China</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Security Settings -->
+    <div class="setting-group">
+      <h3>Security Settings</h3>
+      <div class="setting-item">
+        <label>Change Password</label>
+        <input type="password" placeholder="New password" />
+      </div>
+      <div class="setting-item">
+        <label>Confirm Password</label>
+        <input type="password" placeholder="Confirm new password" />
+      </div>
+    </div>
+
+    <!-- Notification Settings -->
+    <div class="setting-group">
+      <h3>Notification Settings</h3>
+      <div class="setting-item">
+        <label>Send Email Notifications</label>
+        <select>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- User Roles -->
+    <div class="setting-group">
+      <h3>User Role Management</h3>
+      <div class="setting-item">
+        <label>Assign Role</label>
+        <select>
+          <option>Doctor</option>
+          <option>Nurse</option>
+          <option>Accountant</option>
+          <option>Administrator</option>
+          <option>Staff</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Activity Logs -->
+    <div class="setting-group">
+      <h3>Activity Logs</h3>
+      <div class="setting-item">
+        <label>Last Login</label>
+        <input type="text" value="2025-08-10 10:30 AM" readonly />
+      </div>
+      <div class="setting-item">
+        <label>Recent Actions</label>
+        <input type="text" value="Updated patient records" readonly />
+      </div>
+    </div>
+
+    <!-- Theme Settings -->
+    <div class="setting-group">
+      <h3>Theme Settings</h3>
+      <div class="setting-item">
+        <label>Theme Color</label>
+        <select>
+          <option>Default Blue</option>
+          <option>Dark Mode</option>
+          <option>Light Mode</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Save Button -->
+    <button class="save-btn"><i class="fas fa-save"></i> Save Settings</button>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breath_Smart Regional Hospital - Admin Dashboard</title>
+    <style>
+        :root {
+            --primary: #00a0a8;
+            --primary-dark: #00848b;
+            --secondary: #f8f9fa;
+            --sidebar: #1e293b;
+            --sidebar-hover: #334155;
+            --text: #2d3748;
+            --light-text: #64748b;
+            --error: #e53e3e;
+            --card-bg: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', 'Segoe UI', Roboto, sans-serif;
+            background-color: #f1f5f9;
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar styles */
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        .sidebar-header h2 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-header .hospital-name {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .sidebar-header .tagline {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+        
+        .menu {
+            list-style: none;
+            padding: 15px 0;
+        }
+        
+        .menu li {
+            padding: 12px 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+        
+        .menu li:hover {
+            background-color: var(--sidebar-hover);
+            border-left: 3px solid var(--primary);
+        }
+        
+        .menu li.active {
+            background-color: var(--sidebar-hover);
+            border-left: 3px solid var(--primary);
+        }
+        
+        .menu li i {
+            width: 24px;
+            text-align: center;
+            margin-right: 12px;
+            font-size: 1rem;
+        }
+        
+        .menu li a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.95rem;
+            flex: 1;
+        }
+        
+        /* Main content styles */
+        .main {
+            margin-left: 280px;
+            padding: 25px;
+            width: calc(100% - 280px);
+            transition: all 0.3s;
+        }
+        
+        /* Header styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+        
+        .header .title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .language-selector {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            background-color: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        /* Info boxes styles */
+        .info-boxes {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .info-box {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 160, 168, 0.1);
+        }
+        
+        .info-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 160, 168, 0.15);
+        }
+        
+        .info-box .label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        
+        .info-box .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        /* Cards styles */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card h3 {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            color: var(--text);
+        }
+        
+        .card a {
+            color: var(--text);
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .card a:hover {
+            background-color: rgba(0, 160, 168, 0.1);
+            color: var(--primary);
+        }
+        
+        .card i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        /* User list styles */
+        .section-title {
+            font-size: 1.2rem;
+            margin: 25px 0 15px 0;
+            color: var(--text);
+            font-weight: 600;
+        }
+        
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+        
+        .user-table th, 
+        .user-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .user-table th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: var(--light-text);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .user-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .user-table tr:hover td {
+            background-color: #f8fafc;
+        }
+        
+        /* Buttons styles */
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(0, 160, 168, 0.1);
+        }
+        
+        /* AI assistant styles */
+        .ai-box {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-top: 30px;
+        }
+        
+        .ai-box h3 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: var(--text);
+        }
+        
+        .ai-box textarea {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            font-size: 1rem;
+            resize: none;
+            margin-bottom: 15px;
+            transition: all 0.2s;
+        }
+        
+        .ai-box textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 160, 168, 0.2);
+        }
+        
+        #aiResponse {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+            min-height: 100px;
+            border: 1px dashed #e2e8f0;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 240px;
+            }
+            .main {
+                margin-left: 240px;
+                width: calc(100% - 240px);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .main {
+                margin-left: 0;
+                width: 100%;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2><span class="hospital-name">Breath_Smart</span></h2>
+            <div class="tagline">Regional Hospital</div>
+        </div>
+        <ul class="menu">
+            <li class="active">
+                <i class="fas fa-tachometer-alt"></i>
+                <a href="#">Admin Dashboard</a>
+            </li>
+            <li>
+                <i class="fas fa-building"></i>
+                <a href="Department.html">Department</a>
+            </li>
+            <li>
+                <i class="fas fa-user-md"></i>
+                <a href="Doctor.html">Doctor</a>
+            </li>
+            <li>
+                <i class="fas fa-procedures"></i>
+                <a href="LoginPatient.html">Patient</a>
+            </li>
+            <li>
+                <i class="fas fa-user-nurse"></i>
+                <a href="Nurse.html">Nurse</a>
+            </li>
+            <li>
+                <i class="fas fa-pills"></i>
+                <a href="Pharmacist.html">Pharmacist</a>
+            </li>
+            <li>
+                <i class="fas fa-flask"></i>
+                <a href="Laboratory.html">Laboratory</a>
+            </li>
+            <li>
+                <i class="fas fa-calculator"></i>
+                <a href="AccountantLogin.html">Accountant</a>
+            </li>
+            <li>
+                <i class="fas fa-users"></i>
+                <a href="Human_Resources.html">Human Resources</a>
+            </li>
+            <li>
+                <i class="fas fa-cog"></i>
+                <a href="Setting.html">Setting</a>
+            </li>
+            <li>
+                <i class="fas fa-user-circle"></i>
+                <a href="Profile.html">Profile</a>
+            </li>
+            <li>
+                <i class="fas fa-user-circle"></i>
+                <a href="Security.html">Security</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main content -->
+    <div class="main">
+        <!-- Header -->
+        <div class="header">
+            <div class="title">Admin Dashboard</div>
+            <div class="header-actions">
+                <button class="btn">Admin Panel</button>
+                <select class="language-selector">
+                    <option>Choose Language</option>
+                    <option>English</option>
+                    <option>Edo</option>
+                    <option>Yoruba</option>
+                    <option>Igbo</option>
+                    <option>Hausa</option>
+                </select>
+                <button class="btn"><a href="AccountantLogin.html" style="color: white; text-decoration: none;">Account</a></button>
+            </div>
+        </div>
+
+        <!-- Info boxes -->
+        <div class="info-boxes">
+            <div class="info-box fade-in" style="animation-delay: 0.1s;">
+                <div class="label">Total Doctors</div>
+                <div class="value">24</div>
+            </div>
+            <div class="info-box fade-in" style="animation-delay: 0.2s;">
+                <div class="label">Total Patients</div>
+                <div class="value">156</div>
+            </div>
+            <div class="info-box fade-in" style="animation-delay: 0.3s;">
+                <div class="label">Total Nurses</div>
+                <div class="value">38</div>
+            </div>
+            <div class="info-box fade-in" style="animation-delay: 0.4s;">
+                <div class="label">Due Invoices</div>
+                <div class="value">17</div>
+            </div>
+            <div class="info-box fade-in" style="animation-delay: 0.5s;">
+                <div class="label">Total Payments</div>
+                <div class="value">27</div>
+            </div>
+        </div>
+
+        <!-- Dashboard options -->
+        <h3 class="section-title">Quick Access</h3>
+        <div class="dashboard-cards">
+            <div class="card fade-in" style="animation-delay: 0.1s;">
+                <i class="fas fa-user-md"></i>
+                <h3><a href="Doctor.html">Doctor</a></h3>
+            </div>
+            <div class="card fade-in" style="animation-delay: 0.2s;">
+                <i class="fas fa-procedures"></i>
+                <h3><a href="Patient.html">Patient</a></h3>
+            </div>
+            <div class="card fade-in" style="animation-delay: 0.3s;">
+                <i class="fas fa-tint"></i>
+                <h3><a href="Blood Bank.html">Blood Bank</a></h3>
+            </div>
+            <div class="card fade-in" style="animation-delay: 0.4s;">
+                <i class="fas fa-heartbeat"></i>
+                <h3><a href="Blood Donation.html">Blood Donation</a></h3>
+            </div>
+            <div class="card fade-in" style="animation-delay: 0.5s;">
+                <i class="fas fa-pills"></i>
+                <h3><a href="Medicine.html">Medicine</a></h3>
+            </div>
+            <div class="card fade-in" style="animation-delay: 0.6s;">
+                <i class="fas fa-file-medical"></i>
+                <h3><a href="Death Report.html">Death Report</a></h3>
+            </div>
+            <div class="card fade-in" style="animation-delay: 0.7s;">
+                <i class="fas fa-vial"></i>
+                <h3><a href="Blood Assessment.html">Blood Assessment</a></h3>
+            </div>
+            <div class="card fade-in" style="animation-delay: 0.8s;">
+                <i class="fas fa-book"></i>
+                <h3><a href="Notebook.html">Notebook</a></h3>
+            </div>
+            <div class="card fade-in" style="animation-delay: 0.9s;">
+                <i class="fas fa-cog"></i>
+                <h3><a href="Setting.html">Setting</a></h3>
+            </div>
+            <div class="card fade-in" style="animation-delay: 1.0s;">
+                <i class="fas fa-language"></i>
+                <h3><a href="Language.html">Language</a></h3>
+            </div>
+            <div class="card fade-in" style="animation-delay: 1.1s;">
+                <i class="fas fa-database"></i>
+                <h3><a href="Backup.html">Backup</a></h3>
+            </div>
+        </div>
+
+        <!-- User list table -->
+        <h3 class="section-title">Quick Contacts</h3>
+        <table class="user-table">
+            <thead>
+                <tr><th>Name</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Breath Smart</td>
+                    <td><button class="btn">Admin</button></td>
+                </tr>
+                <tr>
+                    <td>Nurse Princess Timothy</td>
+                    <td><button class="btn">Start Chat</button></td>
+                </tr>
+                <tr>
+                    <td>Breath Mirabel</td>
+                    <td><button class="btn">Start Chat</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- AI Assistant Section -->
+        <div class="ai-box">
+            <h3><i class="fas fa-robot"></i> Hospital AI Assistant</h3>
+            <textarea id="aiInput" rows="3" placeholder="Ask the hospital assistant any question..."></textarea>
+            <button class="btn" onclick="sendToAI()"><i class="fas fa-paper-plane"></i> Send</button>
+            <div id="aiResponse"></div>
+        </div>
+    </div>
+
+    <script>
+    function sendToAI() {
+        let message = document.getElementById('aiInput').value;
+        if (!message.trim()) {
+            alert("Please type a message");
+            return;
+        }
+        
+        // Show loading state
+        document.getElementById('aiResponse').innerHTML = '<div style="text-align: center;"><i class="fas fa-spinner fa-spin"></i> Thinking...</div>';
+        
+        // Simulate API call (replace with actual fetch)
+        setTimeout(() => {
+            const responses = [
+                "I can help you with patient records, appointments, and hospital management queries.",
+                "For patient information, please specify the patient ID or name.",
+                "The current hospital occupancy rate is 68% with 24 available beds.",
+                "Dr. Smith is on duty today in the cardiology department.",
+                "The next board meeting is scheduled for Friday at 2 PM in conference room B."
+            ];
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            document.getElementById('aiResponse').innerText = randomResponse;
+        }, 1500);
+    }
+    
+    // Mobile menu toggle (for responsive design)
+    document.addEventListener('DOMContentLoaded', function() {
+        const hamburger = document.createElement('div');
+        hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+        hamburger.style.position = 'fixed';
+        hamburger.style.top = '15px';
+        hamburger.style.left = '15px';
+        hamburger.style.fontSize = '24px';
+        hamburger.style.zIndex = '999';
+        hamburger.style.cursor = 'pointer';
+        hamburger.style.display = 'none';
+        document.body.appendChild(hamburger);
+        
+        const sidebar = document.querySelector('.sidebar');
+        
+        function checkScreenSize() {
+            if (window.innerWidth <= 768) {
+                hamburger.style.display = 'block';
+            } else {
+                hamburger.style.display = 'none';
+                sidebar.classList.remove('active');
+            }
+        }
+        
+        hamburger.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+        });
+        
+        window.addEventListener('resize', checkScreenSize);
+        checkScreenSize();
+    });
+    </script>
+</body>
+</html>

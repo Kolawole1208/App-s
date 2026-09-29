@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Management - BTech Secondary School</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    :root {
+      --primary: #2c3e50;
+      --secondary: #1abc9c;
+      --accent: #f39c12;
+      --light: #f8f9fa;
+      --dark: #2d3436;
+      --text: #444;
+      --white: #fff;
+      --success: #27ae60;
+      --warning: #f1c40f;
+      --danger: #e74c3c;
+      --info: #3498db;
+      --purple: #9b59b6;
+    }
+
+    body {
+      background-color: var(--light);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(180deg, var(--primary), #34495e);
+      color: var(--white);
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .logo-icon {
+      font-size: 2.2rem;
+      margin-right: 10px;
+      color: var(--secondary);
+    }
+
+    .logo-text {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .logo-subtext {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    .user-info {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .user-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .user-role {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .date-time {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    .nav-menu {
+      flex: 1;
+    }
+
+    .nav-item {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      color: var(--white);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      background: rgba(255,255,255,0.12);
+      border-left: 4px solid var(--secondary);
+    }
+
+    .nav-item i {
+      margin-right: 10px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: var(--white);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .page-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .notification-icon {
+      position: relative;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: var(--dark);
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--danger);
+      color: var(--white);
+      border-radius: 50%;
+      font-size: 0.7rem;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .user-avatar {
+      background: var(--secondary);
+      color: var(--white);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 600;
+    }
+
+    .content {
+      flex: 1;
+      padding: 30px;
+      background: linear-gradient(to right, #ecf0f1, #ffffff);
+    }
+
+    /* Dashboard Sections */
+    .dashboard-section {
+      display: none;
+    }
+
+    .dashboard-section.active {
+      display: block;
+    }
+
+    /* Card Styles */
+    .card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-bottom: 25px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--secondary);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: #16a085;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--secondary);
+      color: var(--secondary);
+    }
+
+    .btn-outline:hover {
+      background: var(--secondary);
+      color: var(--white);
+    }
+
+    /* Table Styles */
+    .table-container {
+      overflow-x: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+    }
+
+    .data-table th {
+      background: var(--light);
+      padding: 15px 12px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--primary);
+      border-bottom: 2px solid rgba(0,0,0,0.1);
+    }
+
+    .data-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover {
+      background: rgba(26, 188, 156, 0.05);
+    }
+
+    /* Status Badges */
+    .status-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .status-available {
+      background: rgba(39, 174, 96, 0.15);
+      color: var(--success);
+    }
+
+    .status-borrowed {
+      background: rgba(52, 152, 219, 0.15);
+      color: var(--info);
+    }
+
+    .status-pending {
+      background: rgba(241, 196, 15, 0.15);
+      color: var(--warning);
+    }
+
+    .status-returned {
+      background: rgba(39, 174, 96, 0.15);
+      color: var(--success);
+    }
+
+    .status-good {
+      background: rgba(39, 174, 96, 0.15);
+      color: var(--success);
+    }
+
+    .status-damaged {
+      background: rgba(231, 76, 60, 0.15);
+      color: var(--danger);
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .action-edit {
+      background: rgba(52, 152, 219, 0.15);
+      color: var(--info);
+    }
+
+    .action-edit:hover {
+      background: var(--info);
+      color: white;
+    }
+
+    .action-delete {
+      background: rgba(231, 76, 60, 0.15);
+      color: var(--danger);
+    }
+
+    .action-delete:hover {
+      background: var(--danger);
+      color: white;
+    }
+
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border 0.3s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1);
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--light);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5rem;
+      margin-right: 15px;
+      color: var(--purple);
+    }
+
+    .stat-info h3 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stat-info p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--primary);
+      color: var(--white);
+      text-align: center;
+      padding: 15px 30px;
+    }
+
+    /* Two Column Layout */
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--white);
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .modal-header {
+      padding: 20px 25px;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    .modal-body {
+      padding: 25px;
+    }
+
+    .modal-footer {
+      padding: 20px 25px;
+      border-top: 1px solid rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+      
+      .sidebar {
+        width: 100%;
+        height: auto;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .data-table {
+        font-size: 0.9rem;
+      }
+      
+      .two-column {
+        grid-template-columns: 1fr;
+      }
+      
+      .quick-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-icon"><i class="fas fa-book"></i></div>
+      <div>
+        <div class="logo-text">BTech Library</div>
+        <div class="logo-subtext">Management System</div>
+      </div>
+    </div>
+    <div class="user-info">
+      <div class="user-name">Mrs. Grace Williams</div>
+      <div class="user-role">Head Librarian</div>
+      <div class="date-time" id="current-date-time">10 Oct 2025 11:39:20</div>
+    </div>
+    <div class="nav-menu">
+      <a href="#" class="nav-item active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="#" class="nav-item" data-section="collection"><i class="fas fa-book"></i> Book Collection</a>
+      <a href="#" class="nav-item" data-section="circulation"><i class="fas fa-exchange-alt"></i> Circulation</a>
+      <a href="#" class="nav-item" data-section="patron"><i class="fas fa-users"></i> Patron Management</a>
+      <a href="#" class="nav-item" data-section="reports"><i class="fas fa-chart-line"></i> Reports</a>
+      <a href="#" class="nav-item" data-section="settings"><i class="fas fa-cog"></i> Settings</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="header">
+      <div class="page-title" id="page-title">Library Dashboard</div>
+      <div class="user-actions">
+        <div class="notification-icon">
+          <i class="fas fa-bell"></i>
+          <div class="notification-badge">5</div>
+        </div>
+        <div class="user-avatar">GW</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- Dashboard Section -->
+      <div class="dashboard-section active" id="dashboard">
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-book"></i></div>
+            <div class="stat-info">
+              <h3>1,247</h3>
+              <p>Total Books</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
+            <div class="stat-info">
+              <h3>842</h3>
+              <p>Active Students</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-exchange-alt"></i></div>
+            <div class="stat-info">
+              <h3>23</h3>
+              <p>Books Borrowed</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <div class="stat-info">
+              <h3>5</h3>
+              <p>Overdue Books</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Quick Actions</div>
+          </div>
+          <div class="quick-actions">
+            <button class="btn btn-primary" id="checkout-btn">
+              <i class="fas fa-book"></i> Check Out Book
+            </button>
+            <button class="btn btn-primary" id="return-btn">
+              <i class="fas fa-undo"></i> Process Return
+            </button>
+            <button class="btn btn-outline" id="print-btn">
+              <i class="fas fa-print"></i> Print Reports
+            </button>
+            <button class="btn btn-outline" id="add-student-btn">
+              <i class="fas fa-user-plus"></i> Add Student
+            </button>
+            <button class="btn btn-outline" id="reminder-btn">
+              <i class="fas fa-bell"></i> Send Reminders
+            </button>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="two-column">
+          <!-- Borrowed Books -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Recently Borrowed Books</div>
+              <button class="btn btn-outline" id="view-all-borrowed">
+                View All
+              </button>
+            </div>
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Student Name</th>
+                    <th>Book Title</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Samuel Afolabi</td>
+                    <td>Introduction to Physics</td>
+                    <td>Oct 14, 2025</td>
+                    <td><span class="status-badge status-pending">Pending Return</span></td>
+                  </tr>
+                  <tr>
+                    <td>Grace Ojo</td>
+                    <td>History of Nigeria</td>
+                    <td>Oct 9, 2025</td>
+                    <td><span class="status-badge status-returned">Returned</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Returned Books -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Recently Returned Books</div>
+              <button class="btn btn-outline" id="view-all-returned">
+                View All
+              </button>
+            </div>
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Student Name</th>
+                    <th>Book Title</th>
+                    <th>Return Date</th>
+                    <th>Condition</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Grace Ojo</td>
+                    <td>History of Nigeria</td>
+                    <td>Oct 8, 2025</td>
+                    <td><span class="status-badge status-good">Good</span></td>
+                  </tr>
+                  <tr>
+                    <td>David Wilson</td>
+                    <td>Computer Science Basics</td>
+                    <td>Oct 7, 2025</td>
+                    <td><span class="status-badge status-good">Good</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Book Collection Section -->
+      <div class="dashboard-section" id="collection">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Book Collection</div>
+            <button class="btn btn-primary" id="add-book-btn">
+              <i class="fas fa-plus"></i> Add New Book
+            </button>
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Book ID</th>
+                  <th>Title</th>
+                  <th>Author</th>
+                  <th>Category</th>
+                  <th>Availability</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="books-table-body">
+                <tr>
+                  <td>B001</td>
+                  <td>Things Fall Apart</td>
+                  <td>Chinua Achebe</td>
+                  <td>Literature</td>
+                  <td><span class="status-badge status-available">Available</span></td>
+                  <td class="action-buttons">
+                    <button class="action-btn action-edit">Edit</button>
+                    <button class="action-btn action-delete">Delete</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>B002</td>
+                  <td>Introduction to Physics</td>
+                  <td>Dr. A. O. Johnson</td>
+                  <td>Science</td>
+                  <td><span class="status-badge status-borrowed">Borrowed</span></td>
+                  <td class="action-buttons">
+                    <button class="action-btn action-edit">Edit</button>
+                    <button class="action-btn action-delete">Delete</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>B003</td>
+                  <td>History of Nigeria</td>
+                  <td>Prof. B. Adebayo</td>
+                  <td>History</td>
+                  <td><span class="status-badge status-available">Available</span></td>
+                  <td class="action-buttons">
+                    <button class="action-btn action-edit">Edit</button>
+                    <button class="action-btn action-delete">Delete</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>B004</td>
+                  <td>Advanced Mathematics</td>
+                  <td>Dr. C. Williams</td>
+                  <td>Mathematics</td>
+                  <td><span class="status-badge status-borrowed">Borrowed</span></td>
+                  <td class="action-buttons">
+                    <button class="action-btn action-edit">Edit</button>
+                    <button class="action-btn action-delete">Delete</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Circulation Section -->
+      <div class="dashboard-section" id="circulation">
+        <div class="two-column">
+          <!-- Borrowed Books -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Borrowed Books</div>
+              <button class="btn btn-outline" id="export-borrowed">
+                <i class="fas fa-download"></i> Export
+              </button>
+            </div>
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Student Name</th>
+                    <th>Book Title</th>
+                    <th>Borrow Date</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Samuel Afolabi</td>
+                    <td>Introduction to Physics</td>
+                    <td>Oct 4, 2025</td>
+                    <td>Oct 14, 2025</td>
+                    <td><span class="status-badge status-pending">Pending Return</span></td>
+                  </tr>
+                  <tr>
+                    <td>Grace Ojo</td>
+                    <td>History of Nigeria</td>
+                    <td>Oct 2, 2025</td>
+                    <td>Oct 9, 2025</td>
+                    <td><span class="status-badge status-returned">Returned</span></td>
+                  </tr>
+                  <tr>
+                    <td>Michael Brown</td>
+                    <td>Advanced Mathematics</td>
+                    <td>Oct 5, 2025</td>
+                    <td>Oct 15, 2025</td>
+                    <td><span class="status-badge status-pending">Pending Return</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Returned Books -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Returned Books</div>
+              <button class="btn btn-outline" id="refresh-returned">
+                <i class="fas fa-sync"></i> Refresh
+              </button>
+            </div>
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Student Name</th>
+                    <th>Book Title</th>
+                    <th>Return Date</th>
+                    <th>Condition</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Grace Ojo</td>
+                    <td>History of Nigeria</td>
+                    <td>Oct 8, 2025</td>
+                    <td><span class="status-badge status-good">Good</span></td>
+                  </tr>
+                  <tr>
+                    <td>David Wilson</td>
+                    <td>Computer Science Basics</td>
+                    <td>Oct 7, 2025</td>
+                    <td><span class="status-badge status-good">Good</span></td>
+                  </tr>
+                  <tr>
+                    <td>Emily Chen</td>
+                    <td>Chemistry Principles</td>
+                    <td>Oct 6, 2025</td>
+                    <td><span class="status-badge status-damaged">Damaged</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Other sections would be implemented similarly -->
+      <div class="dashboard-section" id="patron">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Patron Management</div>
+          </div>
+          <p style="padding: 20px; text-align: center; color: var(--text);">
+            Patron management functionality would be implemented here.
+          </p>
+        </div>
+      </div>
+
+      <div class="dashboard-section" id="reports">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Reports</div>
+          </div>
+          <p style="padding: 20px; text-align: center; color: var(--text);">
+            Report generation functionality would be implemented here.
+          </p>
+        </div>
+      </div>
+
+      <div class="dashboard-section" id="settings">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Settings</div>
+          </div>
+          <p style="padding: 20px; text-align: center; color: var(--text);">
+            System settings would be configured here.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      &copy; 2025 BTech Secondary School Library Management System. All rights reserved.
+    </div>
+  </div>
+
+  <!-- Add Book Modal -->
+  <div class="modal" id="add-book-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Add New Book</div>
+        <button class="modal-close" id="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="add-book-form">
+          <div class="form-group">
+            <label class="form-label">Book Title</label>
+            <input type="text" class="form-control" id="book-title" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Author</label>
+            <input type="text" class="form-control" id="book-author" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select class="form-control" id="book-category" required>
+              <option value="">Select Category</option>
+              <option value="Literature">Literature</option>
+              <option value="Science">Science</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="History">History</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Arts">Arts</option>
+              <option value="Reference">Reference</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">ISBN (Optional)</label>
+            <input type="text" class="form-control" id="book-isbn">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Publication Year</label>
+            <input type="number" class="form-control" id="book-year" min="1900" max="2030">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Availability</label>
+            <select class="form-control" id="book-availability" required>
+              <option value="Available">Available</option>
+              <option value="Borrowed">Borrowed</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="cancel-add-book">Cancel</button>
+        <button class="btn btn-primary" id="save-book">Save Book</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Live Date & Time
+    function updateDateTime() {
+      const now = new Date();
+      const options = { day: '2-digit', month: 'short', year: 'numeric' };
+      const date = now.toLocaleDateString('en-GB', options);
+      const time = now.toLocaleTimeString('en-GB', { hour12: false });
+      document.getElementById('current-date-time').textContent = `${date} ${time}`;
+    }
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
+    // Book ID counter
+    let bookIdCounter = 5; // Starting from B005 since we have B001-B004
+
+    // Navigation functionality
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Update active nav item
+        document.querySelectorAll('.nav-item').forEach(nav => {
+          nav.classList.remove('active');
+        });
+        this.classList.add('active');
+        
+        // Show corresponding section
+        const sectionId = this.getAttribute('data-section');
+        document.querySelectorAll('.dashboard-section').forEach(section => {
+          section.classList.remove('active');
+        });
+        document.getElementById(sectionId).classList.add('active');
+        
+        // Update page title
+        const pageTitle = document.getElementById('page-title');
+        const titles = {
+          'dashboard': 'Library Dashboard',
+          'collection': 'Book Collection',
+          'circulation': 'Circulation',
+          'patron': 'Patron Management',
+          'reports': 'Reports',
+          'settings': 'Settings'
+        };
+        pageTitle.textContent = titles[sectionId];
+      });
+    });
+
+    // Dashboard Quick Actions functionality
+    document.getElementById('checkout-btn').addEventListener('click', function() {
+      alert('Check Out Book: This would open a form to check out a book to a student.');
+    });
+
+    document.getElementById('return-btn').addEventListener('click', function() {
+      alert('Process Return: This would open a form to process a book return.');
+    });
+
+    document.getElementById('print-btn').addEventListener('click', function() {
+      alert('Print Reports: This would generate and print library reports.');
+    });
+
+    document.getElementById('add-student-btn').addEventListener('click', function() {
+      alert('Add Student: This would open a form to add a new student to the system.');
+    });
+
+    document.getElementById('reminder-btn').addEventListener('click', function() {
+      alert('Send Reminders: This would send overdue reminders to students.');
+    });
+
+    // Book Collection functionality
+    const addBookModal = document.getElementById('add-book-modal');
+    const addBookBtn = document.getElementById('add-book-btn');
+    const closeModal = document.getElementById('close-modal');
+    const cancelAddBook = document.getElementById('cancel-add-book');
+    const saveBookBtn = document.getElementById('save-book');
+    const addBookForm = document.getElementById('add-book-form');
+    const booksTableBody = document.getElementById('books-table-body');
+
+    // Open modal
+    addBookBtn.addEventListener('click', function() {
+      addBookModal.classList.add('active');
+      addBookForm.reset();
+    });
+
+    // Close modal
+    function closeAddBookModal() {
+      addBookModal.classList.remove('active');
+    }
+
+    closeModal.addEventListener('click', closeAddBookModal);
+    cancelAddBook.addEventListener('click', closeAddBookModal);
+
+    // Save new book
+    saveBookBtn.addEventListener('click', function() {
+      // Get form values
+      const title = document.getElementById('book-title').value;
+      const author = document.getElementById('book-author').value;
+      const category = document.getElementById('book-category').value;
+      const availability = document.getElementById('book-availability').value;
+      
+      // Validate required fields
+      if (!title || !author || !category) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      // Generate new book ID
+      const bookId = 'B' + bookIdCounter.toString().padStart(3, '0');
+      bookIdCounter++;
+
+      // Create status badge
+      const statusClass = availability === 'Available' ? 'status-available' : 'status-borrowed';
+      const statusText = availability === 'Available' ? 'Available' : 'Borrowed';
+
+      // Create new table row
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td>${bookId}</td>
+        <td>${title}</td>
+        <td>${author}</td>
+        <td>${category}</td>
+        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+        <td class="action-buttons">
+          <button class="action-btn action-edit">Edit</button>
+          <button class="action-btn action-delete">Delete</button>
+        </td>
+      `;
+
+      // Add the new row to the table
+      booksTableBody.appendChild(newRow);
+
+      // Add event listeners to the new action buttons
+      addEventListenersToRow(newRow);
+
+      // Close modal and show success message
+      closeAddBookModal();
+      alert(`Book "${title}" has been added successfully with ID: ${bookId}`);
+    });
+
+    // Function to add event listeners to table row actions
+    function addEventListenersToRow(row) {
+      const editBtn = row.querySelector('.action-edit');
+      const deleteBtn = row.querySelector('.action-delete');
+
+      editBtn.addEventListener('click', function() {
+        const bookId = row.cells[0].textContent;
+        const bookTitle = row.cells[1].textContent;
+        alert(`Edit book: ${bookTitle} (${bookId}) - This would open an edit form.`);
+      });
+
+      deleteBtn.addEventListener('click', function() {
+        const bookId = row.cells[0].textContent;
+        const bookTitle = row.cells[1].textContent;
+        
+        if (confirm(`Are you sure you want to delete "${bookTitle}" (${bookId}) from the collection?`)) {
+          row.remove();
+          alert(`Book "${bookTitle}" has been deleted.`);
+        }
+      });
+    }
+
+    // Add event listeners to existing rows
+    document.querySelectorAll('#books-table-body tr').forEach(row => {
+      addEventListenersToRow(row);
+    });
+
+    // Circulation functionality
+    document.getElementById('export-borrowed').addEventListener('click', function() {
+      alert('Export Borrowed Books: This would export the borrowed books list to CSV.');
+    });
+
+    document.getElementById('refresh-returned').addEventListener('click', function() {
+      alert('Refresh Returned Books: This would refresh the returned books list with latest data.');
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener('click', function(event) {
+      if (event.target === addBookModal) {
+        closeAddBookModal();
+      }
+    });
+  </script>
+</body>
+</html>

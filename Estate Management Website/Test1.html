@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Real Estate Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .thin-scroll::-webkit-scrollbar{height:8px}
+    .thin-scroll::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:8px}
+  </style>
+</head>
+<body class="antialiased bg-gray-100 text-gray-800">
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-72 bg-white border-r shadow-sm">
+      <div class="p-6">
+        <h1 class="text-2xl font-bold text-slate-700">EstatePro</h1>
+        <p class="text-sm text-slate-500 mt-1">Property Management</p>
+      </div>
+      <nav class="px-4 py-2">
+        <a class="flex items-center gap-3 px-4 py-2 rounded bg-sky-50 text-sky-600" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10l9-7 9 7v8a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4H9v4a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8z"/>
+          </svg>
+          <span class="font-medium">Dashboard</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-50 mt-1" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-500" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+          </svg>
+          <span class="font-medium text-slate-700">Properties</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-50 mt-1" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+          <span class="font-medium text-slate-700">Clients</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-50 mt-1" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+          <span class="font-medium text-slate-700">Appointments</span>
+        </a>
+      </nav>
+      <div class="mt-auto p-4 text-sm text-slate-500">
+        <div>Logged in as <span class="font-semibold text-slate-700">Admin</span></div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 p-6">
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-sm font-medium text-gray-500">Total Properties</h3>
+              <p class="text-2xl font-semibold text-gray-900">47</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-green-100 text-green-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-sm font-medium text-gray-500">Available</h3>
+              <p class="text-2xl font-semibold text-gray-900">28</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-red-100 text-red-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-sm font-medium text-gray-500">Sold</h3>
+              <p class="text-2xl font-semibold text-gray-900">12</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-sm font-medium text-gray-500">Rented</h3>
+              <p class="text-2xl font-semibold text-gray-900">7</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Topbar -->
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="text-2xl font-bold">Property Listings</h2>
+          <p class="text-sm text-slate-500">Manage properties — add, edit, delete, and toggle status</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <input id="searchInput" type="search" placeholder="Search by title, location, or price" class="px-3 py-2 border rounded-md focus:outline-none focus:ring" />
+          <button id="openAddBtn" class="bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-500">Add Property</button>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="flex items-center gap-4 mb-4">
+        <select id="statusFilter" class="px-3 py-2 border rounded-md">
+          <option value="all">All statuses</option>
+          <option value="Available">Available</option>
+          <option value="Sold">Sold</option>
+          <option value="Rented">Rented</option>
+        </select>
+        <select id="typeFilter" class="px-3 py-2 border rounded-md">
+          <option value="all">All types</option>
+          <option value="Apartment">Apartment</option>
+          <option value="House">House</option>
+          <option value="Villa">Villa</option>
+          <option value="Commercial">Commercial</option>
+        </select>
+        <select id="sortSelect" class="px-3 py-2 border rounded-md">
+          <option value="newest">Newest</option>
+          <option value="price-asc">Price: Low → High</option>
+          <option value="price-desc">Price: High → Low</option>
+        </select>
+      </div>
+
+      <!-- Table -->
+      <div class="bg-white rounded shadow p-4">
+        <div class="overflow-x-auto thin-scroll">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">#</th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Image</th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Title</th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Type</th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Location</th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Price</th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Status</th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="propertiesTbody" class="bg-white divide-y divide-gray-100"></tbody>
+          </table>
+        </div>
+        <div id="emptyState" class="p-8 text-center text-slate-500 hidden">No properties yet — click "Add Property" to create one.</div>
+      </div>
+
+      <!-- Modal: Add / Edit -->
+      <div id="modal" class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg w-full max-w-2xl p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h3 id="modalTitle" class="text-lg font-semibold">Add Property</h3>
+            <button id="closeModal" class="text-slate-400 hover:text-slate-600">✕</button>
+          </div>
+          <form id="propertyForm" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <input type="hidden" id="propId" />
+            <label class="text-sm">Title
+              <input id="titleInput" class="w-full mt-1 px-3 py-2 border rounded" required />
+            </label>
+            <label class="text-sm">Type
+              <select id="typeInput" class="w-full mt-1 px-3 py-2 border rounded">
+                <option>Apartment</option>
+                <option>House</option>
+                <option>Villa</option>
+                <option>Commercial</option>
+              </select>
+            </label>
+            <label class="text-sm">Location
+              <input id="locationInput" class="w-full mt-1 px-3 py-2 border rounded" required />
+            </label>
+            <label class="text-sm">Price (₦)
+              <input id="priceInput" type="number" min="0" step="0.01" class="w-full mt-1 px-3 py-2 border rounded" required />
+            </label>
+            <label class="text-sm">Bedrooms
+              <input id="bedroomsInput" type="number" min="0" class="w-full mt-1 px-3 py-2 border rounded" />
+            </label>
+            <label class="text-sm">Bathrooms
+              <input id="bathroomsInput" type="number" min="0" class="w-full mt-1 px-3 py-2 border rounded" />
+            </label>
+            <label class="text-sm col-span-2">Description
+              <textarea id="descriptionInput" class="w-full mt-1 px-3 py-2 border rounded" rows="3"></textarea>
+            </label>
+            <label class="text-sm col-span-2">Status
+              <select id="statusInput" class="w-full mt-1 px-3 py-2 border rounded">
+                <option>Available</option>
+                <option>Sold</option>
+                <option>Rented</option>
+              </select>
+            </label>
+            <label class="text-sm col-span-2">Image
+              <input id="imageInput" type="file" accept="image/*" class="w-full mt-1" />
+            </label>
+            <div class="flex items-center gap-3 mt-2 col-span-2">
+              <img id="previewImg" src="" alt="preview" class="h-20 w-28 object-cover rounded border hidden" />
+              <div id="previewPlaceholder" class="text-sm text-slate-500">No image selected</div>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 mt-4 col-span-2">
+              <button type="button" id="cancelBtn" class="px-4 py-2 border rounded">Cancel</button>
+              <button type="submit" class="px-4 py-2 bg-sky-600 text-white rounded">Save Property</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // --- Data handling (localStorage) ---
+    const STORAGE_KEY = 'estate_properties_v2';
+
+    function loadProperties(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      }catch(e){
+        console.error('Failed to parse properties', e);
+        return [];
+      }
+    }
+
+    function saveProperties(arr){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+    }
+
+    // --- Utility ---
+    function uid(){ return 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+    function money(n){ return new Intl.NumberFormat().format(Number(n||0)); }
+
+    // --- Rendering ---
+    const tbody = document.getElementById('propertiesTbody');
+    const emptyState = document.getElementById('emptyState');
+
+    function renderProperties(){
+      const list = loadProperties();
+      const statusFilter = document.getElementById('statusFilter').value;
+      const typeFilter = document.getElementById('typeFilter').value;
+      const search = document.getElementById('searchInput').value.trim().toLowerCase();
+      const sort = document.getElementById('sortSelect').value;
+
+      let filtered = list.filter(p => {
+        if(statusFilter !== 'all' && p.status !== statusFilter) return false;
+        if(typeFilter !== 'all' && p.type !== typeFilter) return false;
+        if(search){
+          return (p.title||'').toLowerCase().includes(search) || 
+                 (p.location||'').toLowerCase().includes(search) ||
+                 (String(p.price||'')).includes(search);
+        }
+        return true;
+      });
+
+      if(sort === 'price-asc') filtered.sort((a,b)=>a.price-b.price);
+      else if(sort === 'price-desc') filtered.sort((a,b)=>b.price-a.price);
+      else filtered.sort((a,b)=>b.createdAt - a.createdAt);
+
+      tbody.innerHTML = '';
+
+      if(filtered.length === 0){ emptyState.classList.remove('hidden'); return; }
+      emptyState.classList.add('hidden');
+
+      filtered.forEach((p, idx) =>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="px-4 py-3 text-sm">${idx+1}</td>
+          <td class="px-4 py-3"><img src="${p.image||'https://via.placeholder.com/112x80?text=No+Image'}" class="h-16 w-24 object-cover rounded" alt="property" /></td>
+          <td class="px-4 py-3 text-sm font-medium">${escapeHtml(p.title)}</td>
+          <td class="px-4 py-3 text-sm">${escapeHtml(p.type)}</td>
+          <td class="px-4 py-3 text-sm">${escapeHtml(p.location)}</td>
+          <td class="px-4 py-3 text-sm font-semibold">₦ ${money(p.price)}</td>
+          <td class="px-4 py-3">${statusBadge(p.status)}</td>
+          <td class="px-4 py-3 text-sm">
+            <button data-id="${p.id}" class="editBtn px-2 py-1 border rounded mr-2 hover:bg-gray-50">Edit</button>
+            <button data-id="${p.id}" class="deleteBtn px-2 py-1 border rounded hover:bg-red-50 hover:text-red-600">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // attach listeners
+      document.querySelectorAll('.editBtn').forEach(b=>b.addEventListener('click', ()=> openEdit(b.dataset.id)));
+      document.querySelectorAll('.deleteBtn').forEach(b=>b.addEventListener('click', ()=> removeProperty(b.dataset.id)));
+    }
+
+    function statusBadge(status){
+      const map = {
+        'Available': '<span class="px-2 py-1 rounded text-sm bg-green-100 text-green-800">Available</span>',
+        'Sold': '<span class="px-2 py-1 rounded text-sm bg-red-100 text-red-800">Sold</span>',
+        'Rented': '<span class="px-2 py-1 rounded text-sm bg-yellow-100 text-yellow-800">Rented</span>'
+      };
+      return map[status] || `<span class="px-2 py-1 rounded text-sm bg-gray-100">${escapeHtml(status||'')}</span>`;
+    }
+
+    function escapeHtml(str){
+      return String(str||'').replace(/[&<>"]+/g, function(s){
+        return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[s]);
+      });
+    }
+
+    // --- CRUD ---
+    const modal = document.getElementById('modal');
+    const openAddBtn = document.getElementById('openAddBtn');
+    const closeModal = document.getElementById('closeModal');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const propForm = document.getElementById('propertyForm');
+    const propIdInput = document.getElementById('propId');
+    const titleInput = document.getElementById('titleInput');
+    const typeInput = document.getElementById('typeInput');
+    const locationInput = document.getElementById('locationInput');
+    const priceInput = document.getElementById('priceInput');
+    const bedroomsInput = document.getElementById('bedroomsInput');
+    const bathroomsInput = document.getElementById('bathroomsInput');
+    const descriptionInput = document.getElementById('descriptionInput');
+    const statusInput = document.getElementById('statusInput');
+    const imageInput = document.getElementById('imageInput');
+    const previewImg = document.getElementById('previewImg');
+    const previewPlaceholder = document.getElementById('previewPlaceholder');
+
+    openAddBtn.addEventListener('click', ()=> openAdd());
+    closeModal.addEventListener('click', closeModalFn);
+    cancelBtn.addEventListener('click', closeModalFn);
+
+    function openAdd(){
+      propForm.reset(); 
+      propIdInput.value=''; 
+      previewImg.src=''; 
+      previewImg.classList.add('hidden'); 
+      previewPlaceholder.classList.remove('hidden');
+      document.getElementById('modalTitle').textContent = 'Add Property';
+      showModal();
+    }
+
+    function openEdit(id){
+      const list = loadProperties();
+      const p = list.find(x=>x.id===id); 
+      if(!p) return alert('Property not found');
+      
+      propIdInput.value = p.id; 
+      titleInput.value = p.title; 
+      typeInput.value = p.type; 
+      locationInput.value = p.location;
+      priceInput.value = p.price; 
+      bedroomsInput.value = p.bedrooms; 
+      bathroomsInput.value = p.bathrooms;
+      descriptionInput.value = p.description; 
+      statusInput.value = p.status;
+      
+      if(p.image && p.image !== 'https://via.placeholder.com/112x80?text=No+Image'){ 
+        previewImg.src = p.image; 
+        previewImg.classList.remove('hidden'); 
+        previewPlaceholder.classList.add('hidden'); 
+      } else { 
+        previewImg.classList.add('hidden'); 
+        previewPlaceholder.classList.remove('hidden'); 
+      }
+      
+      document.getElementById('modalTitle').textContent = 'Edit Property';
+      showModal();
+    }
+
+    function removeProperty(id){
+      if(!confirm('Delete this property?')) return;
+      const list = loadProperties().filter(p=>p.id!==id);
+      saveProperties(list); 
+      renderProperties();
+    }
+
+    propForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const id = propIdInput.value || uid();
+      const title = titleInput.value.trim();
+      const type = typeInput.value;
+      const location = locationInput.value.trim();
+      const price = Number(priceInput.value) || 0;
+      const bedrooms = Number(bedroomsInput.value) || 0;
+      const bathrooms = Number(bathroomsInput.value) || 0;
+      const description = descriptionInput.value.trim();
+      const status = statusInput.value;
+
+      // if a file selected, convert to dataURL
+      let imageData = previewImg.src || 'https://via.placeholder.com/112x80?text=No+Image';
+      if(imageInput.files && imageInput.files[0]){
+        imageData = await fileToDataUrl(imageInput.files[0]);
+      }
+
+      const list = loadProperties();
+      const existingIndex = list.findIndex(p=>p.id===id);
+      const record = { 
+        id, title, type, location, price, bedrooms, bathrooms, description, status, 
+        image: imageData, createdAt: Date.now() 
+      };
+      
+      if(existingIndex >= 0) list[existingIndex] = {...list[existingIndex], ...record};
+      else list.unshift(record);
+      
+      saveProperties(list);
+      closeModalFn(); 
+      renderProperties();
+    });
+
+    imageInput.addEventListener('change', ()=>{
+      if(imageInput.files && imageInput.files[0]){
+        const file = imageInput.files[0];
+        const reader = new FileReader();
+        reader.onload = (ev)=>{
+          previewImg.src = ev.target.result; 
+          previewImg.classList.remove('hidden'); 
+          previewPlaceholder.classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function fileToDataUrl(file){
+      return new Promise((res, rej)=>{
+        const reader = new FileReader();
+        reader.onload = ()=> res(reader.result);
+        reader.onerror = rej; 
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function showModal(){ modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    function closeModalFn(){ modal.classList.add('hidden'); modal.classList.remove('flex'); imageInput.value = ''; }
+
+    // --- Search / Filter / Sort listeners ---
+    document.getElementById('statusFilter').addEventListener('change', renderProperties);
+    document.getElementById('typeFilter').addEventListener('change', renderProperties);
+    document.getElementById('sortSelect').addEventListener('change', renderProperties);
+    document.getElementById('searchInput').addEventListener('input', debounce(renderProperties, 250));
+
+    function debounce(fn, wait){ let t; return function(...a){ clearTimeout(t); t = setTimeout(()=>fn.apply(this,a), wait); }; }
+
+    // --- Initial demo data (only if empty) ---
+    (function seedIfEmpty(){
+      const cur = loadProperties();
+      if(cur.length === 0){
+        const demo = [
+          { 
+            id: uid(), 
+            title: 'Luxury 3-Bedroom Apartment in Lekki', 
+            type: 'Apartment', 
+            location: 'Lekki Phase 1, Lagos', 
+            price: 35000000, 
+            bedrooms: 3, 
+            bathrooms: 3, 
+            description: 'Modern apartment with sea view', 
+            status: 'Available', 
+            image: '', 
+            createdAt: Date.now()-1000000 
+          },
+          { 
+            id: uid(), 
+            title: 'Cozy Studio Apartment - Yaba', 
+            type: 'Apartment', 
+            location: 'Yaba, Lagos', 
+            price: 8500000, 
+            bedrooms: 1, 
+            bathrooms: 1, 
+            description: 'Perfect for young professionals', 
+            status: 'Rented', 
+            image: '', 
+            createdAt: Date.now()-500000 
+          }
+        ];
+        saveProperties(demo);
+      }
+    })();
+
+    // first render
+    renderProperties();
+
+    // --- Expose API for integration ---
+    window.getEstateProperties = function(){ return loadProperties(); };
+
+  </script>
+</body>
+</html>

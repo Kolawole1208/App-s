@@ -1,0 +1,21 @@
+{
+  "responses": [
+    {
+      "keywords": ["daily", "campaign", "create"],
+      "reply": "Step-by-step: 1) Click the '+ Daily Campaign' button. 2) Enter a clear topic/headline. 3) Choose target channels and a tone (Conversational/Educational/Storytelling). 4) Click 'Spark Daily Content Engine' to generate caption, hashtags, and visuals. 5) Review generated items, adjust if needed, then 'Approve' or 'Publish Instantly'."
+    },
+    {
+      "keywords": ["sandbox", "instagram"],
+      "reply": "Sandbox vs Live: Sandbox creates a simulated publishing preview (safe testing + fake comments). Direct Meta Live publishes to your connected Instagram Business account via the Meta Graph API (requires Page Access Token and Business/Account ID). Use Sandbox to preview, Live to publish."
+    },
+    {
+      "keywords": ["5", "ideas", "topic", "give me 5"],
+      "reply": "Here are 5 topic ideas:\n1) '3 Morning Habits of High Performers'\n2) 'How Faith Shapes Creative Consistency'\n3) 'Quick Productivity Rituals for Creators'\n4) 'Overcoming Creative Burnout in 5 Steps'\n5) 'Micro-actions That Scale Your Brand'"
+    },
+    {
+      "keywords": ["graphic", "design", "tweak"],
+      "reply": "Graphic tips: Open 'Graphic Card Spec' → adjust background color, text color, accent color; choose layout family (sans/mono/serif) and pattern (grid/dots/waves). Press 'Regenerate Graphic Image' to produce a new visual."
+    }
+  ],
+  "defaultReply": "Hi! Aura Copilot is temporarily unavailable. Try one of the quick-starter buttons to create a post, tweak designs, or check Channel settings."
+}

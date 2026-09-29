@@ -1,0 +1,29 @@
+/* Extracted from <style> in CRM.html */
+:root {
+    --primary: green;
+    --primary-light: #757de8;
+    --primary-dark: #002984;
+    --secondary: #6c757d;
+    --accent: #ff4081;
+    --success: #4caf50;
+    --danger: #f44336;
+    --warning: #ff9800;
+    --info: #2196f3;
+    --light: #f8f9fa;
+    --dark: #343a40;
+    --gray-100: #f8f9fa;
+    --gray-200: #e9ecef;
+    --gray-300: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-500: #adb5bd;
+    --gray-600: #6c757d;
+    --gray-700: #495057;
+    --gray-800: #343a40;
+    --gray-900: #212529;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --transition: all 0.3s ease;
+}
+
+/* ...rest of CSS from CRM.html <style> ... */
+/* For brevity, you should copy the rest of your CSS here from the <style> tag in CRM.html */

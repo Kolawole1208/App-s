@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAMB UTME - Results</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .result-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .result-header h1 {
+            color: #1a237e;
+            margin-bottom: 10px;
+        }
+
+        .score-display {
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .score-large {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #1a237e;
+            margin-bottom: 5px;
+        }
+
+        .score-total {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(#27ae60 0% var(--score-percent), #f0f0f0 var(--score-percent) 100%);
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .score-text {
+            position: relative;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1a237e;
+        }
+
+        .pass-fail-indicator {
+            margin-top: 15px;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .pass {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .fail {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
+        .result-details {
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .subject-performance {
+            margin-top: 25px;
+            text-align: left;
+        }
+
+        .subject-performance h3 {
+            color: #1a237e;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .subject-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .subject-label {
+            width: 100px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .subject-value {
+            flex: 1;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .subject-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1s ease-in-out;
+        }
+
+        .subject-percentage {
+            margin-left: 10px;
+            font-weight: 600;
+            min-width: 40px;
+            text-align: right;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #1a237e;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #283593;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+            transform: translateY(-2px);
+        }
+
+        .passing-info {
+            margin-top: 15px;
+            padding: 10px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #1565c0;
+        }
+
+        .debug-info {
+            margin-top: 15px;
+            padding: 10px;
+            background: #fff3cd;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: #856404;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <div class="result-header">
+            <h1>Exam Results</h1>
+            <p>UTME Computer-Based Test</p>
+        </div>
+
+        <div class="score-display">
+            <div class="score-large" id="scoreLarge">0</div>
+            <div class="score-total">out of 80 questions</div>
+        </div>
+
+        <div class="score-circle" id="scoreCircle">
+            <div class="score-text" id="scoreText">0%</div>
+        </div>
+
+        <div id="passFailIndicator" class="pass-fail-indicator">CALCULATING...</div>
+
+        <div class="result-details" id="resultDetails">
+            <div class="detail-item">
+                <span>Candidate:</span>
+                <span id="candidateName">Loading...</span>
+            </div>
+            <div class="detail-item">
+                <span>Score:</span>
+                <span id="scoreDetail">0 / 80</span>
+            </div>
+            <div class="detail-item">
+                <span>Percentage:</span>
+                <span id="percentageDetail">0%</span>
+            </div>
+            <div class="detail-item">
+                <span>Performance:</span>
+                <span id="performanceDetail">Loading...</span>
+            </div>
+        </div>
+
+        <div class="subject-performance" id="subjectPerformance">
+            <h3>Subject Performance</h3>
+            <div class="subject-bar">
+                <div class="subject-label">English</div>
+                <div class="subject-value">
+                    <div class="subject-fill" id="englishBar" style="width: 0%; background: #3498db;"></div>
+                </div>
+                <div class="subject-percentage" id="englishPercentage">0%</div>
+            </div>
+            <div class="subject-bar">
+                <div class="subject-label">Mathematics</div>
+                <div class="subject-value">
+                    <div class="subject-fill" id="mathBar" style="width: 0%; background: #2ecc71;"></div>
+                </div>
+                <div class="subject-percentage" id="mathPercentage">0%</div>
+            </div>
+            <div class="subject-bar">
+                <div class="subject-label">Physics</div>
+                <div class="subject-value">
+                    <div class="subject-fill" id="physicsBar" style="width: 0%; background: #e74c3c;"></div>
+                </div>
+                <div class="subject-percentage" id="physicsPercentage">0%</div>
+            </div>
+            <div class="subject-bar">
+                <div class="subject-label">Chemistry</div>
+                <div class="subject-value">
+                    <div class="subject-fill" id="chemistryBar" style="width: 0%; background: #f39c12;"></div>
+                </div>
+                <div class="subject-percentage" id="chemistryPercentage">0%</div>
+            </div>
+        </div>
+
+        <div class="passing-info">
+            <p>Passing Score: 65 out of 80 questions (81.25%)</p>
+        </div>
+
+        <div class="debug-info" id="debugInfo">
+            <!-- Debug information will be shown here -->
+        </div>
+
+        <div class="action-buttons">
+            <a href="exam.html" class="btn btn-primary">Take Another Exam</a>
+            <button class="btn btn-secondary" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        // Debug function to show what's in localStorage
+        function showDebugInfo() {
+            const debugInfo = document.getElementById('debugInfo');
+            const examResults = localStorage.getItem('examResults');
+            const currentUser = localStorage.getItem('current_user');
+            const studentName = localStorage.getItem('studentName');
+            
+            debugInfo.innerHTML = `
+                <strong>Debug Information:</strong><br>
+                examResults in localStorage: ${examResults ? 'Exists' : 'Missing'}<br>
+                current_user in localStorage: ${currentUser ? 'Exists' : 'Missing'}<br>
+                studentName in localStorage: ${studentName ? 'Exists' : 'Missing'}<br>
+                Full examResults: ${examResults}
+            `;
+            debugInfo.style.display = 'block';
+        }
+
+        // Get results from localStorage
+        function getExamResults() {
+            try {
+                const examResultsStr = localStorage.getItem('examResults');
+                console.log('Raw examResults from localStorage:', examResultsStr);
+                
+                if (!examResultsStr) {
+                    throw new Error('No exam results found in localStorage');
+                }
+                
+                const results = JSON.parse(examResultsStr);
+                console.log('Parsed exam results:', results);
+                
+                // Validate results structure
+                if (typeof results.score === 'undefined' || typeof results.total === 'undefined') {
+                    throw new Error('Invalid results structure');
+                }
+                
+                return results;
+            } catch (error) {
+                console.error('Error getting exam results:', error);
+                // Return default results for testing
+                return {
+                    score: 65, // Default score for testing
+                    total: 80,
+                    percentage: 81,
+                    answers: [],
+                    timestamp: new Date().toISOString()
+                };
+            }
+        }
+
+        // Calculate subject scores
+        function calculateSubjectScores(results) {
+            const totalScore = results.score || 0;
+            const totalQuestions = results.total || 80;
+            
+            // For demo purposes, distribute score proportionally across subjects
+            // In a real app, you would track subject-specific answers
+            const englishScore = Math.round((totalScore / totalQuestions) * 20);
+            const mathScore = Math.round((totalScore / totalQuestions) * 20);
+            const physicsScore = Math.round((totalScore / totalQuestions) * 20);
+            const chemistryScore = Math.max(0, totalScore - (englishScore + mathScore + physicsScore));
+            
+            return {
+                english: Math.min(20, englishScore),
+                mathematics: Math.min(20, mathScore),
+                physics: Math.min(20, physicsScore),
+                chemistry: Math.min(20, chemistryScore)
+            };
+        }
+
+        // Display results
+        function displayResults() {
+            const results = getExamResults();
+            const studentName = localStorage.getItem('studentName') || 'Student';
+            const currentUser = JSON.parse(localStorage.getItem('current_user') || '{}');
+            
+            console.log('Displaying results:', results);
+            
+            // Update main score display
+            document.getElementById('scoreLarge').textContent = results.score;
+            document.getElementById('scoreText').textContent = `${results.percentage}%`;
+            document.getElementById('scoreCircle').style.setProperty('--score-percent', `${results.percentage}%`);
+            
+            // Update details
+            document.getElementById('candidateName').textContent = studentName || currentUser.fullName || 'Student';
+            document.getElementById('scoreDetail').textContent = `${results.score} / ${results.total}`;
+            document.getElementById('percentageDetail').textContent = `${results.percentage}%`;
+            
+            // Set performance remark
+            const performanceDetail = document.getElementById('performanceDetail');
+            performanceDetail.textContent = getPerformanceRemark(results.percentage);
+            performanceDetail.style.color = getPerformanceColor(results.percentage);
+            performanceDetail.style.fontWeight = 'bold';
+            
+            // Set pass/fail status
+            const passFailIndicator = document.getElementById('passFailIndicator');
+            if (results.score >= 65) {
+                passFailIndicator.textContent = "PASSED ✓";
+                passFailIndicator.className = "pass-fail-indicator pass";
+            } else {
+                passFailIndicator.textContent = "FAILED ✗";
+                passFailIndicator.className = "pass-fail-indicator fail";
+            }
+            
+            // Display subject performance
+            const subjectScores = calculateSubjectScores(results);
+            updateSubjectBars(subjectScores);
+            
+            // Show debug info (you can remove this in production)
+            showDebugInfo();
+        }
+
+        // Update subject performance bars with animation
+        function updateSubjectBars(scores) {
+            const subjects = ['english', 'math', 'physics', 'chemistry'];
+            
+            subjects.forEach(subject => {
+                const score = scores[subject === 'math' ? 'mathematics' : subject];
+                const percentage = Math.round((score / 20) * 100);
+                
+                // Set the percentage text
+                document.getElementById(`${subject}Percentage`).textContent = `${percentage}%`;
+                
+                // Animate the bar after a short delay
+                setTimeout(() => {
+                    document.getElementById(`${subject}Bar`).style.width = `${percentage}%`;
+                }, 300 * subjects.indexOf(subject));
+            });
+        }
+
+        function getPerformanceColor(percentage) {
+            if (percentage >= 70) return '#27ae60';
+            if (percentage >= 50) return '#f39c12';
+            return '#e74c3c';
+        }
+
+        function getPerformanceRemark(percentage) {
+            if (percentage >= 70) return 'Excellent';
+            if (percentage >= 50) return 'Good';
+            return 'Needs Improvement';
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('current_user');
+                localStorage.removeItem('examResults');
+                localStorage.removeItem('studentName');
+                localStorage.removeItem('subjects');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Initialize the page when it loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Results page loaded');
+            displayResults();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>UTME Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="header-content">
+            <div>
+                <h1>UTME Exam Portal</h1>
+                <p class="muted">Welcome to your dashboard</p>
+            </div>
+            <div class="user-menu">
+                <div class="user-info">
+                    <div class="name" id="userName">Loading...</div>
+                    <div class="email" id="userEmail">Loading...</div>
+                </div>
+                <a href="#" class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <div class="welcome-section">
+            <h2>Welcome, <span id="welcomeName">Student</span>!</h2>
+            <p>Ready to take your UTME practice exam? Choose an option below to get started.</p>
+            
+            <div class="action-buttons">
+                <button onclick="location.href='index.html'" class="success">
+                    <i class="fas fa-play-circle"></i> Start New Exam
+                </button>
+                <button onclick="viewResults()" class="secondary">
+                    <i class="fas fa-chart-bar"></i> View Previous Results
+                </button>
+            </div>
+        </div>
+
+        <div class="stats-cards">
+            <div class="stat-card">
+                <i class="fas fa-clock"></i>
+                <h3>Exam Duration</h3>
+                <p>2 Hours</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-book"></i>
+                <h3>Subjects</h3>
+                <p>4 Subjects Total</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-question-circle"></i>
+                <h3>Questions</h3>
+                <p>40 Questions Total</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-graduation-cap"></i>
+                <h3>Your Progress</h3>
+                <p id="progressText">No exams taken yet</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Exam Instructions</h2>
+            <ul style="text-align: left; line-height: 1.8;">
+                <li>You have 2 hours to complete the exam</li>
+                <li>Answer all questions - there's no penalty for wrong answers</li>
+                <li>You can mark questions for review and come back to them</li>
+                <li>Use the navigation buttons to move between questions</li>
+                <li>Ensure you have a stable internet connection</li>
+                <li>Do not refresh the page during the exam</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BTech Secondary School Management System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    :root {
+      --primary: #2c3e50;   /* Dark Navy */
+      --secondary: #1abc9c; /* Teal accent */
+      --accent: #f39c12;    /* Warm orange */
+      --light: #f8f9fa;     /* Light grey background */
+      --dark: #2d3436;      /* Dark gray text */
+      --text: #444;         /* Neutral text */
+      --white: #fff;
+      --success: #27ae60;
+      --warning: #f1c40f;
+      --danger: #e74c3c;
+    }
+
+    body {
+      background-color: var(--light);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(180deg, var(--primary), #34495e);
+      color: var(--white);
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .logo-icon {
+      font-size: 2.2rem;
+      margin-right: 10px;
+      color: var(--secondary);
+    }
+
+    .logo-text {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .logo-subtext {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    .user-info {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .user-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .user-role {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .date-time {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    .nav-menu {
+      flex: 1;
+    }
+
+    .nav-item {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      color: var(--white);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      background: rgba(255,255,255,0.12);
+      border-left: 4px solid var(--secondary);
+    }
+
+    .nav-item i {
+      margin-right: 10px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: var(--white);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .page-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .notification-icon {
+      position: relative;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: var(--dark);
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--danger);
+      color: var(--white);
+      border-radius: 50%;
+      font-size: 0.7rem;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .user-avatar {
+      background: var(--secondary);
+      color: var(--white);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 600;
+    }
+
+    .content {
+      flex: 1;
+      padding: 30px;
+      background: linear-gradient(to right, #ecf0f1, #ffffff);
+    }
+
+    .welcome-banner {
+      background: linear-gradient(135deg, var(--secondary), var(--primary));
+      color: var(--white);
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .module-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: 0.3s ease;
+      cursor: pointer;
+    }
+
+    .module-card:hover {
+      transform: translateY(-5px);
+      background: var(--secondary);
+      color: var(--white);
+    }
+
+    .module-card:hover .module-icon {
+      background: var(--white);
+      color: var(--secondary);
+    }
+
+    .module-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: var(--light);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.8rem;
+      margin: 0 auto 15px;
+      color: var(--secondary);
+    }
+
+    .module-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .module-description {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+
+    .footer {
+      background: var(--primary);
+      color: var(--white);
+      text-align: center;
+      padding: 15px 30px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-icon"><i class="fas fa-graduation-cap"></i></div>
+      <div>
+        <div class="logo-text">BTech SEC SCH</div>
+        <div class="logo-subtext">Management System</div>
+      </div>
+    </div>
+    <div class="user-info">
+      <div class="user-name">Samuel Adegbola</div>
+      <div class="user-role">Accountant</div>
+      <div class="date-time" id="current-date-time"></div>
+    </div>
+    <div class="nav-menu">
+      <a href="#" class="nav-item active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="#" class="nav-item"><i class="fas fa-chalkboard-teacher"></i> Teacher</a>
+      <a href="#" class="nav-item"><i class="fas fa-book"></i> Library</a>
+      <a href="#" class="nav-item"><i class="fas fa-tasks"></i> Assignment</a>
+      <a href="#" class="nav-item"><i class="fas fa-users"></i> Staff</a>
+      <a href="#" class="nav-item"><i class="fas fa-file-alt"></i> Exams</a>
+      <a href="#" class="nav-item"><i class="fas fa-flask"></i> Science</a>
+      <a href="#" class="nav-item"><i class="fas fa-chart-line"></i> Commercial</a>
+      <a href="#" class="nav-item"><i class="fas fa-palette"></i> Art</a>
+      <a href="#" class="nav-item"><i class="fas fa-calendar-alt"></i> Calendar</a>
+      <a href="#" class="nav-item"><i class="fas fa-user-plus"></i> Add Student</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="header">
+      <div class="page-title">Dashboard</div>
+      <div class="user-actions">
+        <div class="notification-icon">
+          <i class="fas fa-bell"></i>
+          <div class="notification-badge">3</div>
+        </div>
+        <div class="user-avatar">SA</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="welcome-banner">
+        <h1>BTech SECONDARY SCHOOL</h1>
+        <p>First Term - 2025/2026 Session</p>
+      </div>
+
+      <h2 style="margin-bottom: 20px; color: var(--primary);">Quick Access Modules</h2>
+      <div class="modules-grid">
+        <div class="module-card"><div class="module-icon"><i class="fas fa-chalkboard-teacher"></i></div><div class="module-title">Teacher</div><div class="module-description">Update your personal info</div></div>
+        <div class="module-card"><div class="module-icon"><i class="fas fa-book"></i></div><div class="module-title">Library</div><div class="module-description">Set up fee structures</div></div>
+        <div class="module-card"><div class="module-icon"><i class="fas fa-tasks"></i></div><div class="module-title">Assignment</div><div class="module-description">Process student payments</div></div>
+        <div class="module-card"><div class="module-icon"><i class="fas fa-users"></i></div><div class="module-title">Staff</div><div class="module-description">View and manage unpaid bills</div></div>
+        <div class="module-card"><div class="module-icon"><i class="fas fa-file-alt"></i></div><div class="module-title">Exams</div><div class="module-description">Track and manage school expenses</div></div>
+        <div class="module-card"><div class="module-icon"><i class="fas fa-flask"></i></div><div class="module-title">Science</div><div class="module-description">Track students with unpaid fees</div></div>
+        <div class="module-card"><div class="module-icon"><i class="fas fa-chart-line"></i></div><div class="module-title">Commercial</div><div class="module-description">Manage school assets & supplies</div></div>
+        <div class="module-card"><div class="module-icon"><i class="fas fa-palette"></i></div><div class="module-title">Art</div><div class="module-description">Process staff salaries</div></div>
+        <div class="module-card"><div class="module-icon"><i class="fas fa-calendar-alt"></i></div><div class="module-title">Calendar</div><div class="module-description">View school events & schedules</div></div>
+        <div class="module-card"><div class="module-icon"><i class="fas fa-user-plus"></i></div><div class="module-title">Add Student</div><div class="module-description">Add new students to the system</div></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      &copy; 2025 BTech Secondary School Management System. All rights reserved.
+    </div>
+  </div>
+
+  <script>
+    // Live Date & Time
+    function updateDateTime() {
+      const now = new Date();
+      const options = { day: '2-digit', month: 'short', year: 'numeric' };
+      const date = now.toLocaleDateString('en-GB', options);
+      const time = now.toLocaleTimeString('en-GB', { hour12: false });
+      document.getElementById('current-date-time').textContent = `${date} ${time}`;
+    }
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+  </script>
+</body>
+</html>

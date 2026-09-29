@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediaBlog - JavaScript Frameworks Comparison</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Navigation styles */
+        nav {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #3498db;
+        }
+        
+        .nav-links a.active {
+            color: #3498db;
+            font-weight: 600;
+        }
+        
+        /* Main content styles */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        
+        /* Blog posts grid */
+        .blog-posts {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-post {
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .blog-post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .post-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .post-content {
+            padding: 1.5rem;
+        }
+        
+        .post-meta {
+            display: flex;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .post-meta span {
+            margin-right: 1rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .post-content h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .post-content p {
+            color: #555;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .read-more {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .read-more:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 3rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .pagination a {
+            display: inline-block;
+            padding: 0.7rem 1rem;
+            background-color: #fff;
+            color: #555;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .pagination a.active,
+        .pagination a:hover {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        .pagination a.next {
+            padding: 0.7rem 1.5rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 3rem 2rem;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #3498db;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #34495e;
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-links li {
+                margin: 0.5rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .blog-posts {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">MediaBlog</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="blog.html" class="active">Blog</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="podcasts.html">Podcasts</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-header">
+            <h1>Latest Blog Posts</h1>
+            <p>Discover the latest insights on technology, development, and design</p>
+        </div>
+
+        <!-- Blog Posts Grid -->
+        <div class="blog-posts" id="blog-posts-container">
+            <!-- Posts will be dynamically inserted here -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <a href="#" class="page-link active" data-page="1">1</a>
+            <a href="#" class="page-link" data-page="2">2</a>
+            <a href="#" class="page-link" data-page="3">3</a>
+            <a href="#" class="page-link" data-page="4">4</a>
+            <a href="#" class="page-link" data-page="5">5</a>
+            <a href="#" class="page-link next" id="next-btn">Next →</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>MediaBlog</h3>
+                <p>Creating beautiful digital experiences that connect with your audience and drive results.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="podcasts.html">Podcasts</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Connect With Us</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">LinkedIn</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2023 MediaBlog. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Blog posts data - 75 posts total (5 pages with 15 posts each)
+        const blogPosts = [
+            // Page 1
+            { date: "June 5, 2023", readTime: "8 min read", category: "Development", title: "JavaScript Frameworks Comparison 2023", description: "A comprehensive look at the most popular JavaScript frameworks and libraries." },
+            { date: "June 4, 2023", readTime: "5 min read", category: "Web Design", title: "CSS Grid vs Flexbox: When to Use What", description: "Understanding the differences between CSS Grid and Flexbox and when to use each layout method." },
+            { date: "June 3, 2023", readTime: "6 min read", category: "Technology", title: "The Rise of WebAssembly", description: "How WebAssembly is changing web development and enabling new possibilities." },
+            { date: "June 2, 2023", readTime: "4 min read", category: "Development", title: "TypeScript Best Practices", description: "Essential TypeScript patterns and practices for writing maintainable code." },
+            { date: "June 1, 2023", readTime: "7 min read", category: "UX/UI", title: "Designing for Dark Mode", description: "Creating user interfaces that work well in both light and dark themes." },
+            { date: "May 31, 2023", readTime: "5 min read", category: "Development", title: "React Hooks Deep Dive", description: "Mastering React Hooks for functional components and state management." },
+            { date: "May 30, 2023", readTime: "6 min read", category: "Technology", title: "Progressive Web Apps in 2023", description: "Building fast, reliable, and engaging web experiences with PWAs." },
+            { date: "May 29, 2023", readTime: "4 min read", category: "Web Design", title: "Modern CSS Techniques", description: "Exploring cutting-edge CSS features and how to use them effectively." },
+            { date: "May 28, 2023", readTime: "8 min read", category: "Development", title: "Node.js Performance Optimization", description: "Techniques for improving the performance of Node.js applications." },
+            { date: "May 27, 2023", readTime: "5 min read", category: "UX/UI", title: "Microinteractions Matter", description: "How small animations and interactions improve user experience." },
+            { date: "May 26, 2023", readTime: "6 min read", category: "Technology", title: "The Future of Web Development", description: "Predictions and trends shaping the future of web development." },
+            { date: "May 25, 2023", readTime: "7 min read", category: "Development", title: "Vue 3 Composition API", description: "A complete guide to Vue 3's Composition API and its benefits." },
+            { date: "May 24, 2023", readTime: "4 min read", category: "Web Design", title: "Accessibility First Approach", description: "Building websites that are accessible to everyone from the start." },
+            { date: "May 23, 2023", readTime: "5 min read", category: "Development", title: "GraphQL vs REST", description: "Comparing GraphQL and REST APIs for modern web applications." },
+            { date: "May 22, 2023", readTime: "6 min read", category: "Technology", title: "Serverless Architecture Benefits", description: "Understanding the advantages of serverless computing for web apps." },
+            
+            // Page 2
+            { date: "May 21, 2023", readTime: "7 min read", category: "Development", title: "Angular Dependency Injection", description: "Mastering Angular's powerful dependency injection system." },
+            { date: "May 20, 2023", readTime: "5 min read", category: "Web Design", title: "Responsive Images Best Practices", description: "Optimizing images for different screen sizes and devices." },
+            { date: "May 19, 2023", readTime: "6 min read", category: "Technology", title: "Web Security Essentials", description: "Critical security practices every web developer should follow." },
+            { date: "May 18, 2023", readTime: "4 min read", category: "Development", title: "Svelte Framework Overview", description: "Exploring the innovative approach of the Svelte framework." },
+            { date: "May 17, 2023", readTime: "8 min read", category: "UX/UI", title: "Design Systems Implementation", description: "Creating and implementing design systems for consistent UIs." },
+            { date: "May 16, 2023", readTime: "5 min read", category: "Development", title: "Next.js for Production Apps", description: "Building scalable production applications with Next.js." },
+            { date: "May 15, 2023", readTime: "6 min read", category: "Technology", title: "The Impact of AI on Creative Industries", description: "How AI is transforming creative workflows and possibilities." },
+            { date: "May 14, 2023", readTime: "4 min read", category: "Web Design", title: "CSS Custom Properties", description: "Leveraging CSS variables for maintainable and dynamic styles." },
+            { date: "May 13, 2023", readTime: "7 min read", category: "Development", title: "State Management Solutions", description: "Comparing different state management approaches in frontend apps." },
+            { date: "May 12, 2023", readTime: "5 min read", category: "UX/UI", title: "User Research Methods", description: "Effective techniques for understanding user needs and behaviors." },
+            { date: "May 11, 2023", readTime: "6 min read", category: "Technology", title: "Web3 and Blockchain Basics", description: "Introduction to Web3 concepts and blockchain technology." },
+            { date: "May 10, 2023", readTime: "4 min read", category: "Development", title: "Testing React Applications", description: "Comprehensive guide to testing React components and apps." },
+            { date: "May 9, 2023", readTime: "8 min read", category: "Web Design", title: "Motion Design Principles", description: "Creating engaging animations that enhance user experience." },
+            { date: "May 8, 2023", readTime: "5 min read", category: "Development", title: "API Design Best Practices", description: "Designing clean, intuitive, and developer-friendly APIs." },
+            { date: "May 7, 2023", readTime: "6 min read", category: "Technology", title: "Cloud Computing Trends", description: "Latest trends and developments in cloud computing services." },
+            
+            // Page 3
+            { date: "May 6, 2023", readTime: "7 min read", category: "Development", title: "Mobile-First Development", description: "Strategies for building websites with a mobile-first approach." },
+            { date: "May 5, 2023", readTime: "5 min read", category: "Web Design", title: "Color Theory for Web Design", description: "Applying color theory principles to create effective web designs." },
+            { date: "May 4, 2023", readTime: "6 min read", category: "Technology", title: "Edge Computing Explained", description: "Understanding edge computing and its benefits for web applications." },
+            { date: "May 3, 2023", readTime: "4 min read", category: "Development", title: "Webpack Module Bundling", description: "Optimizing web application bundles with Webpack configuration." },
+            { date: "May 2, 2023", readTime: "8 min read", category: "UX/UI", title: "UX Writing Principles", description: "Crafting effective microcopy that improves user experience." },
+            { date: "May 1, 2023", readTime: "5 min read", category: "Development", title: "Docker for Web Developers", description: "Containerizing web applications with Docker for consistent deployments." },
+            { date: "April 30, 2023", readTime: "6 min read", category: "Technology", title: "5G Impact on Web Development", description: "How 5G technology will influence web development practices." },
+            { date: "April 29, 2023", readTime: "4 min read", category: "Web Design", title: "Typography in Web Design", description: "Choosing and pairing fonts for optimal readability and aesthetics." },
+            { date: "April 28, 2023", readTime: "7 min read", category: "Development", title: "Microservices Architecture", description: "Building scalable applications with microservices architecture." },
+            { date: "April 27, 2023", readTime: "5 min read", category: "UX/UI", title: "User Testing Methods", description: "Conducting effective user tests to validate design decisions." },
+            { date: "April 26, 2023", readTime: "6 min read", category: "Technology", title: "IoT Development Challenges", description: "Addressing common challenges in Internet of Things development." },
+            { date: "April 25, 2023", readTime: "4 min read", category: "Development", title: "JAMstack Architecture", description: "Building fast and secure websites with JAMstack methodology." },
+            { date: "April 24, 2023", readTime: "8 min read", category: "Web Design", title: "Designing for Emotion", description: "Creating emotional connections through thoughtful design elements." },
+            { date: "April 23, 2023", readTime: "5 min read", category: "Development", title: "Continuous Integration Setup", description: "Setting up CI/CD pipelines for automated testing and deployment." },
+            { date: "April 22, 2023", readTime: "6 min read", category: "Technology", title: "Quantum Computing Basics", description: "Introduction to quantum computing concepts and potential applications." },
+            
+            // Page 4
+            { date: "April 21, 2023", readTime: "7 min read", category: "Development", title: "React Native for Cross-Platform Apps", description: "Building mobile applications with React Native framework." },
+            { date: "April 20, 2023", readTime: "5 min read", category: "Web Design", title: "Minimalist Web Design", description: "Principles of minimalist design and how to apply them effectively." },
+            { date: "April 19, 2023", readTime: "6 min read", category: "Technology", title: "AR/VR Web Experiences", description: "Creating augmented and virtual reality experiences for the web." },
+            { date: "April 18, 2023", readTime: "4 min read", category: "Development", title: "Python for Web Development", description: "Using Python and frameworks like Django and Flask for web apps." },
+            { date: "April 17, 2023", readTime: "8 min read", category: "UX/UI", title: "Information Architecture", description: "Organizing content effectively for optimal user navigation." },
+            { date: "April 16, 2023", readTime: "5 min read", category: "Development", title: "WebSockets Real-Time Communication", description: "Implementing real-time features with WebSockets technology." },
+            { date: "April 15, 2023", readTime: "6 min read", category: "Technology", title: "Sustainable Web Design", description: "Creating environmentally friendly websites with reduced energy consumption." },
+            { date: "April 14, 2023", readTime: "4 min read", category: "Web Design", title: "Designing for Touch Interfaces", description: "Optimizing web interfaces for touchscreen devices and gestures." },
+            { date: "April 13, 2023", readTime: "7 min read", category: "Development", title: "Database Optimization Techniques", description: "Improving database performance for web applications." },
+            { date: "April 12, 2023", readTime: "5 min read", category: "UX/UI", title: "User Persona Development", description: "Creating detailed user personas to guide design decisions." },
+            { date: "April 11, 2023", readTime: "6 min read", category: "Technology", title: "Machine Learning for Developers", description: "Practical introduction to machine learning concepts for web devs." },
+            { date: "April 10, 2023", readTime: "4 min read", category: "Development", title: "Git Workflow Strategies", description: "Effective Git workflows for team collaboration and code management." },
+            { date: "April 9, 2023", readTime: "8 min read", category: "Web Design", title: "Designing for Conversion", description: "Optimizing web design elements to improve conversion rates." },
+            { date: "April 8, 2023", readTime: "5 min read", category: "Development", title: "Rust for Web Development", description: "Exploring the Rust programming language for web applications." },
+            { date: "April 7, 2023", readTime: "6 min read", category: "Technology", title: "Cybersecurity Best Practices", description: "Essential cybersecurity measures for protecting web applications." },
+            
+            // Page 5
+            { date: "April 6, 2023", readTime: "7 min read", category: "Development", title: "Full-Stack Development Roadmap", description: "Comprehensive guide to becoming a full-stack web developer." },
+            { date: "April 5, 2023", readTime: "5 min read", category: "Web Design", title: "Designing for Seniors", description: "Creating accessible web experiences for older adult users." },
+            { date: "April 4, 2023", readTime: "6 min read", category: "Technology", title: "Low-Code Development Platforms", description: "Exploring the rise of low-code and no-code development tools." },
+            { date: "April 3, 2023", readTime: "4 min read", category: "Development", title: "Web Performance Monitoring", description: "Tools and techniques for monitoring web application performance." },
+            { date: "April 2, 2023", readTime: "8 min read", category: "UX/UI", title: "Gamification in UX Design", description: "Using game elements to enhance user engagement and experience." },
+            { date: "April 1, 2023", readTime: "5 min read", category: "Development", title: "Deno vs Node.js", description: "Comparing Deno and Node.js for server-side JavaScript development." },
+            { date: "March 31, 2023", readTime: "6 min read", category: "Technology", title: "Digital Privacy Trends", description: "Latest developments in digital privacy and data protection." },
+            { date: "March 30, 2023", readTime: "4 min read", category: "Web Design", title: "Designing for Voice Interfaces", description: "Creating user experiences for voice-activated devices and apps." },
+            { date: "March 29, 2023", readTime: "7 min read", category: "Development", title: "Mobile App Performance", description: "Optimizing mobile applications for speed and responsiveness." },
+            { date: "March 28, 2023", readTime: "5 min read", category: "UX/UI", title: "User Onboarding Strategies", description: "Designing effective onboarding experiences for new users." },
+            { date: "March 27, 2023", readTime: "6 min read", category: "Technology", title: "Ethical AI Development", description: "Principles for developing artificial intelligence systems ethically." },
+            { date: "March 26, 2023", readTime: "4 min read", category: "Development", title: "CSS-in-JS Solutions", description: "Comparing different CSS-in-JS libraries for component styling." },
+            { date: "March 25, 2023", readTime: "8 min read", category: "Web Design", title: "Designing for Global Audiences", description: "Creating websites that work well across different cultures and languages." },
+            { date: "March 24, 2023", readTime: "5 min read", category: "Development", title: "WebAssembly Use Cases", description: "Practical applications and use cases for WebAssembly technology." },
+            { date: "March 23, 2023", readTime: "6 min read", category: "Technology", title: "Future of Work in Tech", description: "How remote work and automation are shaping the tech industry." }
+        ];
+
+        // DOM elements
+        const blogPostsContainer = document.getElementById('blog-posts-container');
+        const pageLinks = document.querySelectorAll('.page-link');
+        const nextBtn = document.getElementById('next-btn');
+
+        // Current page state
+        let currentPage = 1;
+        const postsPerPage = 15;
+
+        // Function to generate random color for post images
+        function getRandomColor() {
+            const colors = ['#3498db', '#2ecc71', '#e74c3c', '#9b59b6', '#f39c12', '#1abc9c', '#d35400', '#c0392b'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        // Function to display blog posts for a specific page
+        function displayBlogPosts(page) {
+            // Clear current posts
+            blogPostsContainer.innerHTML = '';
+            
+            // Calculate start and end indices for current page
+            const startIndex = (page - 1) * postsPerPage;
+            const endIndex = startIndex + postsPerPage;
+            
+            // Get posts for current page
+            const currentPagePosts = blogPosts.slice(startIndex, endIndex);
+            
+            // Create HTML for each post
+            currentPagePosts.forEach(post => {
+                const postElement = document.createElement('article');
+                postElement.className = 'blog-post';
+                
+                postElement.innerHTML = `
+                    <div class="post-image" style="background-color: ${getRandomColor()};"></div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span>${post.date}</span>
+                            <span>${post.readTime}</span>
+                            <span>${post.category}</span>
+                        </div>
+                        <h2>${post.title}</h2>
+                        <p>${post.description}</p>
+                        <a href="#" class="read-more">Read More</a>
+                    </div>
+                `;
+                
+                blogPostsContainer.appendChild(postElement);
+            });
+            
+            // Update active page in pagination
+            pageLinks.forEach(link => {
+                if (parseInt(link.dataset.page) === page) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+            
+            currentPage = page;
+        }
+
+        // Event listeners for pagination
+        pageLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const page = parseInt(this.dataset.page);
+                if (page) {
+                    displayBlogPosts(page);
+                } else if (this.id === 'next-btn') {
+                    // Handle next button
+                    const nextPage = currentPage < 5 ? currentPage + 1 : 1;
+                    displayBlogPosts(nextPage);
+                }
+                
+                // Scroll to top of posts
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // Read More button functionality (event delegation)
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.classList.contains('read-more')) {
+                e.preventDefault();
+                const postTitle = e.target.closest('.blog-post').querySelector('h2').textContent;
+                alert(`Reading more about: ${postTitle}`);
+                // In a real application, this would navigate to the full article page
+            }
+        });
+
+        // Initialize with first page
+        displayBlogPosts(1);
+    </script>
+</body>
+</html>

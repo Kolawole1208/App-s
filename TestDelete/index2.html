@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="PharmaConnect: Certified medications, expert medical advice, and nationwide delivery across Nigeria." />
+  <title>PharmaConnect | Home</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Local styles (can be moved to styles.css) */
+
+    /* Reset and base styles */
+    :root {
+      --text: #333;
+      --brand: #0072ff;
+      --bg: #ffffff;
+      --card: #f9f9fb;
+      --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: #fff;
+    }
+
+    /* Navigation */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--bg);
+      padding: 14px 20px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--brand);
+    }
+
+    .nav-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .nav-links li { display: inline-block; }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      padding: 6px 8px;
+      border-radius: 4px;
+      transition: color 0.25s ease, background-color 0.25s ease;
+      outline: none;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible,
+    .nav-links a:active {
+      color: var(--brand);
+      background-color: rgba(0, 114, 255, 0.08);
+    }
+
+    /* Active link accessibility */
+    .nav-links a[aria-current="page"] {
+      color: var(--brand);
+      font-weight: 700;
+    }
+
+    /* Focus ring for accessibility */
+    .nav-links a:focus-visible {
+      outline: 2px solid var(--brand);
+      outline-offset: 2px;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 64px 20px;
+      text-align: center;
+      background: #f7fbff;
+    }
+
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: 2.25rem;
+    }
+
+    .hero p {
+      margin: 0 0 20px;
+      color: #555;
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 12px 20px;
+      background: var(--brand);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+    .cta-button:hover { background: darken(var(--brand), 10%); }
+
+    /* Sections */
+    section { padding: 48px 20px; }
+
+    .features {
+      background: #fff;
+    }
+
+    .features h2,
+    .cta h2 { text-align: center; margin-bottom: 24px; }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .feature-item {
+      background: var(--card);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.05);
+    }
+
+    .feature-item h3 { margin-top: 0; }
+
+    /* CTA section */
+    .cta {
+      background: #eef6ff;
+      text-align: center;
+      padding: 40px 20px;
+      border-top: 1px solid #e6eefc;
+    }
+
+    /* Scroll to Top Button */
+    #scrollTopBtn {
+      display: none;
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: var(--brand);
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    }
+
+    /* Footer */
+    footer {
+      padding: 20px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #555;
+      border-top: 1px solid #eee;
+      background: #fafafa;
+    }
+
+    footer a { color: var(--brand); text-decoration: none; }
+
+    /* Responsive tweaks */
+    @media (max-width: 1024px) {
+      .feature-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { overflow-x: auto; white-space: nowrap; gap: 12px; }
+      .feature-grid { grid-template-columns: 1fr; }
+      .hero { padding: 48px 16px; }
+      .hero h1 { font-size: 1.75rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav aria-label="Main navigation">
+    <div class="logo" aria-label="PharmaConnect">PharmaConnect</div>
+    <ul class="nav-links" role="menubar">
+      <li role="none">
+        <a href="index.html" class="active" aria-current="page">Home</a>
+      </li>
+      <li role="none"><a href="about.html">About Us</a></li>
+      <li role="none"><a href="products.html">Products</a></li>
+      <li role="none"><a href="drug-info.html">Drug Info</a></li>
+      <li role="none"><a href="ask-doctor.html">Ask a Doctor</a></li>
+      <li role="none"><a href="blog.html">Blog</a></li>
+      <li role="none"><a href="contact.html">Contact</a></li>
+      <li role="none"><a href="login.html">Login</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero" id="home" role="banner">
+    <h1>Welcome to PharmaConnect</h1>
+    <p>Your trusted source for certified medications and expert medical advice</p>
+    <a href="#features" class="cta-button" aria-label="Learn more about features">Learn More</a>
+  </header>
+
+  <!-- Features Section -->
+  <section class="features" id="features" aria-label="Features">
+    <h2>Why Choose Us?</h2>
+    <div class="feature-grid">
+      <div class="feature-item" aria-label="Certified Medications">
+        <h3>Certified Medications</h3>
+        <p>All products are NAFDAC-approved and sourced from trusted manufacturers.</p>
+      </div>
+      <div class="feature-item" aria-label="Expert Consultations">
+        <h3>Expert Consultations</h3>
+        <p>Connect with licensed doctors and pharmacists for personalized advice.</p>
+      </div>
+      <div class="feature-item" aria-label="Nationwide Delivery">
+        <h3>Nationwide Delivery</h3>
+        <p>Fast and reliable shipping across Nigeria with real-time tracking.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="cta" id="consult" aria-label="Medical advice">
+    <h2>Need Medical Advice?</h2>
+    <p>Visit our Ask a Doctor page to get expert help within 24 hours.</p>
+    <a href="ask-doctor.html" class="cta-button" aria-label="Ask a Doctor">Ask a Doctor</a>
+  </section>
+
+  <!-- Scroll to Top Button -->
+  <button id="scrollTopBtn" title="Go to top" aria-label="Scroll to top">↑</button>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 PharmaConnect. All rights reserved.</p>
+    <a href="privacy.html">Privacy & Terms</a>
+  </footer>
+
+  <!-- Scroll Button Script -->
+  <script>
+    const scrollBtn = document.getElementById("scrollTopBtn");
+
+    window.addEventListener("scroll", () => {
+      const show = window.scrollY > 300;
+      scrollBtn.style.display = show ? "block" : "none";
+    });
+
+    scrollBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>

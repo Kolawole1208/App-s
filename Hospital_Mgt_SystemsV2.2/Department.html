@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breath_Smart Hospital - Department Management</title>
+    <style>
+        :root {
+            --primary: #00a0a8;
+            --primary-dark: #00848b;
+            --secondary: #f8f9fa;
+            --sidebar: #1e293b;
+            --sidebar-hover: #334155;
+            --text: #2d3748;
+            --light-text: #64748b;
+            --error: #e53e3e;
+            --card-bg: #ffffff;
+            --success: #38a169;
+            --warning: #dd6b20;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', 'Segoe UI', Roboto, sans-serif;
+            background-color: #f1f5f9;
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar styles */
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        .sidebar-header h2 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-header .hospital-name {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .sidebar-header .tagline {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+        
+        .menu {
+            list-style: none;
+            padding: 15px 0;
+        }
+        
+        .menu li {
+            padding: 12px 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+        
+        .menu li:hover {
+            background-color: var(--sidebar-hover);
+            border-left: 3px solid var(--primary);
+        }
+        
+        .menu li.active {
+            background-color: var(--sidebar-hover);
+            border-left: 3px solid var(--primary);
+        }
+        
+        .menu li i {
+            width: 24px;
+            text-align: center;
+            margin-right: 12px;
+            font-size: 1rem;
+        }
+        
+        .menu li a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.95rem;
+            flex: 1;
+        }
+        
+        /* Main content styles */
+        .main {
+            margin-left: 280px;
+            padding: 25px;
+            width: calc(100% - 280px);
+            transition: all 0.3s;
+        }
+        
+        /* Header styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+        
+        .header .title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .header-actions a.btn {
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .language-selector {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            background-color: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        /* Buttons styles */
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 160, 168, 0.2);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(0, 160, 168, 0.1);
+        }
+        
+        .btn-danger {
+            background-color: var(--error);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c53030;
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+        }
+        
+        .btn-success:hover {
+            background-color: #2f855a;
+        }
+        
+        /* Section styles */
+        .section {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        /* Table styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        
+        .data-table th, 
+        .data-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .data-table th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: var(--light-text);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .data-table tr:hover td {
+            background-color: #f8fafc;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        /* Pagination styles */
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .pagination-btn {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .pagination-btn:hover {
+            background-color: #f1f5f9;
+        }
+        
+        .pagination-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .pagination-info {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 50%;
+            max-width: 600px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .close {
+            color: var(--light-text);
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .close:hover {
+            color: var(--error);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background-color: #f8fafc;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 160, 168, 0.2);
+            background-color: white;
+        }
+        
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #f1f5f9;
+        }
+        
+        /* Confirmation modal */
+        .confirm-modal .modal-content {
+            text-align: center;
+            max-width: 450px;
+        }
+        
+        .confirm-icon {
+            font-size: 48px;
+            color: var(--error);
+            margin-bottom: 20px;
+        }
+        
+        .confirm-message {
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 240px;
+            }
+            .main {
+                margin-left: 240px;
+                width: calc(100% - 240px);
+            }
+            .modal-content {
+                width: 70%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .main {
+                margin-left: 0;
+                width: 100%;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .modal-content {
+                width: 90%;
+                margin: 10% auto;
+                padding: 20px;
+            }
+            .data-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2><span class="hospital-name">Breath_Smart</span></h2>
+            <div class="tagline">Regional Hospital</div>
+        </div>
+        <ul class="menu">
+            <li>
+                <i class="fas fa-tachometer-alt"></i>
+                <a href="Admin_Dashboard.html">Admin Dashboard</a>
+            </li>
+            <li class="active">
+                <i class="fas fa-building"></i>
+                <a href="#">Department</a>
+            </li>
+            <li>
+                <i class="fas fa-user-md"></i>
+                <a href="Doctor.html">Doctor</a>
+            </li>
+            <li>
+                <i class="fas fa-procedures"></i>
+                <a href="Patient.html">Patient</a>
+            </li>
+            <li>
+                <i class="fas fa-user-nurse"></i>
+                <a href="Nurse.html">Nurse</a>
+            </li>
+            <li>
+                <i class="fas fa-pills"></i>
+                <a href="Pharmacist.html">Pharmacist</a>
+            </li>
+            <li>
+                <i class="fas fa-flask"></i>
+                <a href="Laboratory.html">Laboratory</a>
+            </li>
+            <li>
+                <i class="fas fa-calculator"></i>
+                <a href="AccountantLogin.html">Accountant</a>
+            </li>
+            <li>
+                <i class="fas fa-desktop"></i>
+                <a href="Monitor_Hospital.html">Monitor Hospital</a>
+            </li>
+            <li>
+                <i class="fas fa-cog"></i>
+                <a href="Setting.html">Setting</a>
+            </li>
+            <li>
+                <i class="fas fa-user-circle"></i>
+                <a href="Profile.html">Profile</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+        <!-- Header -->
+        <div class="header">
+            <div class="title">Department Management</div>
+            <div class="header-actions">
+                <a href="Admin_Dashboard.html" class="btn"><i class="fas fa-tachometer-alt"></i> Admin Panel</a>
+                <select class="language-selector">
+                    <option>Choose Language</option>
+                    <option>English</option>
+                    <option>Edo</option>
+                    <option>Yoruba</option>
+                    <option>Igbo</option>
+                    <option>Hausa</option>
+                </select>
+                <a href="AccountantLogin.html" class="btn"><i class="fas fa-user-circle"></i> Account</a>
+            </div>
+        </div>
+
+        <!-- Department Management Section -->
+        <div class="section">
+            <div class="section-header">
+                <h3 class="section-title">Hospital Departments</h3>
+                <button class="btn" id="addDepartmentBtn"><i class="fas fa-plus"></i> Add Department</button>
+            </div>
+            
+            <!-- Department Table -->
+            <table class="data-table" id="departmentTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Department Name</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2</td>
+                        <td>Sales</td>
+                        <td>This is department description</td>
+                        <td class="action-buttons">
+                            <button class="btn btn-outline edit-btn"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn btn-danger delete-btn"><i class="fas fa-trash"></i> Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Autology</td>
+                        <td>This is autology department description</td>
+                        <td class="action-buttons">
+                            <button class="btn btn-outline edit-btn"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn btn-danger delete-btn"><i class="fas fa-trash"></i> Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Dental</td>
+                        <td>Dental care and oral health services</td>
+                        <td class="action-buttons">
+                            <button class="btn btn-outline edit-btn"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn btn-danger delete-btn"><i class="fas fa-trash"></i> Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Children Ward</td>
+                        <td>Pediatric care unit</td>
+                        <td class="action-buttons">
+                            <button class="btn btn-outline edit-btn"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn btn-danger delete-btn"><i class="fas fa-trash"></i> Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Emergency</td>
+                        <td>24/7 emergency medical services</td>
+                        <td class="action-buttons">
+                            <button class="btn btn-outline edit-btn"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn btn-danger delete-btn"><i class="fas fa-trash"></i> Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <!-- Pagination -->
+            <div class="pagination">
+                <span class="pagination-info">Showing 1 to 5 of 5 entries</span>
+                <button class="pagination-btn" disabled><i class="fas fa-chevron-left"></i> Previous</button>
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn" disabled>Next <i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Department Modal -->
+    <div id="departmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Add New Department</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="departmentForm">
+                <input type="hidden" id="deptId">
+                <div class="form-group">
+                    <label for="deptName" class="form-label">Department Name</label>
+                    <input type="text" id="deptName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="deptDesc" class="form-label">Description</label>
+                    <textarea id="deptDesc" class="form-control" required></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="cancelBtn"><i class="fas fa-times"></i> Cancel</button>
+                    <button type="submit" class="btn btn-success" id="saveBtn"><i class="fas fa-save"></i> Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="confirmModal" class="modal confirm-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirm Deletion</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="confirm-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <p class="confirm-message">Are you sure you want to delete this department? This action cannot be undone.</p>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" id="confirmCancel"><i class="fas fa-times"></i> Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete"><i class="fas fa-trash"></i> Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM elements
+        const addDepartmentBtn = document.getElementById('addDepartmentBtn');
+        const modal = document.getElementById('departmentModal');
+        const confirmModal = document.getElementById('confirmModal');
+        const closeBtns = document.querySelectorAll('.close');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const confirmCancel = document.getElementById('confirmCancel');
+        const departmentForm = document.getElementById('departmentForm');
+        const departmentTable = document.getElementById('departmentTable').getElementsByTagName('tbody')[0];
+        const modalTitle = document.getElementById('modalTitle');
+        const saveBtn = document.getElementById('saveBtn');
+        
+        // Variables
+        let nextId = 7; // Starting after the last ID in the table
+        let currentRow = null;
+        let isEditMode = false;
+
+        // Event Listeners
+        addDepartmentBtn.addEventListener('click', openAddModal);
+        closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
+        cancelBtn.addEventListener('click', closeModal);
+        confirmCancel.addEventListener('click', closeConfirmModal);
+        departmentForm.addEventListener('submit', handleFormSubmit);
+        document.getElementById('confirmDelete').addEventListener('click', confirmDelete);
+
+        // Initialize existing buttons
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                openEditModal(this.closest('tr'));
+            });
+        });
+
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                showConfirmModal(this.closest('tr'));
+            });
+        });
+
+        // Functions
+        function openAddModal() {
+            isEditMode = false;
+            modalTitle.textContent = 'Add New Department';
+            saveBtn.innerHTML = '<i class="fas fa-save"></i> Save';
+            departmentForm.reset();
+            document.getElementById('deptId').value = '';
+            modal.style.display = 'block';
+        }
+
+        function openEditModal(row) {
+            isEditMode = true;
+            currentRow = row;
+            modalTitle.textContent = 'Edit Department';
+            saveBtn.innerHTML = '<i class="fas fa-save"></i> Update';
+            
+            // Fill form with row data
+            const cells = row.cells;
+            document.getElementById('deptId').value = cells[0].textContent;
+            document.getElementById('deptName').value = cells[1].textContent;
+            document.getElementById('deptDesc').value = cells[2].textContent;
+            
+            modal.style.display = 'block';
+        }
+
+        function showConfirmModal(row) {
+            currentRow = row;
+            confirmModal.style.display = 'block';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            departmentForm.reset();
+            currentRow = null;
+        }
+
+        function closeConfirmModal() {
+            confirmModal.style.display = 'none';
+            currentRow = null;
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const deptId = document.getElementById('deptId').value;
+            const deptName = document.getElementById('deptName').value;
+            const deptDesc = document.getElementById('deptDesc').value;
+            
+            if (isEditMode) {
+                // Update existing row
+                const cells = currentRow.cells;
+                cells[1].textContent = deptName;
+                cells[2].textContent = deptDesc;
+                
+                // Show success notification
+                showNotification('Department updated successfully!', 'success');
+            } else {
+                // Create new row
+                const newRow = departmentTable.insertRow();
+                const newId = deptId || nextId++;
+                
+                newRow.innerHTML = `
+                    <td>${newId}</td>
+                    <td>${deptName}</td>
+                    <td>${deptDesc}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-outline edit-btn"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="btn btn-danger delete-btn"><i class="fas fa-trash"></i> Delete</button>
+                    </td>
+                `;
+                
+                // Add event listeners to new buttons
+                newRow.querySelector('.edit-btn').addEventListener('click', function() {
+                    openEditModal(this.closest('tr'));
+                });
+                
+                newRow.querySelector('.delete-btn').addEventListener('click', function() {
+                    showConfirmModal(this.closest('tr'));
+                });
+                
+                // Show success notification
+                showNotification('Department added successfully!', 'success');
+            }
+            
+            closeModal();
+        }
+
+        function confirmDelete() {
+            if (currentRow) {
+                currentRow.remove();
+                closeConfirmModal();
+                
+                // Show success notification
+                showNotification('Department deleted successfully!', 'success');
+            }
+        }
+
+        function showNotification(message, type) {
+            // In a real app, you would implement a proper notification system
+            alert(message); // Temporary solution
+        }
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+            if (event.target === confirmModal) {
+                closeConfirmModal();
+            }
+        });
+
+        // Mobile menu toggle (for responsive design)
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.createElement('div');
+            hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+            hamburger.style.position = 'fixed';
+            hamburger.style.top = '15px';
+            hamburger.style.left = '15px';
+            hamburger.style.fontSize = '24px';
+            hamburger.style.zIndex = '999';
+            hamburger.style.cursor = 'pointer';
+            hamburger.style.display = 'none';
+            document.body.appendChild(hamburger);
+            
+            const sidebar = document.querySelector('.sidebar');
+            
+            function checkScreenSize() {
+                if (window.innerWidth <= 768) {
+                    hamburger.style.display = 'block';
+                } else {
+                    hamburger.style.display = 'none';
+                    sidebar.classList.remove('active');
+                }
+            }
+            
+            hamburger.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+            
+            window.addEventListener('resize', checkScreenSize);
+            checkScreenSize();
+        });
+    </script>
+</body>
+</html>

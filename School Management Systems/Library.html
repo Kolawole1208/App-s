@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Dashboard - BTech Secondary School</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    :root {
+      --primary: #2c3e50;   /* Dark Navy */
+      --secondary: #1abc9c; /* Teal accent */
+      --accent: #f39c12;    /* Warm orange */
+      --light: #f8f9fa;     /* Light grey background */
+      --dark: #2d3436;      /* Dark gray text */
+      --text: #444;         /* Neutral text */
+      --white: #fff;
+      --success: #27ae60;
+      --warning: #f1c40f;
+      --danger: #e74c3c;
+      --info: #3498db;
+      --purple: #9b59b6;
+    }
+
+    body {
+      background-color: var(--light);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(180deg, var(--primary), #34495e);
+      color: var(--white);
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .logo-icon {
+      font-size: 2.2rem;
+      margin-right: 10px;
+      color: var(--secondary);
+    }
+
+    .logo-text {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .logo-subtext {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    .user-info {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .user-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .user-role {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .date-time {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    .nav-menu {
+      flex: 1;
+    }
+
+    .nav-item {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      color: var(--white);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      background: rgba(255,255,255,0.12);
+      border-left: 4px solid var(--secondary);
+    }
+
+    .nav-item i {
+      margin-right: 10px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: var(--white);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .page-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .notification-icon {
+      position: relative;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: var(--dark);
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--danger);
+      color: var(--white);
+      border-radius: 50%;
+      font-size: 0.7rem;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .user-avatar {
+      background: var(--secondary);
+      color: var(--white);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 600;
+    }
+
+    .content {
+      flex: 1;
+      padding: 30px;
+      background: linear-gradient(to right, #ecf0f1, #ffffff);
+    }
+
+    .welcome-banner {
+      background: linear-gradient(135deg, var(--purple), var(--primary));
+      color: var(--white);
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--light);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5rem;
+      margin-right: 15px;
+      color: var(--purple);
+    }
+
+    .stat-info h3 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stat-info p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .view-all {
+      color: var(--secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .book-list {
+      list-style: none;
+    }
+
+    .book-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .book-item:last-child {
+      border-bottom: none;
+    }
+
+    .book-cover {
+      width: 50px;
+      height: 65px;
+      background: var(--light);
+      border-radius: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 15px;
+      color: var(--purple);
+      font-size: 1.2rem;
+    }
+
+    .book-info h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .book-info p {
+      font-size: 0.85rem;
+      opacity: 0.7;
+    }
+
+    .due-date {
+      font-size: 0.8rem;
+      color: var(--danger);
+      font-weight: 500;
+    }
+
+    .transaction-list {
+      list-style: none;
+    }
+
+    .transaction-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .transaction-item:last-child {
+      border-bottom: none;
+    }
+
+    .transaction-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--light);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 15px;
+      color: var(--secondary);
+    }
+
+    .transaction-info h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .transaction-info p {
+      font-size: 0.85rem;
+      opacity: 0.7;
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .module-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: 0.3s ease;
+      cursor: pointer;
+    }
+
+    .module-card:hover {
+      transform: translateY(-5px);
+      background: var(--purple);
+      color: var(--white);
+    }
+
+    .module-card:hover .module-icon {
+      background: var(--white);
+      color: var(--purple);
+    }
+
+    .module-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: var(--light);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.8rem;
+      margin: 0 auto 15px;
+      color: var(--purple);
+    }
+
+    .module-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .module-description {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+
+    .footer {
+      background: var(--primary);
+      color: var(--white);
+      text-align: center;
+      padding: 15px 30px;
+    }
+
+    /* Library-specific styles */
+    .library-nav {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .library-nav-btn {
+      background: var(--white);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .library-nav-btn.active {
+      background: var(--purple);
+      color: var(--white);
+    }
+
+    /* Alert Styles */
+    .alert {
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .alert-warning {
+      background: rgba(241, 196, 15, 0.1);
+      border-left: 4px solid var(--warning);
+    }
+
+    .alert-danger {
+      background: rgba(231, 76, 60, 0.1);
+      border-left: 4px solid var(--danger);
+    }
+
+    .alert-icon {
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+
+    /* Book Categories */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .category-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: 0.3s ease;
+      cursor: pointer;
+    }
+
+    .category-card:hover {
+      transform: translateY(-3px);
+      background: var(--purple);
+      color: var(--white);
+    }
+
+    .category-icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: var(--purple);
+    }
+
+    .category-card:hover .category-icon {
+      color: var(--white);
+    }
+
+    .category-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .category-count {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* Popular Books */
+    .popular-books {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .popular-book {
+      text-align: center;
+    }
+
+    .popular-book-cover {
+      width: 100px;
+      height: 130px;
+      background: var(--light);
+      border-radius: 6px;
+      margin: 0 auto 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--purple);
+      font-size: 1.5rem;
+    }
+
+    .popular-book-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+    }
+
+    .popular-book-author {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    /* Analytics Cards */
+    .analytics-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .analytics-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .analytics-title {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .analytics-chart {
+      height: 200px;
+      background: var(--light);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      font-style: italic;
+    }
+
+    /* Status badges */
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .status-available {
+      background: rgba(39, 174, 96, 0.2);
+      color: var(--success);
+    }
+
+    .status-borrowed {
+      background: rgba(52, 152, 219, 0.2);
+      color: var(--info);
+    }
+
+    .status-overdue {
+      background: rgba(231, 76, 60, 0.2);
+      color: var(--danger);
+    }
+
+    /* Dashboard Sections */
+    .dashboard-section {
+      display: none;
+    }
+
+    .dashboard-section.active {
+      display: block;
+    }
+
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border 0.3s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--purple);
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: var(--purple);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: #8e44ad;
+    }
+
+    /* Table Styles */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .data-table th, .data-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .data-table th {
+      background: var(--light);
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .action-edit {
+      background: rgba(52, 152, 219, 0.2);
+      color: var(--info);
+    }
+
+    .action-delete {
+      background: rgba(231, 76, 60, 0.2);
+      color: var(--danger);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1200px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+      
+      .sidebar {
+        width: 100%;
+        height: auto;
+      }
+      
+      .library-nav {
+        overflow-x: auto;
+        padding-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-icon"><i class="fas fa-book"></i></div>
+      <div>
+        <div class="logo-text">BTech Library</div>
+        <div class="logo-subtext">Management System</div>
+      </div>
+    </div>
+    <div class="user-info">
+      <div class="user-name">Mrs. Grace Williams</div>
+      <div class="user-role">Head Librarian</div>
+      <div class="date-time" id="current-date-time"></div>
+    </div>
+    <div class="nav-menu">
+      <a href="#" class="nav-item active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="#" class="nav-item" data-section="catalog"><i class="fas fa-book"></i> Catalog Management</a>
+      <a href="#" class="nav-item" data-section="circulation"><i class="fas fa-exchange-alt"></i> Circulation</a>
+      <a href="#" class="nav-item" data-section="patron"><i class="fas fa-users"></i> Patron Management</a>
+      <a href="#" class="nav-item" data-section="reports"><i class="fas fa-chart-line"></i> Reports & Analytics</a>
+      <a href="#" class="nav-item" data-section="acquisition"><i class="fas fa-tags"></i> Acquisition</a>
+      <a href="#" class="nav-item" data-section="reservations"><i class="fas fa-calendar-alt"></i> Reservations</a>
+      <a href="#" class="nav-item" data-section="settings"><i class="fas fa-cog"></i> System Settings</a>
+      <a href="#" class="nav-item" data-section="help"><i class="fas fa-question-circle"></i> Help & Support</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="header">
+      <div class="page-title" id="page-title">Library Dashboard</div>
+      <div class="user-actions">
+        <div class="notification-icon">
+          <i class="fas fa-bell"></i>
+          <div class="notification-badge">12</div>
+        </div>
+        <div class="user-avatar">GW</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- Dashboard Section -->
+      <div class="dashboard-section active" id="dashboard">
+        <div class="welcome-banner">
+          <h1>Welcome to BTech Secondary School Library</h1>
+          <p>Knowledge Hub | Supporting Academic Excellence | First Term - 2025/2026 Session</p>
+        </div>
+
+        <!-- Alerts Section -->
+        <div class="alert alert-warning">
+          <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
+          <div>
+            <strong>23 books overdue</strong> - Send reminder notifications to students
+          </div>
+        </div>
+
+        <div class="alert alert-danger">
+          <div class="alert-icon"><i class="fas fa-exclamation-circle"></i></div>
+          <div>
+            <strong>5 books reported damaged</strong> - Review and update inventory status
+          </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-book"></i></div>
+            <div class="stat-info">
+              <h3>12,458</h3>
+              <p>Total Books</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
+            <div class="stat-info">
+              <h3>842</h3>
+              <p>Active Patrons</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-exchange-alt"></i></div>
+            <div class="stat-info">
+              <h3>127</h3>
+              <p>Books Checked Out</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="stat-info">
+              <h3>89%</h3>
+              <p>Collection Utilization</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Dashboard Grid -->
+        <div class="dashboard-grid">
+          <!-- Overdue Books -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Overdue Books</div>
+              <a href="#" class="view-all">View All</a>
+            </div>
+            <ul class="book-list">
+              <li class="book-item">
+                <div class="book-cover"><i class="fas fa-book"></i></div>
+                <div class="book-info">
+                  <h4>Introduction to Python Programming</h4>
+                  <p>John Smith | Grade 10B</p>
+                  <div class="due-date">Due: 5 days ago</div>
+                </div>
+              </li>
+              <li class="book-item">
+                <div class="book-cover"><i class="fas fa-book"></i></div>
+                <div class="book-info">
+                  <h4>Database Systems Concepts</h4>
+                  <p>Sarah Johnson | Grade 12A</p>
+                  <div class="due-date">Due: 3 days ago</div>
+                </div>
+              </li>
+              <li class="book-item">
+                <div class="book-cover"><i class="fas fa-book"></i></div>
+                <div class="book-info">
+                  <h4>Networking Fundamentals</h4>
+                  <p>Michael Brown | Grade 11C</p>
+                  <div class="due-date">Due: 2 days ago</div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Recent Transactions -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Recent Transactions</div>
+              <a href="#" class="view-all">View All</a>
+            </div>
+            <ul class="transaction-list">
+              <li class="transaction-item">
+                <div class="transaction-icon"><i class="fas fa-arrow-right"></i></div>
+                <div class="transaction-info">
+                  <h4>Book Checked Out</h4>
+                  <p>Web Development Basics - David Wilson</p>
+                </div>
+              </li>
+              <li class="transaction-item">
+                <div class="transaction-icon"><i class="fas fa-arrow-left"></i></div>
+                <div class="transaction-info">
+                  <h4>Book Returned</h4>
+                  <p>Data Structures - Emily Chen</p>
+                </div>
+              </li>
+              <li class="transaction-item">
+                <div class="transaction-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="transaction-info">
+                  <h4>Fine Applied</h4>
+                  <p>Late return - James Anderson</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Quick Access Modules -->
+        <h2 style="margin: 30px 0 20px; color: var(--primary);">Quick Access</h2>
+        <div class="modules-grid">
+          <div class="module-card" data-section="catalog"><div class="module-icon"><i class="fas fa-book"></i></div><div class="module-title">Catalog Search</div><div class="module-description">Search and browse the library collection</div></div>
+          <div class="module-card" data-section="circulation"><div class="module-icon"><i class="fas fa-exchange-alt"></i></div><div class="module-title">Check Out Books</div><div class="module-description">Process book loans and returns</div></div>
+          <div class="module-card" data-section="patron"><div class="module-icon"><i class="fas fa-users"></i></div><div class="module-title">Patron Management</div><div class="module-description">Manage student and staff library accounts</div></div>
+          <div class="module-card" data-section="reports"><div class="module-icon"><i class="fas fa-chart-line"></i></div><div class="module-title">Reports</div><div class="module-description">Generate circulation and inventory reports</div></div>
+          <div class="module-card" data-section="acquisition"><div class="module-icon"><i class="fas fa-tags"></i></div><div class="module-title">Acquisitions</div><div class="module-description">Manage new book purchases and donations</div></div>
+          <div class="module-card" data-section="reservations"><div class="module-icon"><i class="fas fa-calendar-alt"></i></div><div class="module-title">Reservations</div><div class="module-description">Handle book reservations and holds</div></div>
+        </div>
+      </div>
+
+      <!-- Catalog Management Section -->
+      <div class="dashboard-section" id="catalog">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Catalog Management</div>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search books by title, author, ISBN...">
+          </div>
+          <div class="action-buttons" style="margin-bottom: 20px;">
+            <button class="btn btn-primary"><i class="fas fa-plus"></i> Add New Book</button>
+            <button class="btn btn-primary"><i class="fas fa-upload"></i> Bulk Import</button>
+            <button class="btn btn-primary"><i class="fas fa-tags"></i> Manage Categories</button>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>ISBN</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Python Crash Course</td>
+                <td>Eric Matthes</td>
+                <td>978-1593279288</td>
+                <td>Computer Science</td>
+                <td><span class="status-badge status-available">Available</span></td>
+                <td class="action-buttons">
+                  <button class="action-btn action-edit">Edit</button>
+                  <button class="action-btn action-delete">Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <td>Clean Code</td>
+                <td>Robert Martin</td>
+                <td>978-0132350884</td>
+                <td>Computer Science</td>
+                <td><span class="status-badge status-borrowed">Borrowed</span></td>
+                <td class="action-buttons">
+                  <button class="action-btn action-edit">Edit</button>
+                  <button class="action-btn action-delete">Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <td>The Algorithm Design Manual</td>
+                <td>Steven Skiena</td>
+                <td>978-1849967204</td>
+                <td>Computer Science</td>
+                <td><span class="status-badge status-available">Available</span></td>
+                <td class="action-buttons">
+                  <button class="action-btn action-edit">Edit</button>
+                  <button class="action-btn action-delete">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Circulation Section -->
+      <div class="dashboard-section" id="circulation">
+        <div class="dashboard-grid">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Check Out Books</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Student ID</label>
+              <input type="text" class="form-control" placeholder="Enter student ID">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Book ISBN</label>
+              <input type="text" class="form-control" placeholder="Enter book ISBN">
+            </div>
+            <button class="btn btn-primary">Check Out Book</button>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Return Books</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Book ISBN</label>
+              <input type="text" class="form-control" placeholder="Enter book ISBN">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Condition</label>
+              <select class="form-control">
+                <option>Good</option>
+                <option>Damaged</option>
+                <option>Lost</option>
+              </select>
+            </div>
+            <button class="btn btn-primary">Return Book</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Current Checkouts</div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Book</th>
+                <th>Checkout Date</th>
+                <th>Due Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>John Smith (G10B)</td>
+                <td>Introduction to Python Programming</td>
+                <td>15 Jan 2025</td>
+                <td>29 Jan 2025</td>
+                <td><span class="status-badge status-overdue">Overdue</span></td>
+              </tr>
+              <tr>
+                <td>Sarah Johnson (G12A)</td>
+                <td>Database Systems Concepts</td>
+                <td>18 Jan 2025</td>
+                <td>01 Feb 2025</td>
+                <td><span class="status-badge status-borrowed">On Loan</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Patron Management Section -->
+      <div class="dashboard-section" id="patron">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Patron Management</div>
+          </div>
+          <div class="action-buttons" style="margin-bottom: 20px;">
+            <button class="btn btn-primary"><i class="fas fa-plus"></i> Add New Patron</button>
+            <button class="btn btn-primary"><i class="fas fa-sync"></i> Sync with School Database</button>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Grade/Department</th>
+                <th>Books Borrowed</th>
+                <th>Fines</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>S1001</td>
+                <td>John Smith</td>
+                <td>Grade 10B</td>
+                <td>3</td>
+                <td>$5.00</td>
+                <td><span class="status-badge status-overdue">Overdue</span></td>
+                <td class="action-buttons">
+                  <button class="action-btn action-edit">Edit</button>
+                  <button class="action-btn action-delete">Suspend</button>
+                </td>
+              </tr>
+              <tr>
+                <td>S2045</td>
+                <td>Sarah Johnson</td>
+                <td>Grade 12A</td>
+                <td>1</td>
+                <td>$0.00</td>
+                <td><span class="status-badge status-available">Active</span></td>
+                <td class="action-buttons">
+                  <button class="action-btn action-edit">Edit</button>
+                  <button class="action-btn action-delete">Suspend</button>
+                </td>
+              </tr>
+              <tr>
+                <td>T0032</td>
+                <td>Mr. David Chen</td>
+                <td>IT Department</td>
+                <td>5</td>
+                <td>$0.00</td>
+                <td><span class="status-badge status-available">Active</span></td>
+                <td class="action-buttons">
+                  <button class="action-btn action-edit">Edit</button>
+                  <button class="action-btn action-delete">Suspend</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Reports & Analytics Section -->
+      <div class="dashboard-section" id="reports">
+        <div class="dashboard-grid">
+          <div class="analytics-card">
+            <div class="analytics-header">
+              <div class="analytics-title">Monthly Circulation</div>
+            </div>
+            <div class="analytics-chart">
+              [Bar chart showing monthly checkouts and returns]
+            </div>
+          </div>
+          <div class="analytics-card">
+            <div class="analytics-header">
+              <div class="analytics-title">Popular Categories</div>
+            </div>
+            <div class="analytics-chart">
+              [Pie chart showing book category distribution]
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Report Generator</div>
+          </div>
+          <div class="dashboard-grid">
+            <div class="form-group">
+              <label class="form-label">Report Type</label>
+              <select class="form-control">
+                <option>Circulation Report</option>
+                <option>Inventory Report</option>
+                <option>Overdue Books Report</option>
+                <option>Patron Activity Report</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Date Range</label>
+              <select class="form-control">
+                <option>Last 7 days</option>
+                <option>Last 30 days</option>
+                <option>Last 3 months</option>
+                <option>Custom Range</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary"><i class="fas fa-download"></i> Generate Report</button>
+        </div>
+      </div>
+
+      <!-- Acquisition Section -->
+      <div class="dashboard-section" id="acquisition">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Book Acquisition</div>
+          </div>
+          <div class="dashboard-grid">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">New Book Request</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Title</label>
+                <input type="text" class="form-control">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Author</label>
+                <input type="text" class="form-control">
+              </div>
+              <div class="form-group">
+                <label class="form-label">ISBN</label>
+                <input type="text" class="form-control">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Category</label>
+                <select class="form-control">
+                  <option>Computer Science</option>
+                  <option>Mathematics</option>
+                  <option>Science</option>
+                  <option>Literature</option>
+                </select>
+              </div>
+              <button class="btn btn-primary">Submit Request</button>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Pending Requests</div>
+              </div>
+              <ul class="book-list">
+                <li class="book-item">
+                  <div class="book-cover"><i class="fas fa-book"></i></div>
+                  <div class="book-info">
+                    <h4>Machine Learning Yearning</h4>
+                    <p>Andrew Ng</p>
+                    <div class="due-date">Requested: 15 Jan 2025</div>
+                  </div>
+                </li>
+                <li class="book-item">
+                  <div class="book-cover"><i class="fas fa-book"></i></div>
+                  <div class="book-info">
+                    <h4>Deep Learning with Python</h4>
+                    <p>François Chollet</p>
+                    <div class="due-date">Requested: 12 Jan 2025</div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reservations Section -->
+      <div class="dashboard-section" id="reservations">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Book Reservations</div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Patron</th>
+                <th>Book</th>
+                <th>Reservation Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Michael Brown (G11C)</td>
+                <td>Clean Code</td>
+                <td>20 Jan 2025</td>
+                <td><span class="status-badge status-available">Waiting</span></td>
+                <td class="action-buttons">
+                  <button class="action-btn action-edit">Notify Available</button>
+                  <button class="action-btn action-delete">Cancel</button>
+                </td>
+              </tr>
+              <tr>
+                <td>Emily Chen (G12B)</td>
+                <td>The Algorithm Design Manual</td>
+                <td>18 Jan 2025</td>
+                <td><span class="status-badge status-borrowed">Ready for Pickup</span></td>
+                <td class="action-buttons">
+                  <button class="action-btn action-edit">Check Out</button>
+                  <button class="action-btn action-delete">Cancel</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- System Settings Section -->
+      <div class="dashboard-section" id="settings">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">System Settings</div>
+          </div>
+          <div class="dashboard-grid">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Loan Policies</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Loan Period (days)</label>
+                <input type="number" class="form-control" value="14">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Renewal Limit</label>
+                <input type="number" class="form-control" value="2">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Fine per Day ($)</label>
+                <input type="number" class="form-control" value="0.50" step="0.10">
+              </div>
+              <button class="btn btn-primary">Save Policies</button>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Notification Settings</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">
+                  <input type="checkbox" checked> Send overdue reminders
+                </label>
+              </div>
+              <div class="form-group">
+                <label class="form-label">
+                  <input type="checkbox" checked> Send reservation notifications
+                </label>
+              </div>
+              <div class="form-group">
+                <label class="form-label">
+                  <input type="checkbox"> Send monthly reading reports
+                </label>
+              </div>
+              <button class="btn btn-primary">Save Notifications</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Help & Support Section -->
+      <div class="dashboard-section" id="help">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Help & Support</div>
+          </div>
+          <div class="dashboard-grid">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Documentation</div>
+              </div>
+              <ul class="book-list">
+                <li class="book-item">
+                  <div class="book-cover"><i class="fas fa-file-pdf"></i></div>
+                  <div class="book-info">
+                    <h4>Library System User Guide</h4>
+                    <p>Complete guide to using the library management system</p>
+                  </div>
+                </li>
+                <li class="book-item">
+                  <div class="book-cover"><i class="fas fa-video"></i></div>
+                  <div class="book-info">
+                    <h4>Video Tutorials</h4>
+                    <p>Step-by-step video guides for common tasks</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Contact Support</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Subject</label>
+                <input type="text" class="form-control">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" rows="4"></textarea>
+              </div>
+              <button class="btn btn-primary">Submit Ticket</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      &copy; 2025 BTech Secondary School Library Management System. All rights reserved.
+    </div>
+  </div>
+
+  <script>
+    // Live Date & Time
+    function updateDateTime() {
+      const now = new Date();
+      const options = { day: '2-digit', month: 'short', year: 'numeric' };
+      const date = now.toLocaleDateString('en-GB', options);
+      const time = now.toLocaleTimeString('en-GB', { hour12: false });
+      document.getElementById('current-date-time').textContent = `${date} ${time}`;
+    }
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
+    // Navigation functionality
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Update active nav item
+        document.querySelectorAll('.nav-item').forEach(nav => {
+          nav.classList.remove('active');
+        });
+        this.classList.add('active');
+        
+        // Show corresponding section
+        const sectionId = this.getAttribute('data-section');
+        document.querySelectorAll('.dashboard-section').forEach(section => {
+          section.classList.remove('active');
+        });
+        document.getElementById(sectionId).classList.add('active');
+        
+        // Update page title
+        const pageTitle = document.getElementById('page-title');
+        const titles = {
+          'dashboard': 'Library Dashboard',
+          'catalog': 'Catalog Management',
+          'circulation': 'Circulation',
+          'patron': 'Patron Management',
+          'reports': 'Reports & Analytics',
+          'acquisition': 'Acquisition',
+          'reservations': 'Reservations',
+          'settings': 'System Settings',
+          'help': 'Help & Support'
+        };
+        pageTitle.textContent = titles[sectionId];
+      });
+    });
+
+    // Quick access module navigation
+    document.querySelectorAll('.module-card').forEach(card => {
+      card.addEventListener('click', function() {
+        const sectionId = this.getAttribute('data-section');
+        
+        // Update active nav item
+        document.querySelectorAll('.nav-item').forEach(nav => {
+          nav.classList.remove('active');
+          if (nav.getAttribute('data-section') === sectionId) {
+            nav.classList.add('active');
+          }
+        });
+        
+        // Show corresponding section
+        document.querySelectorAll('.dashboard-section').forEach(section => {
+          section.classList.remove('active');
+        });
+        document.getElementById(sectionId).classList.add('active');
+        
+        // Update page title
+        const pageTitle = document.getElementById('page-title');
+        const titles = {
+          'catalog': 'Catalog Management',
+          'circulation': 'Circulation',
+          'patron': 'Patron Management',
+          'reports': 'Reports & Analytics',
+          'acquisition': 'Acquisition',
+          'reservations': 'Reservations'
+        };
+        pageTitle.textContent = titles[sectionId];
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>User Profile Edit</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        display: flex;
+        height: 100vh;
+    }
+    .sidebar {
+        width: 250px;
+        background-color: #000;
+        height: 100%;
+        padding-top: 20px;
+        position: fixed;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .sidebar h2 {
+        color: #4CAF50;
+        margin-bottom: 20px;
+        font-size: 1.2em;
+        text-align: center;
+    }
+    .sidebar ul {
+        list-style: none;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    .sidebar ul li {
+        padding: 14px 20px;
+        display: flex;
+        align-items: center;
+        color: #fff;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .sidebar ul li:hover {
+        background-color: #333;
+    }
+    .main {
+        margin-left: 250px;
+        padding: 30px;
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: start;
+        height: 100%;
+        overflow-y: auto;
+    }
+    .profile-container {
+        background: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        max-width: 600px;
+        width: 100%;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .section-header h3 {
+        margin: 0;
+        font-size: 1.2em;
+    }
+    .profile-image-section {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    .profile-image {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ccc;
+        transition: border 0.3s;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    label {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    input[type="text"], input[type="email"], input[type="password"] {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1em;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .btn {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .btn:hover {
+        background-color: #45a049;
+    }
+    .upload-btn {
+        padding: 8px 12px;
+        background-color: #008CBA;
+        margin-top: 10px;
+        width: fit-content;
+    }
+    .change-image-btn {
+        padding: 8px 12px;
+        background-color: #f0ad4e;
+        margin-top: 10px;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .change-image-btn:hover {
+        background-color: #e6a13f;
+    }
+</style>
+</head>
+<body>
+<div class="sidebar">
+    <h2>Breath_Smart Regional Hospital</h2>
+    <ul>
+        <a href="Admin_Dashboard.html" class="menu-link active" style="color: white; text-decoration: none;"><li>&#8962; Dashboard</li></a>
+        <a href="Department.html" class="menu-link active" style="color: white; text-decoration: none;"><li>&#128104; Department</li></a>
+        <a href="Doctor.html" class="menu-link active" style="color: white; text-decoration: none;"><li>&#128100; Doctor</li></a>
+        <a href="Patient.html" class="menu-link active" style="color: white; text-decoration: none;"><li>&#128106; Patient</li></a>
+        <a href="Nurse.html" class="menu-link active" style="color: white; text-decoration: none;"><li>&#128105; Nurse</li></a>
+        <a href="Pharmacist.html" class="menu-link active" style="color: white; text-decoration: none;"><li>&#128137; Pharmacist</li></a>
+        <a href="Laboratory.html" class="menu-link active" style="color: white; text-decoration: none;"><li>&#128300; Laboratory</li></a>
+        <a href="Account.html" class="menu-link active" style="color: white; text-decoration: none;"><li>&#128181; Accountant</li></a>
+        <a href="Monitor_Hospital.html" class="menu-link active" style="color: white; text-decoration: none;"><li>&#128138; Monitor hospital</li></a>
+        <a href="Setting.html" class="menu-link active" style="color: white; text-decoration: none;"><li>&#9881; Setting</li></a>
+        <li style="background-color:#4CAF50;">&#128100; Profile</li>
+    </ul>
+</div>
+<div class="main">
+    <div class="profile-container">
+        <div class="section-header">
+            <h3>Edit Profile</h3>
+        </div>
+        <div class="profile-image-section">
+            <img src="https://via.placeholder.com/150" alt="Profile Image" class="profile-image" id="profileImage" />
+            <div>
+                <button class="change-image-btn" id="changeImageBtn">Change Image</button>
+                <input type="file" accept="image/*" id="imageUpload" style="display: none;" />
+            </div>
+        </div>
+        <form id="profileForm">
+            <div>
+                <label for="name">Name</label>
+                <input type="text" id="name" placeholder="Dr Anuary Agaton Mika" value="Dr Smart Emmanuel" />
+            </div>
+            <div>
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="anuarymsimbe@gmail.com" value="smart001@gmail.com" />
+            </div>
+            <hr />
+            <h4>Leave Password blank if you do not want to change</h4>
+            <div>
+                <label for="newPassword">New Password</label>
+                <input type="password" id="newPassword" placeholder="New Password" />
+            </div>
+            <div>
+                <label for="rePassword">Re-enter Password</label>
+                <input type="password" id="rePassword" placeholder="Re-enter Password" />
+            </div>
+            <button type="submit" class="btn">Update Profile</button>
+        </form>
+    </div>
+</div>
+<script>
+    document.getElementById('changeImageBtn').addEventListener('click', function() {
+        document.getElementById('imageUpload').click();
+    });
+    document.getElementById('imageUpload').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('profileImage').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    document.getElementById('profileForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Profile updated!');
+    });
+</script>
+</body>
+</html>

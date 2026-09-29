@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Breath_Smart Regional Hospital - Blood Assessment Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(120deg, #fdfdfd, #f8f8f8);
+      margin: 0;
+    }
+    header {
+      background-color: green;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px;
+    }
+    .cards {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .card {
+      background: #fafafa;
+      flex: 1;
+      min-width: 200px;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .card h2 {
+      color: green;
+      font-size: 2em;
+      background: #ffe6e6;
+      padding: 8px;
+      border-radius: 6px;
+    }
+    form {
+      background: #fafafa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    form h3 {
+      margin-bottom: 10px;
+      color: green;
+      background: #ffe6e6;
+      padding: 6px;
+      border-radius: 4px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 8px;
+      margin: 6px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background: green;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: green;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      margin-top: 15px;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background: green;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<header>Breath_Smart Regional Hospital - Blood Assessment Dashboard</header>
+
+<div class="container">
+
+  <!-- Statistics Cards -->
+  <div class="cards">
+    <div class="card">
+      <h2 id="totalAssessments">0</h2>
+      <p>Total Assessments</p>
+    </div>
+    <div class="card">
+      <h2 id="passedCount">0</h2>
+      <p>Passed</p>
+    </div>
+    <div class="card">
+      <h2 id="failedCount">0</h2>
+      <p>Failed</p>
+    </div>
+  </div>
+
+  <!-- Add Assessment Form -->
+  <form id="assessmentForm">
+    <h3>Record Blood Assessment</h3>
+    <input type="text" id="patientName" placeholder="Patient Name" required>
+    <select id="bloodType" required>
+      <option value="">Select Blood Type</option>
+      <option>A+</option><option>A-</option>
+      <option>B+</option><option>B-</option>
+      <option>AB+</option><option>AB-</option>
+      <option>O+</option><option>O-</option>
+    </select>
+    <input type="number" step="0.1" id="hemoglobinLevel" placeholder="Hemoglobin Level (g/dL)" required>
+    <input type="number" id="unitsDonated" placeholder="Units Donated" min="1" required>
+    <select id="testResult" required>
+      <option value="">Test Result</option>
+      <option value="Pass">Pass</option>
+      <option value="Fail">Fail</option>
+    </select>
+    <button type="submit">Add Assessment</button>
+  </form>
+
+  <!-- Assessment Records Table -->
+  <h3 style="color:#b30000;">Assessment Records</h3>
+  <table id="assessmentTable">
+    <thead>
+      <tr>
+        <th>Patient Name</th>
+        <th>Blood Type</th>
+        <th>Hemoglobin Level</th>
+        <th>Units Donated</th>
+        <th>Result</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Records will load here -->
+    </tbody>
+  </table>
+
+</div>
+
+<script>
+  let totalAssessments = parseInt(localStorage.getItem("totalAssessments")) || 0;
+  let passedCount = parseInt(localStorage.getItem("passedCount")) || 0;
+  let failedCount = parseInt(localStorage.getItem("failedCount")) || 0;
+  let assessmentList = JSON.parse(localStorage.getItem("assessmentList")) || [];
+
+  // Blood Bank variables
+  let availableUnits = parseInt(localStorage.getItem("availableUnits")) || 0;
+  let totalDonors = parseInt(localStorage.getItem("totalDonors")) || 0;
+
+  function updateDashboard() {
+    document.getElementById("totalAssessments").textContent = totalAssessments;
+    document.getElementById("passedCount").textContent = passedCount;
+    document.getElementById("failedCount").textContent = failedCount;
+
+    let tableBody = document.getElementById("assessmentTable").querySelector("tbody");
+    tableBody.innerHTML = "";
+    assessmentList.forEach(record => {
+      tableBody.innerHTML += `
+        <tr>
+          <td>${record.name}</td>
+          <td>${record.type}</td>
+          <td>${record.hb}</td>
+          <td>${record.units}</td>
+          <td style="color:${record.result === 'Pass' ? 'green' : 'red'}; font-weight:bold;">
+            ${record.result}
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  document.getElementById("assessmentForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    let name = document.getElementById("patientName").value;
+    let type = document.getElementById("bloodType").value;
+    let hb = parseFloat(document.getElementById("hemoglobinLevel").value);
+    let units = parseInt(document.getElementById("unitsDonated").value);
+    let result = document.getElementById("testResult").value;
+
+    totalAssessments++;
+    if (result === "Pass") {
+      passedCount++;
+      totalDonors++;
+      availableUnits += units; // Add units to Blood Bank
+    } else {
+      failedCount++;
+    }
+
+    assessmentList.push({ name, type, hb, units, result });
+
+    // Save assessment data
+    localStorage.setItem("totalAssessments", totalAssessments);
+    localStorage.setItem("passedCount", passedCount);
+    localStorage.setItem("failedCount", failedCount);
+    localStorage.setItem("assessmentList", JSON.stringify(assessmentList));
+
+    // Save Blood Bank data
+    localStorage.setItem("totalDonors", totalDonors);
+    localStorage.setItem("availableUnits", availableUnits);
+
+    updateDashboard();
+    this.reset();
+  });
+
+  updateDashboard();
+</script>
+
+</body>
+</html>

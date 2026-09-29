@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Management Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --success: #4cc9a7;
+            --warning: #f8961e;
+            --danger: #f72585;
+            --info: #4895ef;
+            --dark: #2d3748;
+            --light: #f8f9fa;
+            --gray: #718096;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: green;
+            color: var(--dark);
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px 0;
+            position: fixed;
+            width: 280px;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            padding: 0 25px 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 25px;
+        }
+
+        .logo h1 {
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            padding: 15px 25px;
+            margin: 5px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1rem;
+        }
+
+        .nav-item.active, .nav-item:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-left: 4px solid white;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            grid-column: 2;
+            padding: 25px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* KPI Cards */
+        .kpi-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            border-left: 4px solid var(--primary);
+        }
+
+        .kpi-card.loans {
+            border-left-color: var(--primary);
+        }
+
+        .kpi-card.portfolio {
+            border-left-color: var(--secondary);
+        }
+
+        .kpi-card.revenue {
+            border-left-color: var(--success);
+        }
+
+        .kpi-card.delinquency {
+            border-left-color: var(--danger);
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .kpi-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .kpi-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .kpi-trend {
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .trend-up {
+            color: var(--success);
+        }
+
+        .trend-down {
+            color: var(--danger);
+        }
+
+        /* Charts Section */
+        .charts-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Tables Section */
+        .tables-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .loan-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-active {
+            background-color: #e0f2fe;
+            color: #0284c7;
+        }
+
+        .status-delinquent {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-default {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+
+        .status-paid {
+            background-color: #d1fae5;
+            color: #059669;
+        }
+
+        .risk-high {
+            color: var(--danger);
+            font-weight: bold;
+        }
+
+        .risk-medium {
+            color: var(--warning);
+            font-weight: bold;
+        }
+
+        .risk-low {
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        /* Alert Banner */
+        .alert-banner {
+            background: linear-gradient(90deg, var(--warning), #f9a826);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .alert-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .tables-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .main-content {
+                grid-column: 1;
+                padding: 15px;
+            }
+            
+            .kpi-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1><i class="fas fa-landmark"></i> LoanManager Pro</h1>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active"><i class="fas fa-tachometer-alt"></i> Dashboard</li>
+                <li class="nav-item"><i class="fas fa-hand-holding-usd"></i> Loan Applications</li>
+                <li class="nav-item"><i class="fas fa-list-alt"></i> Loan Portfolio</li>
+                <li class="nav-item"><i class="fas fa-calendar-check"></i> Payment Schedule</li>
+                <li class="nav-item"><i class="fas fa-exclamation-triangle"></i> Delinquencies</li>
+                <li class="nav-item"><i class="fas fa-chart-bar"></i> Reports & Analytics</li>
+                <li class="nav-item"><i class="fas fa-cog"></i> Settings</li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <h1>Loan Management Dashboard</h1>
+                <div class="header-actions">
+                    <button class="btn btn-outline"><i class="fas fa-download"></i> Export Report</button>
+                    <button class="btn btn-primary"><i class="fas fa-plus"></i> New Loan</button>
+                    <div class="user-info">
+                        <div class="avatar">LM</div>
+                        <div>
+                            <div class="user-name">Loan Manager</div>
+                            <div class="user-role">Administrator</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alert Banner -->
+            <div class="alert-banner">
+                <div class="alert-content">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span><strong>Alert:</strong> 12 loans are past due. Total overdue amount: $45,670</span>
+                </div>
+                <button style="background: transparent; border: none; color: white; cursor: pointer;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="kpi-cards">
+                <div class="kpi-card loans">
+                    <div class="kpi-header">
+                        <h3>Total Loan Portfolio</h3>
+                        <div class="kpi-icon" style="background-color: var(--primary);">
+                            <i class="fas fa-hand-holding-usd"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value">$4.82M</div>
+                    <div class="kpi-label">Active Loan Value</div>
+                    <div class="kpi-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> 5.2% growth this quarter
+                    </div>
+                </div>
+
+                <div class="kpi-card portfolio">
+                    <div class="kpi-header">
+                        <h3>Active Loans</h3>
+                        <div class="kpi-icon" style="background-color: var(--secondary);">
+                            <i class="fas fa-file-contract"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value">342</div>
+                    <div class="kpi-label">Loans in portfolio</div>
+                    <div class="kpi-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> 8 new loans this month
+                    </div>
+                </div>
+
+                <div class="kpi-card revenue">
+                    <div class="kpi-header">
+                        <h3>Monthly Revenue</h3>
+                        <div class="kpi-icon" style="background-color: var(--success);">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value">$86,540</div>
+                    <div class="kpi-label">Expected this month</div>
+                    <div class="kpi-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> 3.7% from last month
+                    </div>
+                </div>
+
+                <div class="kpi-card delinquency">
+                    <div class="kpi-header">
+                        <h3>Delinquency Rate</h3>
+                        <div class="kpi-icon" style="background-color: var(--danger);">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value">4.2%</div>
+                    <div class="kpi-label">Loans 30+ days late</div>
+                    <div class="kpi-trend trend-down">
+                        <i class="fas fa-arrow-down"></i> 0.8% improvement
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-container">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Portfolio Performance</h3>
+                        <select id="performanceFilter">
+                            <option>Last 12 Months</option>
+                            <option>Last 6 Months</option>
+                            <option>Year to Date</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Loan Distribution</h3>
+                        <select id="distributionFilter">
+                            <option>By Type</option>
+                            <option>By Status</option>
+                            <option>By Risk</option>
+                        </select>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tables Section -->
+            <div class="tables-container">
+                <div class="table-card">
+                    <div class="chart-header">
+                        <h3>Recent Loan Applications</h3>
+                        <button class="btn btn-outline">View All</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Applicant</th>
+                                <th>Loan Amount</th>
+                                <th>Type</th>
+                                <th>Risk Score</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>John Smith</td>
+                                <td>$25,000</td>
+                                <td>Personal</td>
+                                <td><span class="risk-low">Low</span></td>
+                                <td><span class="loan-status status-active">Under Review</span></td>
+                            </tr>
+                            <tr>
+                                <td>Sarah Johnson</td>
+                                <td>$150,000</td>
+                                <td>Mortgage</td>
+                                <td><span class="risk-medium">Medium</span></td>
+                                <td><span class="loan-status status-active">Approved</span></td>
+                            </tr>
+                            <tr>
+                                <td>Mike Brown</td>
+                                <td>$45,000</td>
+                                <td>Auto</td>
+                                <td><span class="risk-high">High</span></td>
+                                <td><span class="loan-status status-active">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>Lisa Taylor</td>
+                                <td>$75,000</td>
+                                <td>Business</td>
+                                <td><span class="risk-medium">Medium</span></td>
+                                <td><span class="loan-status status-active">Documents Requested</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-card">
+                    <div class="chart-header">
+                        <h3>Delinquent Loans</h3>
+                        <button class="btn btn-outline">View All</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Loan ID</th>
+                                <th>Customer</th>
+                                <th>Days Late</th>
+                                <th>Amount Due</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#L-2847</td>
+                                <td>Robert Wilson</td>
+                                <td>45</td>
+                                <td>$1,250</td>
+                                <td><span class="loan-status status-delinquent">Delinquent</span></td>
+                            </tr>
+                            <tr>
+                                <td>#L-3921</td>
+                                <td>Amanda Clark</td>
+                                <td>32</td>
+                                <td>$850</td>
+                                <td><span class="loan-status status-delinquent">Delinquent</span></td>
+                            </tr>
+                            <tr>
+                                <td>#L-4553</td>
+                                <td>James Miller</td>
+                                <td>60</td>
+                                <td>$2,150</td>
+                                <td><span class="loan-status status-default">Default</span></td>
+                            </tr>
+                            <tr>
+                                <td>#L-5126</td>
+                                <td>Patricia Davis</td>
+                                <td>28</td>
+                                <td>$920</td>
+                                <td><span class="loan-status status-delinquent">Delinquent</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize Charts when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Portfolio Performance Chart
+            const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+            const performanceChart = new Chart(performanceCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [
+                        {
+                            label: 'Loan Disbursement',
+                            data: [420, 380, 450, 520, 480, 610, 590, 650, 720, 680, 750, 800],
+                            borderColor: 'rgba(67, 97, 238, 1)',
+                            backgroundColor: 'rgba(67, 97, 238, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Revenue',
+                            data: [65, 72, 78, 75, 82, 88, 85, 92, 96, 102, 98, 105],
+                            borderColor: 'rgba(76, 201, 167, 1)',
+                            backgroundColor: 'rgba(76, 201, 167, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Amount (in $ thousands)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Loan Distribution Chart
+            const distributionCtx = document.getElementById('distributionChart').getContext('2d');
+            const distributionChart = new Chart(distributionCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Mortgage', 'Personal', 'Auto', 'Business', 'Education'],
+                    datasets: [{
+                        data: [35, 25, 20, 15, 5],
+                        backgroundColor: [
+                            'rgba(67, 97, 238, 0.7)',
+                            'rgba(76, 201, 167, 0.7)',
+                            'rgba(248, 150, 30, 0.7)',
+                            'rgba(247, 37, 133, 0.7)',
+                            'rgba(58, 12, 163, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(67, 97, 238, 1)',
+                            'rgba(76, 201, 167, 1)',
+                            'rgba(248, 150, 30, 1)',
+                            'rgba(247, 37, 133, 1)',
+                            'rgba(58, 12, 163, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Add interactivity to navigation
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Simulate real-time data updates
+            setInterval(() => {
+                // Randomly update KPI values for demo purposes
+                const kpiValues = document.querySelectorAll('.kpi-value');
+                const portfolioValue = (4.82 + (Math.random() * 0.1 - 0.05)).toFixed(2);
+                kpiValues[0].textContent = '$' + portfolioValue + 'M';
+                
+                const activeLoans = 342 + Math.floor(Math.random() * 5 - 2);
+                kpiValues[1].textContent = activeLoans;
+                
+                const monthlyRevenue = (86.54 + (Math.random() * 2 - 1)).toFixed(2);
+                kpiValues[2].textContent = '$' + monthlyRevenue + 'K';
+                
+                const delinquencyRate = (4.2 + (Math.random() * 0.4 - 0.2)).toFixed(1);
+                kpiValues[3].textContent = delinquencyRate + '%';
+            }, 8000); // Update every 8 seconds
+        });
+    </script>
+</body>
+</html>

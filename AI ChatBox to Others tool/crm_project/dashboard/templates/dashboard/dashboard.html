@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DE CRM Dashboard</title>
+  <style>
+    body{font-family:Inter,system-ui,Segoe UI,Arial; margin:0; padding:18px;}
+    #customers-ui{max-width:720px;margin:12px auto;padding:14px;border:1px solid #eee;border-radius:6px;background:#fafafa;}
+    #customersContainer > div{padding:8px;border-bottom:1px solid #eee;}
+    button{padding:8px 12px;margin-right:8px}
+    .error{color:#b00020}
+    pre{white-space:pre-wrap;background:#fff;border:1px solid #eee;padding:8px;}
+  </style>
+</head>
+<body>
+  <div id="customers-ui">
+    <h3>Customers (via local proxy)</h3>
+    <div style="margin-bottom:12px;">
+      <button id="loadCustomersBtn">Load customers</button>
+      <button id="createSampleBtn">Create sample customer</button>
+      <button id="openSwaggerBtn">Open Backend Swagger</button>
+    </div>
+    <div id="customersContainer">No data yet</div>
+  </div>
+
+  <script>
+    const proxyBase = 'http://localhost:3000/api/customers/'; // Node proxy
+
+    function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]); }
+
+    async function loadCustomers(){
+      const out = document.getElementById('customersContainer');
+      out.textContent = 'Loading…';
+      try{
+        const res = await fetch(proxyBase, { method: 'GET', credentials: 'same-origin' });
+        const text = await res.text();
+        if (!res.ok) {
+          out.innerHTML = `<div class="error">Error loading customers: HTTP ${res.status}</div><pre>${escapeHtml(text)}</pre>`;
+          return;
+        }
+        let data;
+        try { data = JSON.parse(text); } catch(e) {
+          out.innerHTML = `<div class="error">Invalid JSON response</div><pre>${escapeHtml(text)}</pre>`; return;
+        }
+        out.innerHTML = Array.isArray(data) && data.length
+          ? data.map(c => `<div><strong>${escapeHtml(c.name)}</strong> — ${escapeHtml(c.company||'')}</div>`).join('')
+          : '<div>No customers</div>';
+      }catch(err){
+        out.innerHTML = `<div class="error">Fetch error: ${escapeHtml(err.message)}</div>`;
+        console.error(err);
+      }
+    }
+
+    async function createSampleCustomer(){
+      const out = document.getElementById('customersContainer');
+      out.textContent = 'Creating sample customer…';
+      try{
+        const res = await fetch(proxyBase, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: 'Sample User', company: 'Acme Ltd', email: 'sample@acme.test' })
+        });
+        const text = await res.text();
+        if (!res.ok) {
+          out.innerHTML = `<div class="error">Error creating customer: HTTP ${res.status}</div><pre>${escapeHtml(text)}</pre>`;
+          return;
+        }
+        out.innerHTML = `<div>Created: <pre>${escapeHtml(text)}</pre></div>`;
+        await loadCustomers();
+      }catch(err){
+        out.innerHTML = `<div class="error">Fetch error: ${escapeHtml(err.message)}</div>`;
+        console.error(err);
+      }
+    }
+
+    async function getChatResponse() {
+      const url = 'http://localhost:3000/api/Chat/get-response'; // or use Azure URL directly if CORS allowed
+      const body = {
+        // fill with fields from Swagger's UserRequest schema
+        userId: 'user-1',
+        message: 'Hello, how are you?'
+      };
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        const text = await res.text();
+        console.log('status', res.status, 'body', text);
+        if (res.ok) {
+          const data = JSON.parse(text);
+          // handle response
+          console.log(data);
+        } else {
+          console.error('Upstream error', res.status, text);
+        }
+      } catch (err) {
+        console.error('Fetch error', err);
+      }
+    }
+
+    document.getElementById('loadCustomersBtn').addEventListener('click', loadCustomers);
+    document.getElementById('createSampleBtn').addEventListener('click', createSampleCustomer);
+    document.getElementById('openSwaggerBtn').addEventListener('click', ()=> window.open('https://operamadic-chatbox-bbgag9gudhegeeca.westeurope-01.azurewebsites.net/Swagger/index.html','_blank'));
+
+    document.addEventListener('DOMContentLoaded', loadCustomers);
+    document.addEventListener('DOMContentLoaded', () => {
+      // call once for quick test
+      getChatResponse();
+    });
+  </script>
+</body>
+</html>

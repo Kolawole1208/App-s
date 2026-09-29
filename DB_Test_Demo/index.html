@@ -1,0 +1,57 @@
+@'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>User Registration</h1>
+        <form action="/submit" method="POST">
+            <div class="form-group">
+                <label for="fullname">Full Name *</label>
+                <input type="text" id="fullname" name="fullname" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password *</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="number" id="age" name="age" min="1" max="120">
+            </div>
+            <div class="form-group">
+                <label for="country">Country</label>
+                <select id="country" name="country">
+                    <option value="">Select a country</option>
+                    <option value="USA">United States</option>
+                    <option value="UK">United Kingdom</option>
+                    <option value="Nigeria">Nigeria</option>
+                    <option value="Canada">Canada</option>
+                    <option value="Australia">Australia</option>
+                    <option value="Germany">Germany</option>
+                </select>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+        
+        <div style="margin-top: 30px; text-align: center;">
+            <p><a href="/view-data">View all registered users</a></p>
+        </div>
+        
+        <div class="db-info" style="margin-top: 40px; padding: 15px; background: #f8f9fa; border-radius: 8px; font-size: 14px; color: #666;">
+            <strong>Database Info:</strong> Using SQLite with Node.js<br>
+            <strong>Database File:</strong> form_data.db<br>
+            <strong>Server:</strong> Node.js Express server running on port 8000
+        </div>
+    </div>
+</body>
+</html>
+'@ | Out-File -FilePath index.html -Encoding utf8

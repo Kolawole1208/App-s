@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuthoHR - Settings Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #f5f7fa;
+            --dark: #2c3e50;
+            --gray: #95a5a6;
+            --sidebar-width: 250px;
+            --header-height: 70px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f9fafb;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--secondary);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-header img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .menu-item {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-item.active {
+            background: var(--primary);
+            border-left: 4px solid white;
+        }
+
+        .menu-item i {
+            margin-right: 15px;
+            font-size: 1.2rem;
+            width: 25px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
+        }
+
+        /* Header Styles */
+        .header {
+            height: var(--header-height);
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-left: 15px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+
+        /* Content Area Styles */
+        .content {
+            padding: 30px;
+        }
+
+        .settings-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-header h2 {
+            font-size: 1.4rem;
+            color: var(--dark);
+        }
+
+        .section-content {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background: #dfe6e9;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--success);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+
+        .notification-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            color: var(--dark);
+        }
+
+        .card-content {
+            color: var(--gray);
+        }
+
+        /* Team Management */
+        .team-list {
+            list-style: none;
+        }
+
+        .team-member {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .team-member:last-child {
+            border-bottom: none;
+        }
+
+        .member-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+
+        .member-info {
+            flex: 1;
+        }
+
+        .member-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .member-role {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .member-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Billing */
+        .billing-plan {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .plan-info h3 {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .plan-price {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: var(--dark);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        /* Invitation Options */
+        .invite-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .invite-option {
+            flex: 1;
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .invite-option:hover {
+            border-color: var(--primary);
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        .invite-option i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 0;
+            }
+            
+            .sidebar.active {
+                width: var(--sidebar-width);
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 0 15px;
+            }
+            
+            .content {
+                padding: 15px;
+            }
+            
+            .section-content {
+                padding: 20px;
+            }
+            
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .invite-options {
+                flex-direction: column;
+            }
+            
+            .member-actions {
+                flex-direction: column;
+            }
+        }
+
+        /* Dashboard sections */
+        .dashboard-section {
+            display: none;
+        }
+        
+        .dashboard-section.active {
+            display: block;
+        }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 6px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast.error {
+            background-color: var(--danger);
+        }
+        
+        /* Recent Activities */
+        .activity-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+        
+        .activity-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-text {
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .activity-time {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <img src="https://via.placeholder.com/40" alt="AuthoHR Logo">
+                <h2>AuthoHR</h2>
+            </div>
+            <div class="sidebar-menu">
+                <div class="menu-item active" data-target="account">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Account Settings</span>
+                </div>
+                <div class="menu-item" data-target="security">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Security</span>
+                </div>
+                <div class="menu-item" data-target="notifications">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </div>
+                <div class="menu-item" data-target="team">
+                    <i class="fas fa-users"></i>
+                    <span>Team Management</span>
+                </div>
+                <div class="menu-item" data-target="company">
+                    <i class="fas fa-building"></i>
+                    <span>Company Profile</span>
+                </div>
+                <div class="menu-item" data-target="billing">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Billing</span>
+                </div>
+                <div class="menu-item" data-target="integrations">
+                    <i class="fas fa-plug"></i>
+                    <span>Integrations</span>
+                </div>
+                <div class="menu-item" data-target="audit">
+                    <i class="fas fa-history"></i>
+                    <span>Audit Log</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <button class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>Settings Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <div class="user-profile">
+                        <img src="https://via.placeholder.com/40" alt="User Profile">
+                        <span>Kolawole Abel B</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content">
+                <!-- Account Settings Dashboard -->
+                <div class="dashboard-section active" id="account">
+                    <div class="dashboard-cards">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <h3 class="card-title">Profile Information</h3>
+                            </div>
+                            <div class="card-content">
+                                Manage your personal information and account details.
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background-color: var(--success);">
+                                    <i class="fas fa-language"></i>
+                                </div>
+                                <h3 class="card-title">Language & Region</h3>
+                            </div>
+                            <div class="card-content">
+                                Set your preferred language and regional settings.
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background-color: var(--warning);">
+                                    <i class="fas fa-palette"></i>
+                                </div>
+                                <h3 class="card-title">Appearance</h3>
+                            </div>
+                            <div class="card-content">
+                                Customize the look and feel of your dashboard.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="section-header">
+                            <h2>Account Settings</h2>
+                        </div>
+                        <div class="section-content">
+                            <div class="form-group">
+                                <label for="fullName">Full Name</label>
+                                <input type="text" id="fullName" class="form-control" value="Kolawole Abel">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" class="form-control" value="abel@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="position">Position</label>
+                                <input type="text" id="position" class="form-control" value="HR Manager">
+                            </div>
+                            <div class="form-group">
+                                <label for="department">Department</label>
+                                <select id="department" class="form-control">
+                                    <option selected>Human Resources</option>
+                                    <option>Finance</option>
+                                    <option>IT</option>
+                                    <option>Operations</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary" id="saveAccountSettings">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Dashboard -->
+                <div class="dashboard-section" id="security">
+                    <div class="dashboard-cards">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-key"></i>
+                                </div>
+                                <h3 class="card-title">Password Security</h3>
+                            </div>
+                            <div class="card-content">
+                                Update your password and enhance account security.
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background-color: var(--success);">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                <h3 class="card-title">Two-Factor Authentication</h3>
+                            </div>
+                            <div class="card-content">
+                                Add an extra layer of security to your account.
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background-color: var(--warning);">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <h3 class="card-title">Active Sessions</h3>
+                            </div>
+                            <div class="card-content">
+                                View and manage your active login sessions.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="section-header">
+                            <h2>Security Settings</h2>
+                        </div>
+                        <div class="section-content">
+                            <div class="form-group">
+                                <label for="currentPassword">Current Password</label>
+                                <input type="password" id="currentPassword" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" id="newPassword" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm New Password</label>
+                                <input type="password" id="confirmPassword" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Two-Factor Authentication</label>
+                                <div class="notification-item">
+                                    <span>Enable 2FA for added security</span>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="twoFactorToggle">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" id="updateSecuritySettings">Update Security Settings</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Dashboard -->
+                <div class="dashboard-section" id="notifications">
+                    <div class="dashboard-cards">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <h3 class="card-title">Email Notifications</h3>
+                            </div>
+                            <div class="card-content">
+                                Configure which emails you want to receive.
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background-color: var(--success);">
+                                    <i class="fas fa-bell"></i>
+                                </div>
+                                <h3 class="card-title">Push Notifications</h3>
+                            </div>
+                            <div class="card-content">
+                                Manage your browser and mobile notifications.
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background-color: var(--warning);">
+                                    <i class="fas fa-slack"></i>
+                                </div>
+                                <h3 class="card-title">Slack Integration</h3>
+                            </div>
+                            <div class="card-content">
+                                Set up notifications to your Slack workspace.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="section-header">
+                            <h2>Notification Preferences</h2>
+                        </div>
+                        <div class="section-content">
+                            <div class="notification-item">
+                                <span>Email Notifications</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="emailNotifications" checked>
+                                    <span class="slider"></span>
+                                    </label>
+                            </div>
+                            <div class="notification-item">
+                                <span>Push Notifications</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="pushNotifications" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="notification-item">
+                                <span>New Employee Alerts</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="newEmployeeAlerts" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="notification-item">
+                                <span>Time-Off Requests</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="timeOffRequests">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="notification-item">
+                                <span>Performance Reviews</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="performanceReviews" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <button class="btn btn-primary" id="saveNotificationPreferences">Save Preferences</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Management Dashboard -->
+                <div class="dashboard-section" id="team">
+                    <div class="dashboard-cards">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <h3 class="card-title">Team Members</h3>
+                            </div>
+                            <div class="card-content">
+                                Manage your team members and their roles.
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background-color: var(--success);">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <h3 class="card-title">Invite Members</h3>
+                            </div>
+                            <div class="card-content">
+                                Invite new members to join your team.
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background-color: var(--warning);">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <h3 class="card-title">Permission Groups</h3>
+                            </div>
+                            <div class="card-content">
+                                Configure permission groups for your team.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="section-header">
+                            <h2>Team Management</h2>
+                        </div>
+                        <div class="section-content">
+                            <ul class="team-list" id="teamMembersList">
+                                <li class="team-member" data-id="1">
+                                    <img src="https://via.placeholder.com/50" alt="Team Member" class="member-avatar">
+                                    <div class="member-info">
+                                        <div class="member-name">Sarah Johnson</div>
+                                        <div class="member-role">HR Specialist</div>
+                                    </div>
+                                    <div class="member-actions">
+                                        <button class="btn btn-secondary edit-member">Edit</button>
+                                        <button class="btn btn-primary permissions-btn">Permissions</button>
+                                        <button class="btn btn-danger remove-member">Remove</button>
+                                    </div>
+                                </li>
+                                <li class="team-member" data-id="2">
+                                    <img src="https://via.placeholder.com/50" alt="Team Member" class="member-avatar">
+                                    <div class="member-info">
+                                        <div class="member-name">Michael Chen</div>
+                                        <div class="member-role">Recruiter</div>
+                                    </div>
+                                    <div class="member-actions">
+                                        <button class="btn btn-secondary edit-member">Edit</button>
+                                        <button class="btn btn-primary permissions-btn">Permissions</button>
+                                        <button class="btn btn-danger remove-member">Remove</button>
+                                    </div>
+                                </li>
+                                <li class="team-member" data-id="3">
+                                    <img src="https://via.placeholder.com/50" alt="Team Member" class="member-avatar">
+                                    <div class="member-info">
+                                        <div class="member-name">Emily Rodriguez</div>
+                                        <div class="member-role">Payroll Manager</div>
+                                    </div>
+                                    <div class="member-actions">
+                                        <button class="btn btn-secondary edit-member">Edit</button>
+                                        <button class="btn btn-primary permissions-btn">Permissions</button>
+                                        <button class="btn btn-danger remove-member">Remove</button>
+                                    </div>
+                                </li>
+                            </ul>
+                            <button class="btn btn-primary" id="inviteTeamMember" style="margin-top: 20px;">Invite Team Member</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Company Profile Dashboard -->
+                <div class="dashboard-section" id="company">
+                    <div class="dashboard-cards">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <h3 class="card-title">Company Information</h3>
+                            </div>
+                            <div class="card-content">
+                                Update your company details and contact information.
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background-color: var(--success);">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <h3 class="card-title">Locations</h3>
+                            </div>
+                            <div class="card-content">
+                                Manage your company offices and locations.
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background-color: var(--warning);">
+                                    <i class="fas fa-building"></i>
+                                </div>
+                                <h3 class="card-title">Departments</h3>
+                            </div>
+                            <div class="card-content">
+                                Organize and manage company departments.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="section-header">
+                            <h2>Company Profile</h2>
+                        </div>
+                        <div class="section-content">
+                            <div class="form-group">
+                                <label for="companyName">Company Name</label>
+                                <input type="text" id="companyName" class="form-control" value="TechCorp Inc.">
+                            </div>
+                            <div class="form-group">
+                                <label for="companyIndustry">Industry</label>
+                                <input type="text" id="companyIndustry" class="form-control" value="Technology">
+                            </div>
+                            <div class="form-group">
+                                <label for="companySize">Company Size</label>
+                                <select id="companySize" class="form-control">
+                                    <option>1-10 employees</option>
+                                    <option>11-50 employees</option>
+                                    <option selected>51-200 employees</option>
+                                    <option>201-500 employees</option>
+                                    <option>501-1000 employees</option>
+                                    <option>1000+ employees</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="companyWebsite">Website</label>
+                                <input type="url" id="companyWebsite" class="form-control" value="https://techcorp.example.com">
+                            </div>
+                            <button class="btn btn-primary" id="updateCompanyProfile">Update Company Profile</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Billing Dashboard -->
+                <div class="dashboard-section" id="billing">
+                    <div class="dashboard-cards">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <h3 class="card-title">Payment Methods</h3>
+                            </div>
+                            <div class="card-content">
+                                Manage your payment methods and billing information.
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background-color: var(--success);">
+                                    <i class="fas fa-receipt"></i>
+                                </div>
+                                <h3 class="card-title">Billing History</h3>
+                            </div>
+                            <div class="card-content">
+                                View your past invoices and payment history.
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background-color: var(--warning);">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <h3 class="card-title">Usage Analytics</h3>
+                            </div>
+                            <div class="card-content">
+                                Monitor your usage and forecast future costs.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="section-header">
+                            <h2>Billing Information</h2>
+                        </div>
+                        <div class="section-content">
+                            <div class="billing-plan">
+                                <div class="plan-info">
+                                    <h3>Business Plan</h3>
+                                    <p>10 active team members</p>
+                                </div>
+                                <div class="plan-price">$99/month</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cardNumber">Credit Card Number</label>
+                                <input type="text" id="cardNumber" class="form-control" value="**** **** **** 1234">
+                            </div>
+                            <div class="form-group">
+                                <label for="cardExpiry">Expiration Date</label>
+                                <input type="text" id="cardExpiry" class="form-control" value="12/2024">
+                            </div>
+                            <div class="form-group">
+                                <label for="cardCVC">Security Code (CVC)</label>
+                                <input type="text" id="cardCVC" class="form-control" value="***">
+                            </div>
+                            <button class="btn btn-primary" id="updatePaymentMethod">Update Payment Method</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integrations Dashboard -->
+                <div class="dashboard-section" id="integrations">
+                    <div class="dashboard-cards">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-calendar"></i>
+                                </div>
+                                <h3 class="card-title">Calendar Integration</h3>
+                            </div>
+                            <div class="card-content">
+                                Connect with Google Calendar or Outlook.
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background-color: var(--success);">
+                                    <i class="fab fa-slack"></i>
+                                </div>
+                                <h3 class="card-title">Slack Integration</h3>
+                            </div>
+                            <div class="card-content">
+                                Connect with your Slack workspace.
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background-color: var(--warning);">
+                                    <i class="fas fa-database"></i>
+                                </div>
+                                <h3 class="card-title">HRIS Integration</h3>
+                            </div>
+                            <div class="card-content">
+                                Connect with your HR information system.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="section-header">
+                            <h2>Integrations</h2>
+                        </div>
+                        <div class="section-content">
+                            <div class="notification-item">
+                                <span>Google Calendar Integration</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="googleCalendar" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="notification-item">
+                                <span>Slack Integration</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="slackIntegration" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="notification-item">
+                                <span>Zoom Integration</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="zoomIntegration">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="notification-item">
+                                <span>Microsoft Teams Integration</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="teamsIntegration">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="notification-item">
+                                <span>ADP Integration</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="adpIntegration" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <button class="btn btn-primary" id="saveIntegrationSettings">Save Integration Settings</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Audit Log Dashboard -->
+                <div class="dashboard-section" id="audit">
+                    <div class="dashboard-cards">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-history"></i>
+                                </div>
+                                <h3 class="card-title">Activity History</h3>
+                            </div>
+                            <div class="card-content">
+                                Review all activities performed in the system.
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background-color: var(--success);">
+                                    <i class="fas fa-download"></i>
+                                </div>
+                                <h3 class="card-title">Export Logs</h3>
+                            </div>
+                            <div class="card-content">
+                                Download audit logs for compliance purposes.
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon" style="background-color: var(--warning);">
+                                    <i class="fas fa-filter"></i>
+                                </div>
+                                <h3 class="card-title">Filter & Search</h3>
+                            </div>
+                            <div class="card-content">
+                                Filter and search through audit logs efficiently.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="section-header">
+                            <h2>Audit Log</h2>
+                        </div>
+                        <div class="section-content">
+                            <div class="form-group">
+                                <label>Date Range</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="date" id="dateFrom" class="form-control" value="2023-01-01">
+                                    <input type="date" id="dateTo" class="form-control" value="2023-12-31">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="logUser">User</label>
+                                <select id="logUser" class="form-control">
+                                    <option>All Users</option>
+                                    <option selected>Kolawole Abel</option>
+                                    <option>Sarah Johnson</option>
+                                    <option>Michael Chen</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="logAction">Action Type</label>
+                                <select id="logAction" class="form-control">
+                                    <option>All Actions</option>
+                                    <option>Login</option>
+                                    <option>User Modification</option>
+                                    <option>Settings Change</option>
+                                    <option>Data Export</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary" id="generateReport">Generate Report</button>
+                            
+                            <div style="margin-top: 30px;">
+                                <h3>Recent Activities</h3>
+                                <ul class="activity-list" id="recentActivities">
+                                    <li class="activity-item">
+                                        <div class="activity-text">Kolawole Abel updated security settings</div>
+                                        <div class="activity-time">2 hours ago</div>
+                                    </li>
+                                    <li class="activity-item">
+                                        <div class="activity-text">Sarah Johnson viewed employee records</div>
+                                        <div class="activity-time">5 hours ago</div>
+                                    </li>
+                                    <li class="activity-item">
+                                        <div class="activity-text">System performed nightly backup</div>
+                                        <div class="activity-time">Yesterday at 11:30 PM</div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invite Team Member Modal -->
+    <div class="modal" id="inviteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Invite Team Member</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="inviteEmail">Email Address</label>
+                <input type="email" id="inviteEmail" class="form-control" placeholder="Enter email address">
+            </div>
+            <div class="form-group">
+                <label for="inviteRole">Role</label>
+                <select id="inviteRole" class="form-control">
+                    <option>HR Specialist</option>
+                    <option>Recruiter</option>
+                    <option>Payroll Manager</option>
+                    <option>Administrator</option>
+                </select>
+            </div>
+            <div class="invite-options">
+                <div class="invite-option" data-method="email">
+                    <i class="fas fa-envelope"></i>
+                    <p>Send via Email</p>
+                </div>
+                <div class="invite-option" data-method="microsoft">
+                    <i class="fab fa-microsoft"></i>
+                    <p>Send via Microsoft Teams</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Team Member Modal -->
+    <div class="modal" id="editMemberModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Team Member</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="editName">Full Name</label>
+                <input type="text" id="editName" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="editRole">Role</label>
+                <input type="text" id="editRole" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="editEmail">Email Address</label>
+                <input type="email" id="editEmail" class="form-control">
+            </div>
+            <button class="btn btn-primary" id="saveMemberChanges">Save Changes</button>
+        </div>
+    </div>
+
+    <!-- Permissions Modal -->
+    <div class="modal" id="permissionsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Manage Permissions</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="permissionLevel">Permission Level</label>
+                <select id="permissionLevel" class="form-control">
+                    <option>View Only</option>
+                    <option>Editor</option>
+                    <option selected>Admin</option>
+                    <option>Super Admin</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Access Rights</label>
+                <div class="notification-item">
+                    <span>View Employee Data</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="notification-item">
+                    <span>Edit Employee Data</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="notification-item">
+                    <span>Manage Team Members</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="notification-item">
+                    <span>Access Billing Information</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            <button class="btn btn-primary" id="savePermissions">Save Permissions</button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Settings saved successfully!</span>
+    </div>
+
+    <script>
+        // Toggle sidebar on mobile
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        // Switch active menu item and dashboard section
+        const menuItems = document.querySelectorAll('.menu-item');
+        const dashboardSections = document.querySelectorAll('.dashboard-section');
+        
+        menuItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                
+                // Update active menu item
+                menuItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding dashboard section
+                dashboardSections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === targetId) {
+                        section.classList.add('active');
+                    }
+                });
+                
+                // Update header title if needed
+                document.querySelector('.header-left h1').textContent = this.querySelector('span').textContent;
+            });
+        });
+
+        // Show toast notification
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            
+            if (isError) {
+                toast.classList.add('error');
+            } else {
+                toast.classList.remove('error');
+            }
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Modal functionality
+        const modals = document.querySelectorAll('.modal');
+        const inviteModal = document.getElementById('inviteModal');
+        const editMemberModal = document.getElementById('editMemberModal');
+        const permissionsModal = document.getElementById('permissionsModal');
+        const inviteButton = document.getElementById('inviteTeamMember');
+        const closeButtons = document.querySelectorAll('.close-modal');
+        
+        // Open invite modal
+        inviteButton.addEventListener('click', function() {
+            inviteModal.style.display = 'flex';
+        });
+        
+        // Close modals
+        closeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                modals.forEach(modal => {
+                    modal.style.display = 'none';
+                });
+            });
+        });
+        
+        window.addEventListener('click', function(event) {
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+        
+        // Invite option selection
+        const inviteOptions = document.querySelectorAll('.invite-option');
+        inviteOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const method = this.getAttribute('data-method');
+                const email = document.getElementById('inviteEmail').value;
+                const role = document.getElementById('inviteRole').value;
+                
+                if (!email) {
+                    showToast('Please enter an email address', true);
+                    return;
+                }
+                
+                inviteModal.style.display = 'none';
+                
+                if (method === 'email') {
+                    showToast(`Invitation sent to ${email} via email`);
+                } else if (method === 'microsoft') {
+                    showToast(`Invitation sent to ${email} via Microsoft Teams`);
+                }
+                
+                // Add to recent activities
+                addRecentActivity(`Sent invitation to ${email} (${role}) via ${method === 'email' ? 'Email' : 'Microsoft Teams'}`);
+            });
+        });
+
+        // Team member management
+        const teamMembers = document.querySelectorAll('.team-member');
+        let currentEditingMember = null;
+        
+        // Edit member
+        document.querySelectorAll('.edit-member').forEach(button => {
+            button.addEventListener('click', function() {
+                const memberElement = this.closest('.team-member');
+                const memberId = memberElement.getAttribute('data-id');
+                const memberName = memberElement.querySelector('.member-name').textContent;
+                const memberRole = memberElement.querySelector('.member-role').textContent;
+                
+                document.getElementById('editName').value = memberName;
+                document.getElementById('editRole').value = memberRole;
+                document.getElementById('editEmail').value = `${memberName.toLowerCase().replace(' ', '.')}@example.com`;
+                
+                currentEditingMember = memberElement;
+                editMemberModal.style.display = 'flex';
+            });
+        });
+        
+        // Save member changes
+        document.getElementById('saveMemberChanges').addEventListener('click', function() {
+            const newName = document.getElementById('editName').value;
+            const newRole = document.getElementById('editRole').value;
+            
+            if (!newName || !newRole) {
+                showToast('Please fill in all fields', true);
+                return;
+            }
+            
+            if (currentEditingMember) {
+                currentEditingMember.querySelector('.member-name').textContent = newName;
+                currentEditingMember.querySelector('.member-role').textContent = newRole;
+                
+                showToast('Team member updated successfully');
+                editMemberModal.style.display = 'none';
+                
+                // Add to recent activities
+                addRecentActivity(`Updated team member: ${newName} (${newRole})`);
+            }
+        });
+        
+        // Permissions management
+        document.querySelectorAll('.permissions-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const memberElement = this.closest('.team-member');
+                const memberName = memberElement.querySelector('.member-name').textContent;
+                
+                document.querySelector('#permissionsModal .modal-header h2').textContent = `Permissions for ${memberName}`;
+                permissionsModal.style.display = 'flex';
+            });
+        });
+        
+        // Save permissions
+        document.getElementById('savePermissions').addEventListener('click', function() {
+            const memberName = document.querySelector('#permissionsModal .modal-header h2').textContent.replace('Permissions for ', '');
+            const permissionLevel = document.getElementById('permissionLevel').value;
+            
+            showToast(`Permissions updated for ${memberName}`);
+            permissionsModal.style.display = 'none';
+            
+            // Add to recent activities
+            addRecentActivity(`Updated permissions for ${memberName} (${permissionLevel})`);
+        });
+        
+        // Remove member
+        document.querySelectorAll('.remove-member').forEach(button => {
+            button.addEventListener('click', function() {
+                const memberElement = this.closest('.team-member');
+                const memberName = memberElement.querySelector('.member-name').textContent;
+                
+                if (confirm(`Are you sure you want to remove ${memberName} from the team?`)) {
+                    memberElement.remove();
+                    showToast(`${memberName} has been removed from the team`);
+                    
+                    // Add to recent activities
+                    addRecentActivity(`Removed team member: ${memberName}`);
+                }
+            });
+        });
+
+        // Add recent activity
+        function addRecentActivity(activityText) {
+            const activityList = document.getElementById('recentActivities');
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            const activityItem = document.createElement('li');
+            activityItem.className = 'activity-item';
+            activityItem.innerHTML = `
+                <div class="activity-text">${activityText}</div>
+                <div class="activity-time">Just now (${timeString})</div>
+            `;
+            
+            activityList.insertBefore(activityItem, activityList.firstChild);
+            
+            // Limit to 10 activities
+            if (activityList.children.length > 10) {
+                activityList.removeChild(activityList.lastChild);
+            }
+        }
+
+        // Save Account Settings
+        document.getElementById('saveAccountSettings').addEventListener('click', function() {
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            
+            if (!fullName || !email) {
+                showToast('Please fill in all required fields', true);
+                return;
+            }
+            
+            showToast('Account settings saved successfully');
+            
+            // Add to recent activities
+            addRecentActivity('Updated account settings');
+        });
+
+        // Update Security Settings
+        document.getElementById('updateSecuritySettings').addEventListener('click', function() {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!currentPassword) {
+                showToast('Please enter your current password', true);
+                return;
+            }
+            
+            if (newPassword && newPassword !== confirmPassword) {
+                showToast('New passwords do not match', true);
+                return;
+            }
+            
+            showToast('Security settings updated successfully');
+            
+            // Add to recent activities
+            addRecentActivity('Updated security settings');
+        });
+
+        // Save Notification Preferences
+        document.getElementById('saveNotificationPreferences').addEventListener('click', function() {
+            showToast('Notification preferences saved successfully');
+            
+            // Add to recent activities
+            addRecentActivity('Updated notification preferences');
+        });
+
+        // Update Company Profile
+        document.getElementById('updateCompanyProfile').addEventListener('click', function() {
+            const companyName = document.getElementById('companyName').value;
+            
+            if (!companyName) {
+                showToast('Please enter a company name', true);
+                return;
+            }
+            
+            showToast('Company profile updated successfully');
+            
+            // Add to recent activities
+            addRecentActivity('Updated company profile');
+        });
+
+        // Update Payment Method
+        document.getElementById('updatePaymentMethod').addEventListener('click', function() {
+            const cardNumber = document.getElementById('cardNumber').value;
+            const cardExpiry = document.getElementById('cardExpiry').value;
+            
+            if (!cardNumber || !cardExpiry) {
+                showToast('Please fill in all payment details', true);
+                return;
+            }
+            
+            showToast('Payment method updated successfully');
+            
+            // Add to recent activities
+            addRecentActivity('Updated payment method');
+        });
+
+        // Save Integration Settings
+        document.getElementById('saveIntegrationSettings').addEventListener('click', function() {
+            showToast('Integration settings saved successfully');
+            
+            // Add to recent activities
+            addRecentActivity('Updated integration settings');
+        });
+
+        // Generate Report
+        document.getElementById('generateReport').addEventListener('click', function() {
+            const dateFrom = document.getElementById('dateFrom').value;
+            const dateTo = document.getElementById('dateTo').value;
+            const user = document.getElementById('logUser').value;
+            const action = document.getElementById('logAction').value;
+            
+            showToast(`Report generated for ${user} from ${dateFrom} to ${dateTo} (${action})`);
+            
+            // Add to recent activities
+            addRecentActivity(`Generated audit report for ${user} (${action})`);
+        });
+    </script>
+</body>
+</html>

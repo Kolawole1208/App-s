@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DE CRM Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: green;
+            --primary-light: #757de8;
+            --primary-dark: #002984;
+            --secondary: #6c757d;
+            --accent: #ff4081;
+            --success: #4caf50;
+            --danger: #f44336;
+            --warning: #ff9800;
+            --info: #2196f3;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-700: #495057;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f5f7f9;
+            color: var(--gray-800);
+            line-height: 1.6;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: #35675a;
+            color: white;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--box-shadow);
+            z-index: 100;
+        }
+
+        .logo-container {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .logo-text h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        .nav-section {
+            margin-bottom: 24px;
+            padding: 0 16px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0 12px;
+            font-weight: 500;
+        }
+
+        .nav-list {
+            list-style: none;
+        }
+
+        .nav-item {
+            padding: 12px 16px;
+            margin: 4px 0;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            font-weight: 600;
+        }
+
+        .nav-item i {
+            margin-right: 12px;
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 12px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .top-header {
+            background: white;
+            padding: 16px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            z-index: 10;
+        }
+
+        .header-title h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .header-title p {
+            font-size: 14px;
+            color: var(--gray-600);
+            margin-top: 4px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding: 10px 15px 10px 40px;
+            border: 1px solid var(--gray-300);
+            border-radius: 30px;
+            width: 280px;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.1);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-500);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: var(--gray-600);
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            border-left: 4px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: #e8eaf6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        .stat-content {
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--gray-600);
+        }
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: #e8eaf6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .card-content {
+            margin-top: 15px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        .pipeline-stage {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            align-items: center;
+        }
+
+        .stage-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stage-name {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .stage-count {
+            font-size: 12px;
+            color: var(--gray-600);
+        }
+
+        .content-section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title-main {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: var(--transition);
+        }
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #e8eaf6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            color: var(--primary);
+            font-size: 16px;
+        }
+
+        .activity-details {
+            flex: 1;
+        }
+
+        .activity-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: var(--gray-600);
+        }
+
+        .customer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .customer-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            border-top: 4px solid var(--accent);
+        }
+
+        .customer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .customer-name {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .customer-company {
+            font-size: 14px;
+            color: var(--gray-600);
+            margin-bottom: 10px;
+        }
+
+        .customer-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-hot {
+            background: #ffebee;
+            color: var(--danger);
+        }
+
+        .status-warm {
+            background: #fff3e0;
+            color: var(--warning);
+        }
+
+        .status-cold {
+            background: #e3f2fd;
+            color: var(--info);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .table th, .table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .table th {
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 14px;
+        }
+
+        .table td {
+            font-size: 14px;
+        }
+
+        .table tr:hover {
+            background: var(--gray-100);
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: var(--gray-600);
+            font-size: 14px;
+            padding: 20px;
+        }
+
+        .notification-badge {
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+
+        .notification-icon {
+            position: relative;
+        }
+
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 80px;
+                overflow: hidden;
+            }
+            .logo-text, .section-title, .nav-item span {
+                display: none;
+            }
+            .nav-item {
+                justify-content: center;
+                padding: 16px;
+            }
+            .nav-item i {
+                margin-right: 0;
+                font-size: 20px;
+            }
+            .search-box input {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            .nav-list {
+                display: flex;
+                overflow-x: auto;
+                padding: 10px 0;
+            }
+            .nav-item {
+                min-width: 70px;
+            }
+            .search-box {
+                display: none;
+            }
+            .dashboard-cards, .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo-container">
+            <div class="logo-icon">
+                <i class="fas fa-handshake"></i>
+            </div>
+            <div class="logo-text">
+                <h1>CRM Dashboard</h1>
+                <p>Customer Relationship Management</p>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <h3 class="section-title">Navigation</h3>
+            <ul class="nav-list">
+                <li class="nav-item active"><i class="fas fa-home"></i> <span>Dashboard</span></li>
+                <li class="nav-item"><i class="fas fa-users"></i> <span>Customers</span></li>
+                <li class="nav-item"><i class="fas fa-funnel-dollar"></i> <span>Sales Pipeline</span></li>
+                <li class="nav-item"><i class="fas fa-tasks"></i> <span>Leads</span></li>
+                <li class="nav-item"><i class="fas fa-calendar-check"></i> <span>Activities</span></li>
+                <li class="nav-item"><i class="fas fa-chart-bar"></i> <span>Reports</span></li>
+            </ul>
+        </div>
+
+        <div class="nav-section">
+            <h3 class="section-title">DE Management</h3>
+            <ul class="nav-list">
+                <li class="nav-item"><i class="fas fa-cog"></i> <span>Settings</span></li>
+                <li class="nav-item"><i class="fas fa-user-tie"></i> <span>Team</span></li>
+                <li class="nav-item"><i class="fas fa-bullseye"></i> <span>Targets</span></li>
+                <li class="nav-item"><i class="fas fa-file-contract"></i> <span>Contracts</span></li>
+            </ul>
+        </div>
+
+        <div class="sidebar-footer">
+            <p>CRM System © 2025 | Customer Relationship Management</p>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="header-title">
+                <h1>CRM Dashboard</h1>
+                <p>Welcome back, Reliance Infosystems. Here's your sales overview.</p>
+            </div>
+            <div class="header-actions">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search customers, deals, activities...">
+                </div>
+                <div class="notification-icon">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">10</span>
+                </div>
+                <div class="user-profile">
+                    <div class="user-avatar">DE</div>
+                    <div class="user-info">
+                        <div class="user-name">DE Department</div>
+                        <div class="user-role">Sales Management</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- Dashboard stats and content would go here -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">248</div>
+                        <div class="stat-label">Total Customers</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">$48,500</div>
+                        <div class="stat-label">Monthly Revenue</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">+12.5%</div>
+                        <div class="stat-label">Growth Rate</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">42</div>
+                        <div class="stat-label">Active Leads</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <!-- Regular dashboard content here -->
+                <p>Use the AI assistant (bottom right) to ask about our company FAQ, services, products, or CRM data.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- AI Assistant (self-contained widget) -->
+    <div id="aiToggle" title="Open AI assistant" style="position:fixed;right:24px;bottom:24px;z-index:9999;">
+        <button style="width:64px;height:64px;border-radius:50%;background:linear-gradient(#0a7a2f,#0a5b2a);border:none;color:#fff;font-size:22px;cursor:pointer;">
+            🤖
+        </button>
+    </div>
+
+    <div id="aiChat" style="display:none;position:fixed;right:24px;bottom:100px;width:420px;max-height:70vh;background:#fff;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.2);z-index:9999;overflow:hidden;">
+        <div style="background:linear-gradient(135deg, #0a7a2f, #0a5b2a);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;">
+            <div style="display:flex;align-items:center;gap:10px;">
+                <div style="width:32px;height:32px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;">🤖</div>
+                <strong style="font-size:16px;">DATA EXCELLENCE AI Assistant</strong>
+            </div>
+            <button id="aiClose" aria-label="Close" style="background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;">✕</button>
+        </div>
+
+        <div id="aiMessages" style="padding:16px;overflow:auto;height:360px;background:#f9fbfc;font-size:14px;">
+            <div style="background:#e9f7ed;border-radius:12px;padding:14px 18px;margin-bottom:12px;border-left:4px solid #0a7a2f;">
+                <div style="font-weight:600;color:#0a5b2a;margin-bottom:6px;font-size:15px;">Hello! I'm your DATA EXCELLENCE Assistant.</div>
+                <div style="color:#555;font-size:13px;line-height:1.5;">
+                    I can help with:
+                    <ul style="margin:6px 0 6px 18px;color:#555;">
+                        <li>20+ Company FAQs and information</li>
+                        <li>Our products (TradeOffice, Operamadic)</li>
+                        <li>Services (Cloud Migration, AI, BI, etc.)</li>
+                        <li>Contact and engagement details</li>
+                        <li>CRM data and sales information</li>
+                    </ul>
+                    <div style="background:#d4edda;border-radius:8px;padding:10px;margin-top:8px;border:1px solid #c3e6cb;">
+                        <strong>📞 Need personalized help?</strong><br>
+                        Book an appointment or email us: <strong>bello@relianceinfosystems.com</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FAQ Quick Links -->
+            <div style="margin-bottom:12px;display:flex;flex-wrap:wrap;gap:8px;">
+                <button class="faq-quick-btn" data-question="what is data excellence" style="background:#e9f7ed;color:#0a5b2a;border:1px solid #c1e5d0;border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer;transition:all 0.2s;">What is DATA EXCELLENCE?</button>
+                <button class="faq-quick-btn" data-question="tradeoffice" style="background:#e9f7ed;color:#0a5b2a;border:1px solid #c1e5d0;border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer;transition:all 0.2s;">TradeOffice</button>
+                <button class="faq-quick-btn" data-question="operamadic" style="background:#e9f7ed;color:#0a5b2a;border:1px solid #c1e5d0;border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer;transition:all 0.2s;">Operamadic</button>
+                <button class="faq-quick-btn" data-question="services" style="background:#e9f7ed;color:#0a5b2a;border:1px solid #c1e5d0;border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer;transition:all 0.2s;">Our Services</button>
+                <button class="faq-quick-btn" data-question="contact" style="background:#e9f7ed;color:#0a5b2a;border:1px solid #c1e5d0;border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer;transition:all 0.2s;">Contact Us</button>
+                <button class="faq-quick-btn" data-question="faq" style="background:#0a7a2f;color:white;border:none;border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer;transition:all 0.2s;">View All FAQ</button>
+            </div>
+        </div>
+
+        <div style="padding:12px 16px;border-top:1px solid #eee;background:#fff;">
+            <div style="display:flex;gap:10px;align-items:center;">
+                <input id="aiInput" placeholder="Ask about DATA EXCELLENCE, our services, or CRM data..." style="flex:1;padding:12px 16px;border:1px solid #ddd;border-radius:24px;font-size:14px;outline:none;transition:all 0.2s;" />
+                <button id="aiSend" title="Send" style="width:46px;height:46px;border-radius:50%;background:linear-gradient(#0a7a2f,#0a5b2a);border:none;color:#fff;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;">➤</button>
+            </div>
+            <div style="font-size:11px;color:#888;text-align:center;margin-top:8px;">
+                Ask about our company, products, services, or CRM data
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // FAQ Knowledge Base with 20+ questions
+    const faqKnowledgeBase = {
+        // General & Company (6 questions)
+        "what is data excellence": {
+            category: "General & Company",
+            question: "What is DATA EXCELLENCE, and what do you do?",
+            answer: "DATA EXCELLENCE is a trusted partner for organizations of all sizes, helping them to leverage their data to achieve their business goals. We offer a wide range of services, a custom and collaborative approach, and a proven track record of success. For personalized consultation, please reach out to our support team at bello@relianceinfosystems.com."
+        },
+        "approach different": {
+            category: "General & Company",
+            question: "What makes your approach different from other software or data solution providers?",
+            answer: "We take a custom and collaborative approach to solving problems, working closely with our clients to understand their unique challenges and goals. We are known for our expertise, custom solutions, innovation, and customer-centric approach. To discuss how we can tailor our approach to your needs, email bello@relianceinfosystems.com."
+        },
+        "success stories": {
+            category: "General & Company",
+            question: "Can you share more about your success stories or case studies?",
+            answer: "We have a proven track record of success, with clients benefiting from our custom solutions such as TradeOffice and Operamadic. TradeOffice is a cloud-based trade management platform that helps organizations automate trade processes. Operamadic is a cloud-based manufacturing operations management platform. For specific case studies relevant to your industry, please contact bello@relianceinfosystems.com."
+        },
+        "company history": {
+            category: "General & Company",
+            question: "How long has DATA EXCELLENCE been in business?",
+            answer: "DATA EXCELLENCE has been providing expert data solutions and services for several years, building a reputation for excellence and innovation in the industry. We've evolved alongside technological advancements to deliver cutting-edge solutions to our clients."
+        },
+        "mission vision": {
+            category: "General & Company",
+            question: "What is your company's mission and vision?",
+            answer: "Our mission is to empower organizations with data-driven intelligence that transforms operations and drives growth. Our vision is to be the leading partner for data excellence globally, recognized for innovative solutions that create lasting business value."
+        },
+        "team expertise": {
+            category: "General & Company",
+            question: "What expertise does your team possess?",
+            answer: "Our team comprises certified professionals in data science, cloud architecture, software development, and business intelligence. We have deep expertise in Microsoft Azure technologies, AI/ML, database management, and industry-specific solutions. Meet our team by booking a consultation at bello@relianceinfosystems.com."
+        },
+        
+        // Products & Solutions (5 questions)
+        "tradeoffice": {
+            category: "Products & Solutions",
+            question: "What is TradeOffice, and what type of businesses is it designed for?",
+            answer: "TradeOffice is a specially crafted ERP solution designed to help you streamline your operations, automate tasks, and make better decisions. It's a cloud-based trade management platform suitable for organizations involved in trade and logistics. Schedule a demo by contacting bello@relianceinfosystems.com."
+        },
+        "operamadic": {
+            category: "Products & Solutions",
+            question: "What is Operamadic, and how does it help manufacturing operations?",
+            answer: "Operamadic is a specially crafted ERP solution designed to help streamline operations, automate tasks, and make better decisions. It's a cloud-based manufacturing operations management platform that helps organizations optimize their manufacturing operations and improve productivity. Book a consultation at bello@relianceinfosystems.com."
+        },
+        "customizable products": {
+            category: "Products & Solutions",
+            question: "Are TradeOffice and Operamadic off-the-shelf products, or are they customizable?",
+            answer: "Both TradeOffice and Operamadic are specially crafted solutions that can be tailored to your specific business needs. We take a custom approach to ensure the solution fits your unique requirements. Discuss customization options by emailing bello@relianceinfosystems.com."
+        },
+        "product integration": {
+            category: "Products & Solutions",
+            question: "Can your products integrate with our existing systems?",
+            answer: "Yes, both TradeOffice and Operamadic are designed with integration capabilities. We can connect with your existing ERP, CRM, accounting software, and other business systems through APIs and custom integration solutions."
+        },
+        "implementation timeline": {
+            category: "Products & Solutions",
+            question: "What is the typical implementation timeline for your solutions?",
+            answer: "Implementation timelines vary based on complexity and customization needs, typically ranging from 4-12 weeks. We follow an agile methodology with regular milestones and deliverables. For a personalized timeline estimate, please contact bello@relianceinfosystems.com."
+        },
+        
+        // Services (5 questions)
+        "cloud migration": {
+            category: "Services",
+            question: "What does your Cloud Migration process involve?",
+            answer: "Our cloud migration process involves assessing your current infrastructure, planning the migration strategy, executing the migration with minimal disruption, and providing post-migration support. We ensure solutions are tailored to your specific business needs and goals. Start your migration journey by emailing bello@relianceinfosystems.com."
+        },
+        "tailored solutions": {
+            category: "Services",
+            question: "How do you tailor your Data Analysis, AI, and Cloud Solutions to specific business needs?",
+            answer: "We understand that every business is different. We work closely with our clients to develop solutions that are tailored to their specific needs and goals through a collaborative approach that begins with understanding your unique challenges. Book a discovery session at bello@relianceinfosystems.com."
+        },
+        "end to end": {
+            category: "Services",
+            question: "Do you offer end-to-end project management from development to system integration?",
+            answer: "Yes, we offer comprehensive services including Custom Development and System Integration as part of our end-to-end solution approach. We manage projects from conception through implementation and integration with your existing systems. Inquire about project management by emailing bello@relianceinfosystems.com."
+        },
+        "technologies": {
+            category: "Services",
+            question: "What technologies do you primarily work with?",
+            answer: "We leverage technologies like Azure App Service, Kubernetes, Azure DevOps, Github, and API Management to deliver innovative and scalable solutions. Our expertise spans across Microsoft Azure services and modern development platforms."
+        },
+        "support services": {
+            category: "Services",
+            question: "What support and maintenance services do you offer?",
+            answer: "We offer 24/7 monitoring, regular updates, security patches, performance optimization, and dedicated technical support. Our support plans are customizable based on your business needs. Discuss support options at bello@relianceinfosystems.com."
+        },
+        
+        // Engagement & Practical Information (6 questions)
+        "process starting project": {
+            category: "Engagement & Practical Information",
+            question: "What is the typical process for starting a project with DATA EXCELLENCE?",
+            answer: "Our process begins with a consultation to understand your needs, followed by a proposal, planning phase, development/implementation, testing, and finally deployment with ongoing support. We maintain close collaboration throughout the entire process. Start your project by emailing bello@relianceinfosystems.com."
+        },
+        "support maintenance": {
+            category: "Engagement & Practical Information",
+            question: "Do you provide support and maintenance after a solution is implemented?",
+            answer: "Yes, we provide comprehensive support and maintenance services to ensure your solutions continue to operate optimally and evolve with your business needs. We are committed to the long-term success of our clients. Email bello@relianceinfosystems.com for support inquiries."
+        },
+        "location regions": {
+            category: "Engagement & Practical Information",
+            question: "Where is your company located, and what regions do you serve?",
+            answer: "We are located at 71i Freedom Way, Ikate, Lekki, Lagos, Nigeria. We serve clients both locally and internationally, helping organizations leverage their data regardless of their location. For international inquiries, contact bello@relianceinfosystems.com."
+        },
+        "contact consultation": {
+            category: "Engagement & Practical Information",
+            question: "How can I get in touch for a consultation or to discuss my project?",
+            answer: "You can contact us via email at de-business@relianceinfosystems.com or bello@relianceinfosystems.com, call us at (+234) 1-700-1790, or use the contact form on our website. We typically respond within 24 hours to schedule an initial consultation."
+        },
+        "pricing models": {
+            category: "Engagement & Practical Information",
+            question: "What are your pricing models?",
+            answer: "We offer flexible pricing models including project-based, subscription-based, and managed services options. Pricing depends on project scope, complexity, and support requirements. For a customized quote, please contact bello@relianceinfosystems.com."
+        },
+        "data security": {
+            category: "Engagement & Practical Information",
+            question: "What security measures do you implement for data protection?",
+            answer: "We implement enterprise-grade security including encryption, access controls, regular security audits, compliance with industry standards, and secure development practices. Your data security is our top priority."
+        },
+        "industries served": {
+            category: "Engagement & Practical Information",
+            question: "Which industries do you typically serve?",
+            answer: "We serve diverse industries including manufacturing, logistics, healthcare, finance, retail, and technology. Our solutions are adaptable to various sectors with industry-specific customization available."
+        },
+        
+        // Special commands
+        "faq": {
+            category: "Help",
+            question: "Frequently Asked Questions (20+ Questions Available)",
+            answer: "**20+ FAQ Categories Available:**\n\n📋 **General & Company (6)**\n• What is DATA EXCELLENCE?\n• What makes your approach different?\n• Success stories and case studies\n• Company history and background\n• Mission and vision\n• Team expertise and certifications\n\n🏢 **Products & Solutions (5)**\n• TradeOffice ERP solution\n• Operamadic manufacturing platform\n• Product customization options\n• System integration capabilities\n• Implementation timelines\n\n🛠️ **Services (5)**\n• Cloud Migration process\n• Tailored AI/Data solutions\n• End-to-end project management\n• Technologies we work with\n• Support and maintenance services\n\n📞 **Engagement & Practical Info (6)**\n• Starting a project process\n• Support and maintenance\n• Company location and regions\n• How to contact us\n• Pricing models\n• Data security measures\n• Industries we serve\n\n**💡 Need personalized assistance?**\nBook an appointment or email: **bello@relianceinfosystems.com**"
+        },
+        "services": {
+            category: "Services Overview",
+            question: "Our Comprehensive Services",
+            answer: "**Our Service Portfolio:**\n\n• **Azure Services** - Comprehensive cloud solutions on Microsoft Azure\n• **Business Intelligence** - Data-driven decision making and analytics\n• **Database Modernization** - Upgrading and optimizing legacy systems\n• **AI and Machine Learning** - Intelligent automation and predictive analytics\n• **Data Visualization** - Interactive dashboards and reports\n• **Migration Solutions** - Seamless cloud transitions with minimal disruption\n• **Custom Development** - Tailored software solutions for unique needs\n• **System Integration** - Connecting disparate systems into unified platforms\n\n**🎯 Book a Service Consultation:**\nEach service is tailored to your specific business needs. For a detailed discussion about which services are right for you, please contact **bello@relianceinfosystems.com**."
+        },
+        "contact": {
+            category: "Contact Information",
+            question: "How to Contact DATA EXCELLENCE",
+            answer: "**📞 Contact Details:**\n📍 **Address:** 71i Freedom Way, Ikate, Lekki, Lagos, Nigeria\n📧 **General Email:** de-business@relianceinfosystems.com\n📧 **Appointments/Support:** bello@relianceinfosystems.com\n📞 **Phone:** (+234) 1-700-1790\n\n**🕒 Business Hours:**\nMonday-Friday: 9:00 AM - 6:00 PM (WAT)\nSaturday: 10:00 AM - 2:00 PM (WAT)\n\n**💼 Book an Appointment:**\nFor personalized consultations, project discussions, or demo requests, please email **bello@relianceinfosystems.com**\n\nWe typically respond to inquiries within 24 hours. For urgent matters, please call us directly during business hours."
+        },
+        "appointment": {
+            category: "Booking",
+            question: "How to Book an Appointment",
+            answer: "**📅 Book Your Appointment:**\n\nTo schedule a consultation, demo, or project discussion with our experts:\n\n1. **Email:** Send your request to **bello@relianceinfosystems.com**\n2. **Phone:** Call (+234) 1-700-1790 during business hours\n3. **Include:** Your name, company, preferred date/time, and brief description of your needs\n\nWe offer:\n• Virtual consultations (Zoom, Teams)\n• On-site meetings (Lagos area)\n• Product demonstrations\n• Technical assessments\n• Project scoping sessions\n\nWe'll confirm your appointment within 24 hours and provide any preparation materials needed."
+        }
+    };
+
+    // AI Assistant functionality
+    document.addEventListener('DOMContentLoaded', () => {
+        const aiToggle = document.getElementById('aiToggle');
+        const aiChat = document.getElementById('aiChat');
+        const aiClose = document.getElementById('aiClose');
+        const aiInput = document.getElementById('aiInput');
+        const aiSend = document.getElementById('aiSend');
+        const aiMessages = document.getElementById('aiMessages');
+        
+        // Add quick FAQ button event listeners
+        document.querySelectorAll('.faq-quick-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const question = this.getAttribute('data-question');
+                handleFAQQuestion(question);
+            });
+        });
+
+        function appendMessage(text, sender, isFAQ = false) {
+            const msg = document.createElement('div');
+            msg.style.marginBottom = '12px';
+            msg.style.maxWidth = '90%';
+            msg.style.wordBreak = 'break-word';
+            msg.style.lineHeight = '1.5';
+            
+            if (sender === 'user') {
+                msg.style.background = 'linear-gradient(135deg, #0a7a2f, #0a5b2a)';
+                msg.style.color = '#fff';
+                msg.style.marginLeft = 'auto';
+                msg.style.borderRadius = '16px 16px 4px 16px';
+                msg.style.padding = '10px 14px';
+                msg.style.fontSize = '14px';
+            } else {
+                if (isFAQ) {
+                    msg.style.background = '#f0f9ff';
+                    msg.style.borderLeft = '4px solid #0a7a2f';
+                    msg.style.borderRadius = '4px 16px 16px 16px';
+                    msg.style.padding = '14px 16px';
+                    msg.style.fontSize = '14px';
+                    msg.style.color = '#333';
+                } else {
+                    msg.style.background = '#f5f5f5';
+                    msg.style.borderRadius = '4px 16px 16px 16px';
+                    msg.style.padding = '10px 14px';
+                    msg.style.fontSize = '14px';
+                    msg.style.color = '#333';
+                }
+            }
+            
+            // Format text with basic markdown and email highlighting
+            const formattedText = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/bello@relianceinfosystems\.com/g, '<strong style="color: #0a7a2f;">bello@relianceinfosystems.com</strong>')
+                .replace(/\n/g, '<br>');
+            
+            msg.innerHTML = formattedText;
+            aiMessages.appendChild(msg);
+            aiMessages.scrollTop = aiMessages.scrollHeight;
+        }
+
+        function findFAQMatch(userInput) {
+            const input = userInput.toLowerCase().trim();
+            
+            // Check for exact matches in keys
+            for (const key in faqKnowledgeBase) {
+                if (input.includes(key)) {
+                    return faqKnowledgeBase[key];
+                }
+            }
+            
+            // Check for partial matches in questions
+            for (const key in faqKnowledgeBase) {
+                const faq = faqKnowledgeBase[key];
+                if (faq.question.toLowerCase().includes(input) || 
+                    input.includes(faq.question.toLowerCase().substring(0, 20))) {
+                    return faq;
+                }
+            }
+            
+            // Check for common question patterns
+            const patterns = [
+                { keywords: ['what is', 'data excellence'], response: 'what is data excellence' },
+                { keywords: ['tradeoffice', 'trade office'], response: 'tradeoffice' },
+                { keywords: ['operamadic'], response: 'operamadic' },
+                { keywords: ['cloud migration'], response: 'cloud migration' },
+                { keywords: ['contact', 'email', 'phone', 'call'], response: 'contact' },
+                { keywords: ['appointment', 'book', 'schedule', 'meeting'], response: 'appointment' },
+                { keywords: ['service', 'offer', 'provide'], response: 'services' },
+                { keywords: ['faq', 'frequently asked', 'questions'], response: 'faq' },
+                { keywords: ['price', 'cost', 'pricing', 'quote'], response: 'pricing models' },
+                { keywords: ['security', 'secure', 'protection'], response: 'data security' },
+                { keywords: ['team', 'expert', 'certified'], response: 'team expertise' },
+                { keywords: ['industry', 'sector', 'vertical'], response: 'industries served' },
+                { keywords: ['implement', 'timeline', 'duration'], response: 'implementation timeline' },
+                { keywords: ['integrate', 'integration', 'connect'], response: 'product integration' },
+                { keywords: ['support', 'maintenance', 'help'], response: 'support maintenance' }
+            ];
+            
+            for (const pattern of patterns) {
+                for (const keyword of pattern.keywords) {
+                    if (input.includes(keyword)) {
+                        return faqKnowledgeBase[pattern.response];
+                    }
+                }
+            }
+            
+            return null;
+        }
+
+        function handleFAQQuestion(questionKey) {
+            const faq = faqKnowledgeBase[questionKey];
+            if (faq) {
+                appendMessage(faq.question, 'user');
+                setTimeout(() => {
+                    appendMessage(`**${faq.question}**\n\n${faq.answer}\n\n*Category: ${faq.category}*`, 'assistant', true);
+                }, 300);
+            }
+        }
+
+        async function sendMessage() {
+            const text = (aiInput.value || '').trim();
+            if (!text) return;
+            
+            appendMessage(text, 'user');
+            aiInput.value = '';
+            aiSend.disabled = true;
+
+            // Check if this is an FAQ question
+            const faqMatch = findFAQMatch(text);
+            
+            if (faqMatch) {
+                // Simulate thinking delay
+                setTimeout(() => {
+                    appendMessage(`**${faqMatch.question}**\n\n${faqMatch.answer}\n\n*Category: ${faqMatch.category}*`, 'assistant', true);
+                    aiSend.disabled = false;
+                }, 600);
+            } else {
+                // Show typing indicator for non-FAQ questions
+                const typing = document.createElement('div');
+                typing.className = 'ai-typing';
+                typing.style.color = '#666';
+                typing.style.fontStyle = 'italic';
+                typing.style.marginBottom = '10px';
+                typing.style.fontSize = '13px';
+                typing.innerText = 'Thinking...';
+                aiMessages.appendChild(typing);
+                aiMessages.scrollTop = aiMessages.scrollHeight;
+
+                // For non-FAQ questions, try to provide a helpful response
+                setTimeout(() => {
+                    if (aiMessages.contains(typing)) aiMessages.removeChild(typing);
+                    
+                    const lowerText = text.toLowerCase();
+                    let response = "";
+                    
+                    if (lowerText.includes('hello') || lowerText.includes('hi') || lowerText.includes('hey')) {
+                        response = "Hello! I'm your DATA EXCELLENCE assistant. I can help you with 20+ frequently asked questions about our company, products, and services. Try asking about our solutions, or type 'FAQ' to see all questions. For personalized help, email bello@relianceinfosystems.com.";
+                    } else if (lowerText.includes('thank')) {
+                        response = "You're welcome! Is there anything else I can help you with? Remember, for personalized consultations or to book appointments, please contact bello@relianceinfosystems.com.";
+                    } else if (lowerText.includes('crm') || lowerText.includes('customer') || lowerText.includes('sales')) {
+                        response = "I can help with CRM-related questions! The dashboard shows:\n\n• **248 Total Customers**\n• **$48,500 Monthly Revenue**\n• **+12.5% Growth Rate**\n• **42 Active Leads**\n\nFor specific CRM data or sales pipeline details, please check the respective sections in the dashboard.";
+                    } else if (lowerText.includes('help') || lowerText.includes('support')) {
+                        response = "I'm here to help! You can ask me about:\n\n• DATA EXCELLENCE company information (20+ FAQ available)\n• Our products (TradeOffice, Operamadic)\n• Our services and technologies\n• How to contact us or book appointments\n\n**For immediate support or to book appointments:**\nEmail: **bello@relianceinfosystems.com**\nPhone: (+234) 1-700-1790";
+                    } else {
+                        response = "I'm not sure I understand. You can ask me about:\n\n• **Company Information** - What we do, our approach, success stories\n• **Products** - TradeOffice, Operamadic, features, customization\n• **Services** - Cloud migration, AI, BI, system integration\n• **Engagement** - How to contact us, pricing, security\n\nType **'FAQ'** to see all 20+ questions, or email **bello@relianceinfosystems.com** for personalized assistance.";
+                    }
+                    
+                    appendMessage(response, 'assistant');
+                    aiSend.disabled = false;
+                }, 1000);
+            }
+        }
+
+        // Event listeners
+        if (aiToggle) aiToggle.addEventListener('click', () => { 
+            aiChat.style.display = 'block'; 
+            aiInput.focus(); 
+        });
+        
+        if (aiClose) aiClose.addEventListener('click', () => { 
+            aiChat.style.display = 'none'; 
+        });
+        
+        if (aiSend) aiSend.addEventListener('click', sendMessage);
+        
+        if (aiInput) aiInput.addEventListener('keydown', (e) => { 
+            if (e.key === 'Enter') sendMessage(); 
+        });
+        
+        // Quick FAQ button styling on hover
+        document.querySelectorAll('.faq-quick-btn').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+                this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+            });
+            btn.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = 'none';
+            });
+        });
+    });
+    </script>
+</body>
+<footer style="width:100%;text-align:center;padding:18px 0 12px 0;font-size:1rem;color:#888;background:#f7f9fa;position:fixed;bottom:0;left:0;z-index:10;">
+    CRM Dashboard v2.1 • Use the AI assistant for 20+ FAQ about DATA EXCELLENCE • © 2025 All rights reserved
+</footer>
+</html>

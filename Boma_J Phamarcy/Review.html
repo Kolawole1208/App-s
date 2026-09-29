@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bomaj Pharma International - Review Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, rgba(44, 62, 80, 0.9), rgba(26, 37, 47, 0.9));
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%232c3e50"/><path d="M30,30 L70,30 L70,70 L30,70 Z" fill="none" stroke="%233498db" stroke-width="2"/><path d="M40,40 L60,40 L60,60 L40,60 Z" fill="none" stroke="%233498db" stroke-width="1"/><circle cx="50" cy="50" r="8" fill="%233498db" opacity="0.3"/></svg>'),
+                            linear-gradient(135deg, #2c3e50, #1a252f);
+            background-size: 200px, cover;
+            background-position: center, center;
+            background-attachment: fixed;
+            background-blend-mode: overlay;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+            min-height: 90vh;
+            transition: all 0.3s ease;
+        }
+
+        /* Professional Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #2c3e50 0%, #1a252f 100%);
+            color: white;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Logo Section */
+        .logo-section {
+            padding: 28px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+            font-size: 22px;
+            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .logo-icon:hover {
+            transform: rotate(-5deg) scale(1.05);
+        }
+
+        .brand-text {
+            flex: 1;
+        }
+
+        .brand-name {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            color: white;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .brand-subtitle {
+            font-size: 11px;
+            color: #bdc3c7;
+            letter-spacing: 0.8px;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        .company-tagline {
+            font-size: 13px;
+            color: #3498db;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 8px;
+            border-left: 3px solid #3498db;
+        }
+
+        .company-tagline i {
+            font-size: 16px;
+        }
+
+        /* Navigation Sections */
+        .nav-section {
+            padding: 24px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-header {
+            padding: 0 24px 18px 24px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #95a5a6;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 24px;
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            font-size: 14px;
+            border-left: 4px solid transparent;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: linear-gradient(90deg, rgba(52, 152, 219, 0.1), transparent);
+            color: white;
+            border-left-color: #3498db;
+            padding-left: 30px;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(52, 152, 219, 0.15), transparent);
+            color: white;
+            border-left-color: #3498db;
+            font-weight: 500;
+            box-shadow: inset 0 0 20px rgba(52, 152, 219, 0.05);
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            right: 24px;
+            width: 8px;
+            height: 8px;
+            background: #3498db;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #3498db;
+            animation: pulse 2s infinite;
+        }
+
+        .item-icon {
+            margin-right: 14px;
+            font-size: 16px;
+            width: 22px;
+            text-align: center;
+            opacity: 0.9;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-item:hover .item-icon {
+            transform: scale(1.1);
+            color: #3498db;
+        }
+
+        .nav-item.active .item-icon {
+            opacity: 1;
+            color: #3498db;
+            transform: scale(1.1);
+        }
+
+        .order-badge, .review-badge {
+            margin-left: auto;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 12px;
+            min-width: 28px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .order-badge {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .review-badge {
+            background: linear-gradient(135deg, #f39c12, #d35400);
+            color: white;
+        }
+
+        /* User Profile Section */
+        .user-profile {
+            margin-top: auto;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .user-profile:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .user-avatar {
+            font-size: 36px;
+            color: #3498db;
+            filter: drop-shadow(0 4px 8px rgba(52, 152, 219, 0.3));
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 3px;
+        }
+
+        .user-role {
+            font-size: 13px;
+            color: #95a5a6;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            background: #2ecc71;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 10px #2ecc71;
+        }
+
+        .status-indicator.active::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #2ecc71;
+            border-radius: 50%;
+            top: -4px;
+            left: -4px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.7;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.3;
+            }
+            100% {
+                transform: scale(0.8);
+                opacity: 0.7;
+            }
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Updated Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 18px 32px;
+            border-bottom: 1px solid #e8edf2;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+
+        .header-left {
+            flex: 1;
+        }
+
+        .page-title h1 {
+            color: #2c3e50;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .page-title h1 i {
+            color: #f39c12;
+            font-size: 26px;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-subtitle {
+            color: #7f8c8d;
+            font-size: 15px;
+            font-weight: 400;
+            max-width: 600px;
+            line-height: 1.5;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .action-btn {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #495057;
+            position: relative;
+        }
+
+        .action-btn:hover {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
+            border-color: #3498db;
+        }
+
+        .action-btn .badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
+
+        .user-dropdown {
+            position: relative;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 10px 18px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 14px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .user-menu:hover {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border-color: #3498db;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .user-menu i:first-child {
+            font-size: 20px;
+        }
+
+        .user-menu i:last-child {
+            font-size: 12px;
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .user-menu:hover i:last-child {
+            transform: rotate(180deg);
+        }
+
+        /* Header Buttons */
+        .header-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .header-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+        }
+
+        .header-btn:hover {
+            background: linear-gradient(135deg, #2980b9, #1c5d8a);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .header-btn i {
+            font-size: 14px;
+        }
+
+        /* Review Content Area */
+        .review-content {
+            padding: 32px;
+            flex: 1;
+            overflow-y: auto;
+            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        /* Review Stats */
+        .review-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            border-color: #e9ecef;
+        }
+
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 8px rgba(52, 152, 219, 0.2));
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: #2c3e50;
+            margin: 10px 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        /* Review Filters */
+        .review-filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            padding: 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .filter-btn {
+            padding: 10px 24px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+            color: #495057;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-btn:hover {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border-color: #3498db;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+        }
+
+        /* Review Form Container */
+        .review-form-container {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            margin-bottom: 32px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            border: 1px solid #e9ecef;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .review-form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(180deg, #3498db, #2980b9);
+        }
+
+        .review-form-container h3 {
+            color: #2c3e50;
+            margin-bottom: 24px;
+            font-size: 22px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .review-form-container h3 i {
+            color: #3498db;
+        }
+
+        .rating-stars {
+            font-size: 32px;
+            color: #ffd700;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .star {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .star:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .form-group input, 
+        .form-group textarea, 
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .form-group input:focus, 
+        .form-group textarea:focus, 
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            background: white;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.6;
+        }
+
+        .submit-review-btn {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            padding: 14px 36px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .submit-review-btn:hover {
+            background: linear-gradient(135deg, #27ae60, #219653);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4);
+        }
+
+        .submit-review-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Review List */
+        .review-list {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            border: 1px solid #e9ecef;
+        }
+
+        .review-list h3 {
+            color: #2c3e50;
+            margin-bottom: 28px;
+            font-size: 22px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .review-list h3 i {
+            color: #f39c12;
+        }
+
+        .review-item {
+            border-bottom: 1px solid #f1f5f9;
+            padding: 28px 0;
+            transition: all 0.3s ease;
+        }
+
+        .review-item:hover {
+            background: #f8fafc;
+            padding-left: 15px;
+            padding-right: 15px;
+            margin: 0 -15px;
+            border-radius: 12px;
+        }
+
+        .review-item:last-child {
+            border-bottom: none;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .reviewer-avatar {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        .reviewer-details {
+            flex: 1;
+        }
+
+        .reviewer-name {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .reviewer-title {
+            color: #7f8c8d;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .reviewer-title i {
+            color: #3498db;
+            font-size: 12px;
+        }
+
+        .review-date {
+            color: #95a5a6;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .review-rating {
+            color: #ffd700;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .review-type {
+            display: inline-block;
+            padding: 6px 14px;
+            background: #f1f5f9;
+            color: #3498db;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 10px;
+            border: 1px solid rgba(52, 152, 219, 0.2);
+        }
+
+        .review-comment {
+            color: #4a5568;
+            line-height: 1.7;
+            margin: 20px 0;
+            font-size: 15px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border-left: 4px solid #3498db;
+        }
+
+        /* Reaction Buttons */
+        .reaction-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 24px;
+        }
+
+        .reaction-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 10px 22px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .reaction-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        .like-btn:hover {
+            background: #e3f2fd;
+            color: #2196f3;
+            border-color: #bbdefb;
+        }
+
+        .love-btn:hover {
+            background: #fce4ec;
+            color: #e91e63;
+            border-color: #f8bbd0;
+        }
+
+        .dislike-btn:hover {
+            background: #f5f5f5;
+            color: #757575;
+            border-color: #e0e0e0;
+        }
+
+        .reaction-count {
+            font-weight: 700;
+            font-size: 14px;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: linear-gradient(135deg, #2c3e50, #1a252f);
+            color: white;
+            text-align: center;
+            padding: 32px 20px;
+            margin-top: auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+        }
+
+        .footer-marquee {
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 15px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-marquee__inner {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 25s linear infinite;
+            font-size: 16px;
+            color: rgba(255,255,255,0.95);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-marquee__inner:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .footer-icons {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            margin-bottom: 20px;
+        }
+
+        .footer-icons a {
+            color: white;
+            font-size: 22px;
+            background: rgba(255, 255, 255, 0.1);
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-icons a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .footer-icons a:hover::before {
+            left: 100%;
+        }
+
+        .footer-icons a:hover {
+            background: #3498db;
+            color: white;
+            transform: translateY(-5px) rotate(5deg);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .contact-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 32px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 20px;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .contact-btn:hover {
+            background: linear-gradient(135deg, #2980b9, #1c5d8a);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+        }
+
+        .footer-note {
+            font-size: 14px;
+            opacity: 0.8;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                max-width: 95%;
+            }
+            
+            .review-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+                border-radius: 12px;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+
+            .logo-container {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .brand-text {
+                text-align: left;
+            }
+
+            .nav-header {
+                justify-content: center;
+            }
+
+            .user-profile {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+                margin-top: 20px;
+            }
+
+            .review-content {
+                padding: 20px;
+            }
+
+            .review-stats {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .review-filters {
+                justify-content: center;
+            }
+
+            .reaction-buttons {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .review-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .reviewer-info {
+                width: 100%;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2980b9, #1c5d8a);
+        }
+
+        /* Loading Animation */
+        @keyframes shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: calc(200px + 100%) 0; }
+        }
+
+        .loading {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200px 100%;
+            animation: shimmer 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Professional Sidebar -->
+        <div class="sidebar">
+            <div class="logo-section">
+                <div class="logo-container">
+                    <div class="logo-icon">
+                        <i class="fas fa-prescription-bottle-alt"></i>
+                    </div>
+                    <div class="brand-text">
+                        <div class="brand-name">BOMAJ PHARMA</div>
+                        <div class="brand-subtitle">International Pharmaceutical Solutions</div>
+                    </div>
+                </div>
+                <div class="company-tagline">
+                    <i class="fas fa-heartbeat"></i>
+                    Excellence in Healthcare Delivery
+                </div>
+            </div>
+
+            <!-- Navigation Sections -->
+            <div class="nav-section">
+                <div class="nav-header">
+                    <span class="nav-icon"><i class="fas fa-tachometer-alt"></i></span>
+                    <span>DASHBOARD</span>
+                </div>
+                <a href="index.html" class="nav-item">
+                    <span class="item-icon"><i class="fas fa-chart-line"></i></span>
+                    <span>Overview</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="item-icon"><i class="fas fa-clinic-medical"></i></span>
+                    <span>Pharmacy Network</span>
+                </a>
+                <a href="Orders.html" class="nav-item">
+                    <span class="item-icon"><i class="fas fa-shipping-fast"></i></span>
+                    <span>Order Management</span>
+                    <span class="order-badge">12</span>
+                </a>
+                <a href="Doctor.html" class="nav-item">
+                    <span class="item-icon"><i class="fas fa-user-md"></i></span>
+                    <span>Medical Partners</span>
+                </a>
+                <a href="Pharmacist.html" class="nav-item">
+                    <span class="item-icon"><i class="fas fa-user-shield"></i></span>
+                    <span>Pharmacy Team</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-header">
+                    <span class="nav-icon"><i class="fas fa-chart-bar"></i></span>
+                    <span>ANALYTICS & INSIGHTS</span>
+                </div>
+                <a href="#" class="nav-item">
+                    <span class="item-icon"><i class="fas fa-users"></i></span>
+                    <span>Customer Analytics</span>
+                </a>
+                <a href="" class="nav-item active">
+                    <span class="item-icon"><i class="fas fa-star"></i></span>
+                    <span>Feedback & Reviews</span>
+                    <span class="review-badge">24</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="item-icon"><i class="fas fa-file-chart-line"></i></span>
+                    <span>Performance Reports</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-header">
+                    <span class="nav-icon"><i class="fas fa-life-ring"></i></span>
+                    <span>SUPPORT & RESOURCES</span>
+                </div>
+                <a href="About.html" class="nav-item">
+                    <span class="item-icon"><i class="fas fa-info-circle"></i></span>
+                    <span>About Us</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="item-icon"><i class="fas fa-cogs"></i></span>
+                    <span>Settings</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="item-icon"><i class="fas fa-question-circle"></i></span>
+                    <span>Help Center</span>
+                </a>
+            </div>
+
+            <!-- User Profile Section -->
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-name">Admin User</div>
+                    <div class="user-role">Pharmacy Manager</div>
+                </div>
+                <div class="status-indicator active"></div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <div class="page-title">
+                        <h1><i class="fas fa-star"></i> Customer Feedback System</h1>
+                        <p class="page-subtitle">Monitor reviews, manage customer satisfaction metrics, and improve service quality through actionable insights</p>
+                    </div>
+                    <div class="header-buttons">
+                        <button class="header-btn" id="refreshBtn">
+                            <i class="fas fa-sync-alt"></i> Refresh Reviews
+                        </button>
+                        <button class="header-btn" id="exportBtn">
+                            <i class="fas fa-download"></i> Export Data
+                        </button>
+                        <button class="header-btn" id="analyticsBtn">
+                            <i class="fas fa-chart-pie"></i> View Analytics
+                        </button>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="header-actions">
+                        <button class="action-btn" id="notificationsBtn">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge">3</span>
+                        </button>
+                        <button class="action-btn" id="helpBtn">
+                            <i class="fas fa-question-circle"></i>
+                        </button>
+                        <div class="user-dropdown">
+                            <div class="user-menu">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Settings</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review Content -->
+            <div class="review-content">
+                <!-- Review Statistics -->
+                <div class="review-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-comments"></i></div>
+                        <div class="stat-value" id="totalReviews">148</div>
+                        <div class="stat-label">Total Reviews</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-star-half-alt"></i></div>
+                        <div class="stat-value" id="avgRating">4.8</div>
+                        <div class="stat-label">Average Rating</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+                        <div class="stat-value" id="monthlyReviews">36</div>
+                        <div class="stat-label">This Month</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-thumbs-up"></i></div>
+                        <div class="stat-value" id="positiveRate">98%</div>
+                        <div class="stat-label">Positive Feedback</div>
+                    </div>
+                </div>
+
+                <!-- Review Filters -->
+                <div class="review-filters">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fas fa-list"></i> All Reviews
+                    </button>
+                    <button class="filter-btn" data-filter="5">
+                        <i class="fas fa-star"></i> 5 Stars
+                    </button>
+                    <button class="filter-btn" data-filter="4">
+                        <i class="fas fa-star"></i> 4+ Stars
+                    </button>
+                    <button class="filter-btn" data-filter="3">
+                        <i class="fas fa-star"></i> 3+ Stars
+                    </button>
+                    <button class="filter-btn" data-filter="recent">
+                        <i class="fas fa-clock"></i> Most Recent
+                    </button>
+                    <button class="filter-btn" data-filter="popular">
+                        <i class="fas fa-fire"></i> Most Reactions
+                    </button>
+                </div>
+
+                <!-- Review Form -->
+                <div class="review-form-container">
+                    <h3><i class="fas fa-edit"></i> Share Your Experience</h3>
+                    <form id="reviewForm">
+                        <div class="rating-stars" id="ratingStars">
+                            <span class="star" data-value="1">☆</span>
+                            <span class="star" data-value="2">☆</span>
+                            <span class="star" data-value="3">☆</span>
+                            <span class="star" data-value="4">☆</span>
+                            <span class="star" data-value="5">☆</span>
+                        </div>
+                        <input type="hidden" id="rating" name="rating" required>
+                        
+                        <div class="form-group">
+                            <label for="reviewerName"><i class="fas fa-user"></i> Your Name (Optional)</label>
+                            <input type="text" id="reviewerName" placeholder="Enter your name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="reviewerTitle"><i class="fas fa-briefcase"></i> Your Role (Optional)</label>
+                            <input type="text" id="reviewerTitle" placeholder="e.g., Patient, Healthcare Professional, etc.">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="reviewComment"><i class="fas fa-comment-dots"></i> Your Review*</label>
+                            <textarea id="reviewComment" placeholder="Share your experience with our pharmaceutical services, products, or customer support..." required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="reviewType"><i class="fas fa-tag"></i> Review Category</label>
+                            <select id="reviewType">
+                                <option value="service">Service Quality</option>
+                                <option value="product">Product Effectiveness</option>
+                                <option value="delivery">Delivery Service</option>
+                                <option value="advice">Professional Advice</option>
+                                <option value="overall">Overall Experience</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="submit-review-btn">
+                            <i class="fas fa-paper-plane"></i> Submit Review
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Review List -->
+                <div class="review-list">
+                    <h3><i class="fas fa-comments"></i> Customer Reviews & Feedback</h3>
+                    <div id="reviewsContainer">
+                        <!-- Reviews will be dynamically inserted here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Professional Footer -->
+            <footer class="footer">
+                <div class="footer-marquee" aria-label="Company tagline">
+                    <div class="footer-marquee__inner">
+                        🏆 Trusted by healthcare professionals worldwide • ISO 9001:2015 Certified • 24/7 Pharmaceutical Support • Global Delivery Network •
+                    </div>
+                </div>
+
+                <button class="contact-btn" id="contactBtn">
+                    <i class="fas fa-headset"></i> Contact Support
+                </button>
+                <div class="footer-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+                <p class="footer-note">
+                    &copy; 2025 Bomaj Pharma International. All rights reserved. | 
+                    <i class="fas fa-shield-alt"></i> HIPAA Compliant | 
+                    <i class="fas fa-certificate"></i> FDA Approved | 
+                    <i class="fas fa-globe"></i> Global Presence in 45+ Countries
+                </p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // Sample review data with professional healthcare context
+        const sampleReviews = [
+            {
+                id: 1,
+                name: "Dr. Sarah Johnson",
+                initial: "SJ",
+                title: "Cardiologist",
+                rating: 5,
+                comment: "As a practicing cardiologist, I've worked with numerous pharmaceutical providers, but Bomaj Pharma stands out. Their medication quality is exceptional, and their clinical support team is always available for consultations. The anticoagulants we ordered arrived promptly and were properly stored.",
+                date: "2 days ago",
+                likes: 28,
+                loves: 14,
+                dislikes: 0,
+                type: "product"
+            },
+            {
+                id: 2,
+                name: "Michael Chen",
+                initial: "MC",
+                title: "Hospital Pharmacist",
+                rating: 5,
+                comment: "The temperature-controlled delivery system is impressive. Our oncology medications arrived with perfect temperature logs and proper documentation. The ordering portal is intuitive and saves our pharmacy team hours every week.",
+                date: "1 week ago",
+                likes: 22,
+                loves: 8,
+                dislikes: 1,
+                type: "delivery"
+            },
+            {
+                id: 3,
+                name: "Amanda Rodriguez",
+                initial: "AR",
+                title: "Clinic Manager",
+                rating: 4,
+                comment: "Excellent overall service. The antibiotic selection is comprehensive, and the medical representatives are knowledgeable. Would appreciate more flexible delivery windows for our rural clinic locations.",
+                date: "2 weeks ago",
+                likes: 15,
+                loves: 6,
+                dislikes: 2,
+                type: "service"
+            },
+            {
+                id: 4,
+                name: "Dr. Robert Smith",
+                initial: "RS",
+                title: "Chief of Medicine",
+                rating: 5,
+                comment: "Bomaj's clinical pharmacists provide valuable therapeutic recommendations that enhance patient care. Their continuing education programs for our staff have been instrumental in keeping us updated with the latest pharmaceutical developments.",
+                date: "3 weeks ago",
+                likes: 45,
+                loves: 22,
+                dislikes: 0,
+                type: "advice"
+            },
+            {
+                id: 5,
+                name: "Maria Gonzalez",
+                initial: "MG",
+                title: "Long-term Patient",
+                rating: 5,
+                comment: "As someone who requires regular medication for a chronic condition, I appreciate the consistency and reliability of Bomaj's products. The patient support program has made my medications affordable, and the home delivery service is a lifesaver.",
+                date: "1 month ago",
+                likes: 32,
+                loves: 18,
+                dislikes: 0,
+                type: "service"
+            },
+            {
+                id: 6,
+                name: "David Wilson",
+                initial: "DW",
+                title: "Pharmacy Director",
+                rating: 5,
+                comment: "The inventory management system integration has streamlined our operations significantly. Real-time stock updates and automated reordering have reduced our medication shortages by 85%. The quality assurance documentation is comprehensive and audit-ready.",
+                date: "1 month ago",
+                likes: 38,
+                loves: 12,
+                dislikes: 0,
+                type: "service"
+            }
+        ];
+
+        // Initialize reviews
+        let reviews = JSON.parse(localStorage.getItem('bomajProfessionalReviews')) || sampleReviews;
+        let currentRating = 0;
+        let currentFilter = 'all';
+
+        // Star rating functionality
+        const stars = document.querySelectorAll('.star');
+        const ratingInput = document.getElementById('rating');
+
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                currentRating = parseInt(star.dataset.value);
+                ratingInput.value = currentRating;
+                
+                stars.forEach(s => {
+                    const value = parseInt(s.dataset.value);
+                    s.textContent = value <= currentRating ? '★' : '☆';
+                    s.style.color = value <= currentRating ? '#ffd700' : '#ffd700';
+                });
+            });
+            
+            star.addEventListener('mouseover', () => {
+                const hoverValue = parseInt(star.dataset.value);
+                stars.forEach(s => {
+                    const value = parseInt(s.dataset.value);
+                    s.style.color = value <= hoverValue ? '#ffed85' : '#ffd700';
+                });
+            });
+            
+            star.addEventListener('mouseout', () => {
+                stars.forEach(s => {
+                    const value = parseInt(s.dataset.value);
+                    s.style.color = value <= currentRating ? '#ffd700' : '#ffd700';
+                    s.textContent = value <= currentRating ? '★' : '☆';
+                });
+            });
+        });
+
+        // Render reviews with filtering
+        function renderReviews(filter = 'all') {
+            const container = document.getElementById('reviewsContainer');
+            let filteredReviews = [...reviews];
+
+            // Apply filters
+            switch(filter) {
+                case '5':
+                    filteredReviews = filteredReviews.filter(r => r.rating === 5);
+                    break;
+                case '4':
+                    filteredReviews = filteredReviews.filter(r => r.rating >= 4);
+                    break;
+                case '3':
+                    filteredReviews = filteredReviews.filter(r => r.rating >= 3);
+                    break;
+                case 'recent':
+                    filteredReviews.sort((a, b) => b.id - a.id);
+                    break;
+                case 'popular':
+                    filteredReviews.sort((a, b) => (b.likes + b.loves) - (a.likes + a.loves));
+                    break;
+                default:
+                    // Show all, most recent first
+                    filteredReviews.sort((a, b) => b.id - a.id);
+            }
+
+            if (filteredReviews.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px; color: #7f8c8d;">
+                        <i class="fas fa-comment-slash" style="font-size: 48px; margin-bottom: 20px; opacity: 0.5;"></i>
+                        <h3 style="margin-bottom: 10px;">No reviews found</h3>
+                        <p>Try changing your filter or be the first to share your experience!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredReviews.map(review => `
+                <div class="review-item" data-review-id="${review.id}">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-avatar">${review.initial}</div>
+                            <div class="reviewer-details">
+                                <div class="reviewer-name">${review.name}</div>
+                                <div class="reviewer-title">
+                                    <i class="fas fa-user-tag"></i> ${review.title}
+                                </div>
+                                <div class="review-date">
+                                    <i class="far fa-calendar"></i> ${review.date}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            ${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}
+                            <span style="color: #f39c12; margin-left: 5px;">${review.rating}.0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="review-type">
+                        <i class="fas fa-tag"></i> ${getTypeLabel(review.type)}
+                    </div>
+                    
+                    <p class="review-comment">${review.comment}</p>
+                    
+                    <div class="reaction-buttons">
+                        <button class="reaction-btn like-btn" onclick="reactToReview(${review.id}, 'like')">
+                            <i class="fas fa-thumbs-up"></i>
+                            <span class="reaction-count">${review.likes}</span>
+                            <span style="font-size: 12px; opacity: 0.8;">Helpful</span>
+                        </button>
+                        <button class="reaction-btn love-btn" onclick="reactToReview(${review.id}, 'love')">
+                            <i class="fas fa-heart"></i>
+                            <span class="reaction-count">${review.loves}</span>
+                            <span style="font-size: 12px; opacity: 0.8;">Appreciate</span>
+                        </button>
+                        <button class="reaction-btn dislike-btn" onclick="reactToReview(${review.id}, 'dislike')">
+                            <i class="fas fa-thumbs-down"></i>
+                            <span class="reaction-count">${review.dislikes}</span>
+                            <span style="font-size: 12px; opacity: 0.8;">Disagree</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            updateStats();
+        }
+
+        // Get human-readable type labels
+        function getTypeLabel(type) {
+            const labels = {
+                'service': 'Service Quality',
+                'product': 'Product Effectiveness',
+                'delivery': 'Delivery Service',
+                'advice': 'Professional Advice',
+                'overall': 'Overall Experience'
+            };
+            return labels[type] || type;
+        }
+
+        // Reaction functionality
+        function reactToReview(reviewId, reaction) {
+            const review = reviews.find(r => r.id === reviewId);
+            if (review) {
+                review[reaction + 's']++;
+                localStorage.setItem('bomajProfessionalReviews', JSON.stringify(reviews));
+                renderReviews(currentFilter);
+                
+                // Show feedback
+                const messages = {
+                    'like': 'Thank you for finding this review helpful!',
+                    'love': 'Thank you for appreciating this review!',
+                    'dislike': 'Thank you for your feedback!'
+                };
+                showToast(messages[reaction]);
+            }
+        }
+
+        // Update statistics
+        function updateStats() {
+            const totalReviews = reviews.length;
+            const avgRating = (reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews).toFixed(1);
+            const positiveRate = Math.round((reviews.filter(r => r.rating >= 4).length / totalReviews) * 100);
+            const monthlyReviews = Math.round(totalReviews * 0.25) + 12; // Simulated growth
+            
+            document.getElementById('totalReviews').textContent = totalReviews;
+            document.getElementById('avgRating').textContent = avgRating;
+            document.getElementById('positiveRate').textContent = `${positiveRate}%`;
+            document.getElementById('monthlyReviews').textContent = monthlyReviews;
+            
+            // Update badge count
+            document.querySelector('.review-badge').textContent = totalReviews;
+        }
+
+        // Submit review form
+        document.getElementById('reviewForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('reviewerName').value || 'Anonymous';
+            const title = document.getElementById('reviewerTitle').value || 'Customer';
+            const comment = document.getElementById('reviewComment').value;
+            const type = document.getElementById('reviewType').value;
+            
+            if (!currentRating) {
+                showToast('Please select a rating', 'warning');
+                return;
+            }
+            
+            if (!comment.trim() || comment.length < 20) {
+                showToast('Please provide a detailed review (minimum 20 characters)', 'warning');
+                return;
+            }
+
+            const newReview = {
+                id: reviews.length > 0 ? Math.max(...reviews.map(r => r.id)) + 1 : 1,
+                name: name,
+                initial: name.charAt(0).toUpperCase() + (name.includes(' ') ? name.split(' ')[1].charAt(0).toUpperCase() : ''),
+                title: title,
+                rating: currentRating,
+                comment: comment,
+                date: 'Just now',
+                likes: 0,
+                loves: 0,
+                dislikes: 0,
+                type: type
+            };
+
+            reviews.unshift(newReview);
+            localStorage.setItem('bomajProfessionalReviews', JSON.stringify(reviews));
+            
+            // Reset form
+            document.getElementById('reviewForm').reset();
+            stars.forEach(s => {
+                s.textContent = '☆';
+                s.style.color = '#ffd700';
+            });
+            currentRating = 0;
+            ratingInput.value = '';
+            
+            renderReviews(currentFilter);
+            showToast('Thank you for your valuable feedback! Your review has been submitted.', 'success');
+            
+            // Simulate notification update
+            const badge = document.querySelector('.review-badge');
+            badge.textContent = parseInt(badge.textContent) + 1;
+        });
+
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
+                renderReviews(currentFilter);
+            });
+        });
+
+        // Header button functionality
+        document.getElementById('refreshBtn').addEventListener('click', () => {
+            renderReviews(currentFilter);
+            showToast('Reviews refreshed successfully!', 'info');
+        });
+
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            const dataStr = JSON.stringify(reviews, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            const exportFileDefaultName = `bomaj-reviews-${new Date().toISOString().split('T')[0]}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            showToast('Export started. Your review data is being downloaded.', 'success');
+        });
+
+        document.getElementById('analyticsBtn').addEventListener('click', () => {
+            showToast('Analytics dashboard is coming soon!', 'info');
+        });
+
+        // Contact button
+        document.getElementById('contactBtn').addEventListener('click', () => {
+            const contactInfo = `
+                📞 24/7 Support Hotline: +1-800-BOMAJ-PHARMA
+                📧 Email: support@bomajpharma.com
+                🌐 Website: www.bomajpharma.com/support
+                
+                Office Hours: Monday-Friday, 8:00 AM - 8:00 PM EST
+                Emergency Pharmaceutical Support: Available 24/7
+                
+                Regional Offices:
+                • New York: +1-212-555-0100
+                • London: +44-20-7946-0958
+                • Singapore: +65-6011-8888
+            `;
+            alert('Contact Information:\n\n' + contactInfo);
+        });
+
+        // Notifications button
+        document.getElementById('notificationsBtn').addEventListener('click', function() {
+            const notifications = [
+                '• 3 new reviews pending moderation',
+                '• 2 customer feedback forms completed',
+                '• Quarterly review report is ready',
+                '• System maintenance scheduled for Sunday',
+                '• New feature: Review analytics dashboard'
+            ];
+            alert('Notifications:\n\n' + notifications.join('\n'));
+        });
+
+        // Help button
+        document.getElementById('helpBtn').addEventListener('click', function() {
+            const helpInfo = `
+                Need Help?\n
+                1. Review Management Guide
+                2. Customer Feedback Process
+                3. Report Generation
+                4. Data Export Instructions
+                5. Account Settings
+                
+                Quick Links:
+                • User Manual: docs.bomajpharma.com
+                • Video Tutorials: learn.bomajpharma.com
+                • FAQ: support.bomajpharma.com/faq
+                
+                Contact Support:
+                • Email: help@bomajpharma.com
+                • Live Chat: Available on dashboard
+                • Phone: +1-800-HELP-BOMAJ
+            `;
+            alert(helpInfo);
+        });
+
+        // User dropdown functionality
+        document.querySelector('.user-menu').addEventListener('click', function() {
+            // Remove existing dropdown if any
+            const existingDropdown = document.querySelector('.dropdown-menu');
+            if (existingDropdown) {
+                existingDropdown.remove();
+                return;
+            }
+            
+            const dropdown = document.createElement('div');
+            dropdown.className = 'dropdown-menu';
+            dropdown.innerHTML = `
+                <div class="dropdown-item" onclick="window.location='profile.html'">
+                    <i class="fas fa-user"></i> My Profile
+                </div>
+                <div class="dropdown-item" onclick="window.location='settings.html'">
+                    <i class="fas fa-cog"></i> Account Settings
+                </div>
+                <div class="dropdown-item" onclick="showToast('Dark mode coming soon!', 'info')">
+                    <i class="fas fa-moon"></i> Dark Mode
+                </div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item" onclick="window.location='login.html'">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </div>
+            `;
+            
+            dropdown.style.cssText = `
+                position: absolute;
+                top: calc(100% + 10px);
+                right: 0;
+                background: white;
+                border: 1px solid #e0e0e0;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+                min-width: 220px;
+                z-index: 1000;
+                padding: 10px 0;
+                animation: fadeIn 0.2s ease;
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                .dropdown-item {
+                    padding: 12px 20px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    color: #2c3e50;
+                    font-size: 14px;
+                    font-weight: 500;
+                    transition: all 0.2s ease;
+                }
+                .dropdown-item:hover {
+                    background: #f8f9fa;
+                    color: #3498db;
+                    padding-left: 25px;
+                }
+                .dropdown-divider {
+                    height: 1px;
+                    background: #e9ecef;
+                    margin: 8px 0;
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(-10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.querySelector('.user-dropdown').appendChild(dropdown);
+            
+            // Remove dropdown when clicking elsewhere
+            setTimeout(() => {
+                const clickHandler = (e) => {
+                    if (!dropdown.contains(e.target) && !e.target.closest('.user-menu')) {
+                        dropdown.remove();
+                        style.remove();
+                        document.removeEventListener('click', clickHandler);
+                    }
+                };
+                document.addEventListener('click', clickHandler);
+            }, 100);
+        });
+
+        // Navigation active state
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                if (this.getAttribute('href') === '#') {
+                    e.preventDefault();
+                }
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update page title based on navigation
+                if (this.textContent.includes('Feedback')) {
+                    document.querySelector('.page-title h1').innerHTML = '<i class="fas fa-star"></i> Customer Feedback System';
+                }
+            });
+        });
+
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            const colors = {
+                success: '#2ecc71',
+                error: '#e74c3c',
+                warning: '#f39c12',
+                info: '#3498db'
+            };
+            
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                background: ${colors[type]};
+                color: white;
+                padding: 16px 24px;
+                border-radius: 10px;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+                z-index: 9999;
+                max-width: 400px;
+                animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            `;
+            
+            const icon = document.createElement('i');
+            icon.className = type === 'success' ? 'fas fa-check-circle' :
+                           type === 'error' ? 'fas fa-exclamation-circle' :
+                           type === 'warning' ? 'fas fa-exclamation-triangle' : 'fas fa-info-circle';
+            toast.prepend(icon);
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes fadeOut {
+                    from { opacity: 1; }
+                    to { opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+                style.remove();
+            }, 3000);
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            renderReviews();
+            
+            // Simulate loading animation
+            const container = document.getElementById('reviewsContainer');
+            container.innerHTML = `
+                <div class="loading" style="height: 200px; border-radius: 12px; margin-bottom: 20px;"></div>
+                <div class="loading" style="height: 200px; border-radius: 12px; margin-bottom: 20px;"></div>
+                <div class="loading" style="height: 200px; border-radius: 12px;"></div>
+            `;
+            
+            setTimeout(() => {
+                renderReviews();
+                showToast('Review dashboard loaded successfully!', 'success');
+            }, 800);
+        });
+    </script>
+</body>
+</html>

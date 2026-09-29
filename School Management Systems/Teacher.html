@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IT Teacher Dashboard - BTech Secondary School</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    :root {
+      --primary: #2c3e50;   /* Dark Navy */
+      --secondary: #1abc9c; /* Teal accent */
+      --accent: #f39c12;    /* Warm orange */
+      --light: #f8f9fa;     /* Light grey background */
+      --dark: #2d3436;      /* Dark gray text */
+      --text: #444;         /* Neutral text */
+      --white: #fff;
+      --success: #27ae60;
+      --warning: #f1c40f;
+      --danger: #e74c3c;
+      --info: #3498db;
+    }
+
+    body {
+      background-color: var(--light);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(180deg, var(--primary), #34495e);
+      color: var(--white);
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .logo-icon {
+      font-size: 2.2rem;
+      margin-right: 10px;
+      color: var(--secondary);
+    }
+
+    .logo-text {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .logo-subtext {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    .user-info {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .user-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .user-role {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .date-time {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    .nav-menu {
+      flex: 1;
+    }
+
+    .nav-item {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      color: var(--white);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      background: rgba(255,255,255,0.12);
+      border-left: 4px solid var(--secondary);
+    }
+
+    .nav-item i {
+      margin-right: 10px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: var(--white);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .page-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .notification-icon {
+      position: relative;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: var(--dark);
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--danger);
+      color: var(--white);
+      border-radius: 50%;
+      font-size: 0.7rem;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .user-avatar {
+      background: var(--secondary);
+      color: var(--white);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 600;
+    }
+
+    .content {
+      flex: 1;
+      padding: 30px;
+      background: linear-gradient(to right, #ecf0f1, #ffffff);
+    }
+
+    .welcome-banner {
+      background: linear-gradient(135deg, var(--secondary), var(--primary));
+      color: var(--white);
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--light);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5rem;
+      margin-right: 15px;
+      color: var(--secondary);
+    }
+
+    .stat-info h3 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stat-info p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .view-all {
+      color: var(--secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .class-list {
+      list-style: none;
+    }
+
+    .class-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .class-item:last-child {
+      border-bottom: none;
+    }
+
+    .class-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--light);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 15px;
+      color: var(--secondary);
+    }
+
+    .class-info h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .class-info p {
+      font-size: 0.85rem;
+      opacity: 0.7;
+    }
+
+    .task-list {
+      list-style: none;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .task-item:last-child {
+      border-bottom: none;
+    }
+
+    .task-checkbox {
+      margin-right: 15px;
+    }
+
+    .task-info h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .task-info p {
+      font-size: 0.85rem;
+      opacity: 0.7;
+    }
+
+    .task-due {
+      font-size: 0.8rem;
+      color: var(--danger);
+      font-weight: 500;
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .module-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: 0.3s ease;
+      cursor: pointer;
+    }
+
+    .module-card:hover {
+      transform: translateY(-5px);
+      background: var(--secondary);
+      color: var(--white);
+    }
+
+    .module-card:hover .module-icon {
+      background: var(--white);
+      color: var(--secondary);
+    }
+
+    .module-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: var(--light);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.8rem;
+      margin: 0 auto 15px;
+      color: var(--secondary);
+    }
+
+    .module-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .module-description {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+
+    .footer {
+      background: var(--primary);
+      color: var(--white);
+      text-align: center;
+      padding: 15px 30px;
+    }
+
+    /* Teacher-specific styles */
+    .teacher-nav {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .teacher-nav-btn {
+      background: var(--white);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .teacher-nav-btn.active {
+      background: var(--secondary);
+      color: var(--white);
+    }
+
+    .attendance-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    .attendance-table th, .attendance-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .attendance-table th {
+      background: var(--light);
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .attendance-status {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .present {
+      background: rgba(39, 174, 96, 0.2);
+      color: var(--success);
+    }
+
+    .absent {
+      background: rgba(231, 76, 60, 0.2);
+      color: var(--danger);
+    }
+
+    .late {
+      background: rgba(241, 196, 15, 0.2);
+      color: var(--warning);
+    }
+
+    /* Standards & Assessment Styles */
+    .standards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .standard-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 4px solid var(--info);
+    }
+
+    .standard-code {
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .standard-desc {
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+
+    .mastery-bar {
+      height: 8px;
+      background: var(--light);
+      border-radius: 4px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .mastery-fill {
+      height: 100%;
+      background: var(--success);
+      border-radius: 4px;
+    }
+
+    .mastery-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+    }
+
+    /* Assessment Cards */
+    .assessment-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 4px solid var(--accent);
+    }
+
+    .assessment-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .assessment-title {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .assessment-due {
+      font-size: 0.9rem;
+      color: var(--danger);
+      font-weight: 500;
+    }
+
+    .assessment-class {
+      font-size: 0.9rem;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .assessment-standards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .standard-tag {
+      background: rgba(52, 152, 219, 0.1);
+      color: var(--info);
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+    }
+
+    /* Alert Styles */
+    .alert {
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .alert-warning {
+      background: rgba(241, 196, 15, 0.1);
+      border-left: 4px solid var(--warning);
+    }
+
+    .alert-danger {
+      background: rgba(231, 76, 60, 0.1);
+      border-left: 4px solid var(--danger);
+    }
+
+    .alert-icon {
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+
+    /* Analytics Cards */
+    .analytics-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .analytics-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .analytics-title {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .analytics-chart {
+      height: 200px;
+      background: var(--light);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      font-style: italic;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1200px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+      
+      .sidebar {
+        width: 100%;
+        height: auto;
+      }
+      
+      .teacher-nav {
+        overflow-x: auto;
+        padding-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-icon"><i class="fas fa-graduation-cap"></i></div>
+      <div>
+        <div class="logo-text">BTech SEC SCH</div>
+        <div class="logo-subtext">IT Department</div>
+      </div>
+    </div>
+    <div class="user-info">
+      <div class="user-name">Mr. David Chen</div>
+      <div class="user-role">IT Teacher / Department Head</div>
+      <div class="date-time" id="current-date-time"></div>
+    </div>
+    <div class="nav-menu">
+      <a href="#" class="nav-item active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+      <a href="#" class="nav-item"><i class="fas fa-user"></i> My Profile</a>
+      <a href="#" class="nav-item"><i class="fas fa-laptop-code"></i> My Classes</a>
+      <a href="#" class="nav-item"><i class="fas fa-tasks"></i> Assignments</a>
+      <a href="#" class="nav-item"><i class="fas fa-clipboard-check"></i> Attendance</a>
+      <a href="#" class="nav-item"><i class="fas fa-chart-line"></i> Grades & Analytics</a>
+      <a href="#" class="nav-item"><i class="fas fa-calendar-alt"></i> Schedule & Planning</a>
+      <a href="#" class="nav-item"><i class="fas fa-comments"></i> Communication</a>
+      <a href="#" class="nav-item"><i class="fas fa-book"></i> Resources & Standards</a>
+      <a href="#" class="nav-item"><i class="fas fa-cogs"></i> System Settings</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="header">
+      <div class="page-title">IT Teacher Dashboard</div>
+      <div class="user-actions">
+        <div class="notification-icon">
+          <i class="fas fa-bell"></i>
+          <div class="notification-badge">7</div>
+        </div>
+        <div class="user-avatar">DC</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="welcome-banner">
+        <h1>Welcome, Mr. David Chen</h1>
+        <p>IT Department Head | Grades 9-12 | First Term - 2025/2026 Session</p>
+      </div>
+
+      <!-- Teacher Navigation -->
+      <div class="teacher-nav">
+        <button class="teacher-nav-btn active">Overview</button>
+        <button class="teacher-nav-btn">Classes & Rosters</button>
+        <button class="teacher-nav-btn">Assessments</button>
+        <button class="teacher-nav-btn">Standards & Analytics</button>
+        <button class="teacher-nav-btn">Lesson Planning</button>
+        <button class="teacher-nav-btn">Communication</button>
+        <button class="teacher-nav-btn">Resources</button>
+        <a href="Book1.xlsx" class="teacher-nav-btn" style="text-decoration: none;">Assesment</a>      </div>
+
+      <!-- Alerts Section -->
+      <div class="alert alert-warning">
+        <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
+        <div>
+          <strong>5 assignments pending grading</strong> - Grade 10 Python Programming due yesterday
+        </div>
+      </div>
+
+      <div class="alert alert-danger">
+        <div class="alert-icon"><i class="fas fa-exclamation-circle"></i></div>
+        <div>
+          <strong>Low engagement detected</strong> - Grade 9 IT Fundamentals showing 23% incomplete assignments
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-users"></i></div>
+          <div class="stat-info">
+            <h3>142</h3>
+            <p>Total Students</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-laptop-code"></i></div>
+          <div class="stat-info">
+            <h3>6</h3>
+            <p>IT Classes</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-tasks"></i></div>
+          <div class="stat-info">
+            <h3>12</h3>
+            <p>Pending Assessments</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+          <div class="stat-info">
+            <h3>84%</h3>
+            <p>Avg. Mastery (CSTA Standards)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Dashboard Grid -->
+      <div class="dashboard-grid">
+        <!-- Today's Classes -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Today's IT Classes</div>
+            <a href="#" class="view-all">View Timetable</a>
+          </div>
+          <ul class="class-list">
+            <li class="class-item">
+              <div class="class-icon"><i class="fas fa-code"></i></div>
+              <div class="class-info">
+                <h4>Grade 10 - Python Programming</h4>
+                <p>8:00 AM - 9:20 AM | Computer Lab A</p>
+              </div>
+            </li>
+            <li class="class-item">
+              <div class="class-icon"><i class="fas fa-database"></i></div>
+              <div class="class-info">
+                <h4>Grade 12 - Database Systems</h4>
+                <p>10:00 AM - 11:20 AM | Computer Lab B</p>
+              </div>
+            </li>
+            <li class="class-item">
+              <div class="class-icon"><i class="fas fa-network-wired"></i></div>
+              <div class="class-info">
+                <h4>Grade 11 - Networking Fundamentals</h4>
+                <p>1:00 PM - 2:20 PM | Computer Lab A</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Upcoming Assessments -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Upcoming Assessments</div>
+            <a href="#" class="view-all">View All</a>
+          </div>
+          <div class="assessment-card">
+            <div class="assessment-header">
+              <div class="assessment-title">Python Functions Quiz</div>
+              <div class="assessment-due">Due: Tomorrow</div>
+            </div>
+            <div class="assessment-class">Grade 10 - Python Programming</div>
+            <div class="assessment-standards">
+              <span class="standard-tag">CSTA 2-AP-13</span>
+              <span class="standard-tag">CSTA 2-AP-17</span>
+            </div>
+          </div>
+          <div class="assessment-card">
+            <div class="assessment-header">
+              <div class="assessment-title">SQL Query Project</div>
+              <div class="assessment-due">Due: Friday</div>
+            </div>
+            <div class="assessment-class">Grade 12 - Database Systems</div>
+            <div class="assessment-standards">
+              <span class="standard-tag">CSTA 3A-DA-11</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Standards Mastery -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">CSTA Standards Mastery - Grade 10</div>
+          <a href="#" class="view-all">View All Standards</a>
+        </div>
+        <div class="standards-grid">
+          <div class="standard-card">
+            <div class="standard-code">CSTA 2-AP-13</div>
+            <div class="standard-desc">Decompose problems and subproblems into parts to facilitate the design, implementation, and review of programs.</div>
+            <div class="mastery-bar">
+              <div class="mastery-fill" style="width: 78%"></div>
+            </div>
+            <div class="mastery-info">
+              <span>Class Mastery</span>
+              <span>78%</span>
+            </div>
+          </div>
+          <div class="standard-card">
+            <div class="standard-code">CSTA 2-AP-17</div>
+            <div class="standard-desc">Systematically test and refine programs using a range of test cases.</div>
+            <div class="mastery-bar">
+              <div class="mastery-fill" style="width: 65%"></div>
+            </div>
+            <div class="mastery-info">
+              <span>Class Mastery</span>
+              <span>65%</span>
+            </div>
+          </div>
+          <div class="standard-card">
+            <div class="standard-code">CSTA 2-AP-19</div>
+            <div class="standard-desc">Document programs in order to make them easier to follow, test, and debug.</div>
+            <div class="mastery-bar">
+              <div class="mastery-fill" style="width: 82%"></div>
+            </div>
+            <div class="mastery-info">
+              <span>Class Mastery</span>
+              <span>82%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytics Section -->
+      <div class="dashboard-grid">
+        <div class="analytics-card">
+          <div class="analytics-header">
+            <div class="analytics-title">Grade Distribution - Grade 10 Python</div>
+            <a href="#" class="view-all">View Details</a>
+          </div>
+          <div class="analytics-chart">
+            [Bar chart showing grade distribution A-F]
+          </div>
+        </div>
+        <div class="analytics-card">
+          <div class="analytics-header">
+            <div class="analytics-title">Assignment Completion Rates</div>
+            <a href="#" class="view-all">View Details</a>
+          </div>
+          <div class="analytics-chart">
+            [Line chart showing completion trends]
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Access Modules -->
+      <h2 style="margin: 30px 0 20px; color: var(--primary);">Quick Access</h2>
+      <div class="modules-grid">
+        <div class="module-card"><div class="module-icon"><i class="fas fa-laptop-code"></i></div><div class="module-title">My Classes</div><div class="module-description">Manage class rosters and student information</div></div>
+        <div class="module-card"><div class="module-icon"><i class="fas fa-tasks"></i></div><div class="module-title">Assignments</div><div class="module-description">Create and grade differentiated assignments</div></div>
+        <div class="module-card"><div class="module-icon"><i class="fas fa-clipboard-check"></i></div><div class="module-title">Attendance</div><div class="module-description">Take period-level attendance with codes</div></div>
+        <div class="module-card"><div class="module-icon"><i class="fas fa-chart-line"></i></div><div class="module-title">Analytics</div><div class="module-description">View standards mastery and progress analytics</div></div>
+        <div class="module-card"><div class="module-icon"><i class="fas fa-calendar-alt"></i></div><div class="module-title">Lesson Planning</div><div class="module-description">Create standards-aligned lesson plans</div></div>
+        <div class="module-card"><div class="module-icon"><i class="fas fa-book"></i></div><div class="module-title">Resources</div><div class="module-description">Access IT curriculum resources and materials</div></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      &copy; 2025 BTech Secondary School Management System. All rights reserved.
+    </div>
+  </div>
+
+  <script>
+    // Live Date & Time
+    function updateDateTime() {
+      const now = new Date();
+      const options = { day: '2-digit', month: 'short', year: 'numeric' };
+      const date = now.toLocaleDateString('en-GB', options);
+      const time = now.toLocaleTimeString('en-GB', { hour12: false });
+      document.getElementById('current-date-time').textContent = `${date} ${time}`;
+    }
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
+    // Teacher navigation functionality
+    document.querySelectorAll('.teacher-nav-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        document.querySelectorAll('.teacher-nav-btn').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

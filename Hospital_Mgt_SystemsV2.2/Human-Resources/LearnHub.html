@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnHub - Professional Learning Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --dark: #1e1e2c;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --hover-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fb;
+            color: #333;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            background: var(--dark);
+            color: white;
+            padding: 24px 16px;
+            position: fixed;
+            width: 260px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 12px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 24px;
+        }
+        
+        .logo i {
+            font-size: 28px;
+            color: var(--success);
+        }
+        
+        .logo h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-item i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            grid-column: 2;
+            padding: 30px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .welcome h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+        
+        .welcome p {
+            color: var(--gray);
+        }
+        
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 10px;
+            padding: 8px 16px;
+            width: 300px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .search-box input {
+            flex: 1;
+            border: none;
+            padding: 8px 12px;
+            font-size: 14px;
+            outline: none;
+        }
+        
+        .search-box i {
+            color: var(--gray);
+            cursor: pointer;
+        }
+        
+        /* Dashboard Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .stat-card .icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+        
+        .stat-card h3 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .stat-card p {
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        /* Platform Grid */
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 40px 0 20px;
+            color: var(--dark);
+        }
+        
+        .platforms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .platform-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .platform-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .platform-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid #f1f3f6;
+        }
+        
+        .platform-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+        
+        .platform-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .platform-info p {
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .platform-content {
+            padding: 20px;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #f1f3f6;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        
+        .platform-footer {
+            padding: 16px 20px;
+            background: #f9fafc;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .btn-visit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .btn-visit:hover {
+            background: var(--secondary);
+        }
+        
+        /* Content Sections */
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        /* Course Cards */
+        .course-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+        }
+        
+        .course-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid #f1f3f6;
+        }
+        
+        .course-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            background: var(--primary);
+        }
+        
+        .course-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .course-info p {
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .course-content {
+            padding: 20px;
+        }
+        
+        .course-footer {
+            padding: 16px 20px;
+            background: #f9fafc;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        /* Certificate Cards */
+        .certificate-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+        }
+        
+        .certificate-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #f1f3f6;
+        }
+        
+        .certificate-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .certificate-info p {
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .certificate-content {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .certificate-image {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #eee;
+        }
+        
+        .certificate-footer {
+            padding: 16px 20px;
+            background: #f9fafc;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        /* Schedule Styles */
+        .schedule-day {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+        }
+        
+        .schedule-header {
+            padding: 16px 20px;
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .schedule-content {
+            padding: 20px;
+        }
+        
+        .schedule-item {
+            display: flex;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f1f3f6;
+        }
+        
+        .schedule-time {
+            min-width: 100px;
+            font-weight: 600;
+        }
+        
+        .schedule-details h4 {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .schedule-details p {
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+            
+            .main-content {
+                grid-column: 1;
+            }
+            
+            .platforms-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .main-content {
+                padding: 20px;
+            }
+            
+            .platforms-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <h1>LearnHub</h1>
+            </div>
+            
+            <div class="nav-item active" data-target="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </div>
+            
+            <div class="nav-item" data-target="my-courses">
+                <i class="fas fa-book-open"></i>
+                <span>My Courses</span>
+            </div>
+            
+            <div class="nav-item" data-target="progress">
+                <i class="fas fa-chart-line"></i>
+                <span>Progress</span>
+            </div>
+            
+            <div class="nav-item" data-target="certificates">
+                <i class="fas fa-certificate"></i>
+                <span>Certificates</span>
+            </div>
+            
+            <div class="nav-item" data-target="schedule">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Schedule</span>
+            </div>
+            
+            <div class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </div>
+            
+            <div class="nav-item">
+                <i class="fas fa-question-circle"></i>
+                <span>Help</span>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <div class="welcome">
+                    <h2>Welcome back, Kolawole Abel Blessing</h2>
+                    <p>Track your learning progress and continue your journey</p>
+                </div>
+                
+                <div class="search-box">
+                    <i class="fas fa-search" id="search-button"></i>
+                    <input type="text" id="search-input" placeholder="Search courses, platforms...">
+                </div>
+            </div>
+            
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="content-section active">
+                <!-- Stats Cards -->
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3>12</h3>
+                        <p>Active Courses</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>36</h3>
+                        <p>Learning Hours</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h3>5</h3>
+                        <p>Certificates Earned</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="icon">
+                            <i class="fas fa-target"></i>
+                        </div>
+                        <h3>78%</h3>
+                        <p>Overall Progress</p>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">Learning Platforms</h2>
+                
+                <!-- Platforms Grid -->
+                <div class="platforms-grid" id="platforms-container">
+                    <!-- Platform cards will be generated here -->
+                </div>
+            </div>
+            
+            <!-- My Courses Section -->
+            <div id="my-courses" class="content-section">
+                <h2 class="section-title">My Courses</h2>
+                
+                <div id="courses-container">
+                    <!-- Course cards will be generated here -->
+                </div>
+            </div>
+            
+            <!-- Progress Section -->
+            <div id="progress" class="content-section">
+                <h2 class="section-title">Learning Progress</h2>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="icon">
+                            <i class="fas fa-target"></i>
+                        </div>
+                        <h3>78%</h3>
+                        <p>Overall Progress</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3>24/32</h3>
+                        <p>Completed Modules</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <h3>14</h3>
+                        <p>Day Streak</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="icon">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <h3>3</h3>
+                        <p>Skills Mastered</p>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">Course Progress</h2>
+                
+                <div id="progress-container">
+                    <!-- Progress cards will be generated here -->
+                </div>
+            </div>
+            
+            <!-- Certificates Section -->
+            <div id="certificates" class="content-section">
+                <h2 class="section-title">My Certificates</h2>
+                
+                <div id="certificates-container">
+                    <!-- Certificate cards will be generated here -->
+                </div>
+            </div>
+            
+            <!-- Schedule Section -->
+            <div id="schedule" class="content-section">
+                <h2 class="section-title">Learning Schedule</h2>
+                
+                <div id="schedule-container">
+                    <!-- Schedule will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Platform data with URLs, icons, and colors
+        const platforms = [
+            { 
+                name: "Coursera", 
+                url: "https://www.coursera.org", 
+                icon: "graduation-cap",
+                color: "#0056d2",
+                description: "Online courses from top universities",
+                progress: 65
+            },
+            { 
+                name: "edX", 
+                url: "https://www.edx.org", 
+                icon: "book-open",
+                color: "#0a68e8",
+                description: "University-level courses online",
+                progress: 40
+            },
+            { 
+                name: "Udemy", 
+                url: "https://www.udemy.com", 
+                icon: "tv",
+                color: "#ea5252",
+                description: "Learn practical skills online",
+                progress: 85
+            },
+            { 
+                name: "PluralSight", 
+                url: "https://www.pluralsight.com", 
+                icon: "desktop",
+                color: "#e41e59",
+                description: "Technology skills platform",
+                progress: 30
+            },
+            { 
+                name: "Udacity", 
+                url: "https://www.udacity.com", 
+                icon: "star",
+                color: "#15bbbe",
+                description: "Learn the latest tech skills",
+                progress: 25
+            },
+            { 
+                name: "LinkedIn Learning", 
+                url: "https://www.linkedin.com/learning", 
+                icon: "linkedin",
+                color: "#0077b5",
+                description: "Business, creative & tech skills",
+                progress: 55
+            },
+            { 
+                name: "freeCodeCamp", 
+                url: "https://www.freecodecamp.org", 
+                icon: "code",
+                color: "#0a0a23",
+                description: "Learn to code for free",
+                progress: 75
+            },
+            { 
+                name: "Codecademy", 
+                url: "https://www.codecademy.com", 
+                icon: "laptop-code",
+                color: "#1F4056",
+                description: "Coding interactive platform",
+                progress: 90
+            },
+            { 
+                name: "DataCamp", 
+                url: "https://www.datacamp.com", 
+                icon: "chart-bar",
+                color: "#01C4A3",
+                description: "Learn data science online",
+                progress: 20
+            },
+            { 
+                name: "Kaggle Learn", 
+                url: "https://www.kaggle.com/learn", 
+                icon: "robot",
+                color: "#20BEFF",
+                description: "Data science and machine learning",
+                progress: 15
+            },
+            { 
+                name: "fast.ai", 
+                url: "https://www.fast.ai", 
+                icon: "bolt",
+                color: "#8444d8",
+                description: "Making neural nets uncool again",
+                progress: 10
+            },
+            { 
+                name: "HackerRank", 
+                url: "https://www.hackerrank.com", 
+                icon: "keyboard",
+                color: "#1ba94c",
+                description: "Practice coding skills",
+                progress: 45
+            }
+        ];
+
+        // Course data
+        const courses = [
+            {
+                name: "Web Development Bootcamp",
+                platform: "Udemy",
+                instructor: "Colt Steele",
+                progress: 85,
+                duration: "60 hours",
+                nextLesson: "React Hooks"
+            },
+            {
+                name: "Machine Learning",
+                platform: "Coursera",
+                instructor: "Andrew Ng",
+                progress: 65,
+                duration: "55 hours",
+                nextLesson: "Neural Networks"
+            },
+            {
+                name: "Data Structures & Algorithms",
+                platform: "Udacity",
+                instructor: "Sarah Johnson",
+                progress: 40,
+                duration: "45 hours",
+                nextLesson: "Binary Trees"
+            },
+            {
+                name: "UI/UX Design",
+                platform: "LinkedIn Learning",
+                instructor: "Joe Natoli",
+                progress: 75,
+                duration: "35 hours",
+                nextLesson: "Prototyping"
+            }
+        ];
+
+        // Certificate data
+        const certificates = [
+            {
+                name: "Full Stack Web Development",
+                platform: "freeCodeCamp",
+                date: "June 15, 2023",
+                skills: ["HTML", "CSS", "JavaScript", "Node.js", "React"]
+            },
+            {
+                name: "Google Data Analytics",
+                platform: "Coursera",
+                date: "April 3, 2023",
+                skills: ["Data Analysis", "R Programming", "SQL", "Tableau"]
+            },
+            {
+                name: "AWS Cloud Practitioner",
+                platform: "Udemy",
+                date: "February 28, 2023",
+                skills: ["Cloud Computing", "AWS Services", "Architecture"]
+            }
+        ];
+
+        // Schedule data
+        const schedule = [
+            {
+                day: "Monday",
+                activities: [
+                    { time: "09:00 - 10:30", course: "Web Development", topic: "React Fundamentals" },
+                    { time: "14:00 - 15:30", course: "Machine Learning", topic: "Model Evaluation" }
+                ]
+            },
+            {
+                day: "Tuesday",
+                activities: [
+                    { time: "10:00 - 11:30", course: "Data Structures", topic: "Tree Traversal" },
+                    { time: "16:00 - 17:30", course: "UI/UX Design", topic: "User Research" }
+                ]
+            },
+            {
+                day: "Wednesday",
+                activities: [
+                    { time: "09:30 - 11:00", course: "Web Development", topic: "State Management" },
+                    { time: "13:00 - 14:30", course: "Machine Learning", topic: "Neural Networks" }
+                ]
+            },
+            {
+                day: "Thursday",
+                activities: [
+                    { time: "11:00 - 12:30", course: "Data Structures", topic: "Graph Algorithms" },
+                    { time: "15:00 - 16:30", course: "UI/UX Design", topic: "Wireframing" }
+                ]
+            },
+            {
+                day: "Friday",
+                activities: [
+                    { time: "10:00 - 12:00", course: "Web Development", topic: "Project Work" },
+                    { time: "14:00 - 15:30", course: "Machine Learning", topic: "Project Implementation" }
+                ]
+            }
+        ];
+
+        // Function to create platform cards
+        function createPlatformCards(platformsToShow = platforms) {
+            const platformsContainer = document.getElementById('platforms-container');
+            platformsContainer.innerHTML = '';
+            
+            platformsToShow.forEach(platform => {
+                const card = document.createElement('div');
+                card.classList.add('platform-card');
+                
+                card.innerHTML = `
+                    <div class="platform-header">
+                        <div class="platform-icon" style="background: ${platform.color}">
+                            <i class="fas fa-${platform.icon}"></i>
+                        </div>
+                        <div class="platform-info">
+                            <h3>${platform.name}</h3>
+                            <p>${platform.description}</p>
+                        </div>
+                    </div>
+                    <div class="platform-content">
+                        <div class="progress-text">
+                            <span>Progress</span>
+                            <span>${platform.progress}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: ${platform.progress}%; background: ${platform.color}"></div>
+                        </div>
+                    </div>
+                    <div class="platform-footer">
+                        <span>${platform.progress}% completed</span>
+                        <a href="${platform.url}" target="_blank" class="btn-visit">
+                            <i class="fas fa-external-link-alt"></i> Visit
+                        </a>
+                    </div>
+                `;
+                
+                platformsContainer.appendChild(card);
+            });
+        }
+
+        // Function to create course cards
+        function createCourseCards() {
+            const coursesContainer = document.getElementById('courses-container');
+            coursesContainer.innerHTML = '';
+            
+            courses.forEach(course => {
+                const card = document.createElement('div');
+                card.classList.add('course-card');
+                
+                card.innerHTML = `
+                    <div class="course-header">
+                        <div class="course-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="course-info">
+                            <h3>${course.name}</h3>
+                            <p>${course.platform} • Instructor: ${course.instructor}</p>
+                        </div>
+                    </div>
+                    <div class="course-content">
+                        <div class="progress-text">
+                            <span>Progress</span>
+                            <span>${course.progress}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: ${course.progress}%"></div>
+                        </div>
+                    </div>
+                    <div class="course-footer">
+                        <span>Next: ${course.nextLesson}</span>
+                        <span>${course.duration}</span>
+                    </div>
+                `;
+                
+                coursesContainer.appendChild(card);
+            });
+        }
+
+        // Function to create progress cards
+        function createProgressCards() {
+            const progressContainer = document.getElementById('progress-container');
+            progressContainer.innerHTML = '';
+            
+            courses.forEach(course => {
+                const card = document.createElement('div');
+                card.classList.add('course-card');
+                
+                card.innerHTML = `
+                    <div class="course-header">
+                        <div class="course-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="course-info">
+                            <h3>${course.name}</h3>
+                            <p>${course.platform}</p>
+                        </div>
+                    </div>
+                    <div class="course-content">
+                        <div class="progress-text">
+                            <span>Progress</span>
+                            <span>${course.progress}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: ${course.progress}%"></div>
+                        </div>
+                    </div>
+                    <div class="course-footer">
+                        <span>Next Lesson: ${course.nextLesson}</span>
+                        <button class="btn-visit">
+                            <i class="fas fa-play-circle"></i> Continue
+                        </button>
+                    </div>
+                `;
+                
+                progressContainer.appendChild(card);
+            });
+        }
+
+        // Function to create certificate cards
+        function createCertificateCards() {
+            const certificatesContainer = document.getElementById('certificates-container');
+            certificatesContainer.innerHTML = '';
+            
+            certificates.forEach(certificate => {
+                const card = document.createElement('div');
+                card.classList.add('certificate-card');
+                
+                card.innerHTML = `
+                    <div class="certificate-header">
+                        <div class="certificate-info">
+                            <h3>${certificate.name}</h3>
+                            <p>Issued by ${certificate.platform} on ${certificate.date}</p>
+                        </div>
+                        <div>
+                            <button class="btn-visit">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+                    <div class="certificate-content">
+                        <div style="background: #f5f7fb; padding: 30px; border-radius: 8px;">
+                            <h3 style="color: var(--primary); margin-bottom: 15px;">Certificate of Completion</h3>
+                            <p>This certifies that</p>
+                            <h4 style="margin: 10px 0;">Kolawole Abel Blessing</h4>
+                            <p>has successfully completed the course</p>
+                            <h4 style="margin: 10px 0; color: var(--primary);">${certificate.name}</h4>
+                            <p style="margin-top: 15px;">Skills gained: ${certificate.skills.join(', ')}</p>
+                            <p style="margin-top: 20px; font-style: italic;">Issued: ${certificate.date}</p>
+                        </div>
+                    </div>
+                    <div class="certificate-footer">
+                        <button class="btn-visit">
+                            <i class="fas fa-share-alt"></i> Share
+                        </button>
+                    </div>
+                `;
+                
+                certificatesContainer.appendChild(card);
+            });
+        }
+
+        // Function to create schedule
+        function createSchedule() {
+            const scheduleContainer = document.getElementById('schedule-container');
+            scheduleContainer.innerHTML = '';
+            
+            schedule.forEach(daySchedule => {
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('schedule-day');
+                
+                let activitiesHTML = '';
+                daySchedule.activities.forEach(activity => {
+                    activitiesHTML += `
+                        <div class="schedule-item">
+                            <div class="schedule-time">${activity.time}</div>
+                            <div class="schedule-details">
+                                <h4>${activity.course}</h4>
+                                <p>${activity.topic}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                dayElement.innerHTML = `
+                    <div class="schedule-header">
+                        ${daySchedule.day}
+                    </div>
+                    <div class="schedule-content">
+                        ${activitiesHTML}
+                    </div>
+                `;
+                
+                scheduleContainer.appendChild(dayElement);
+            });
+        }
+
+        // Function to search platforms and courses
+        function performSearch() {
+            const query = document.getElementById('search-input').value.trim().toLowerCase();
+            
+            if (query) {
+                // Filter platforms
+                const filteredPlatforms = platforms.filter(platform => 
+                    platform.name.toLowerCase().includes(query) || 
+                    platform.description.toLowerCase().includes(query)
+                );
+                
+                // Filter courses
+                const filteredCourses = courses.filter(course => 
+                    course.name.toLowerCase().includes(query) || 
+                    course.platform.toLowerCase().includes(query) ||
+                    course.instructor.toLowerCase().includes(query)
+                );
+                
+                // Show appropriate section based on results
+                if (filteredPlatforms.length > 0) {
+                    // Switch to dashboard and show filtered platforms
+                    switchContentSection('dashboard');
+                    createPlatformCards(filteredPlatforms);
+                    
+                    // Update navigation
+                    updateNavigation('dashboard');
+                } else if (filteredCourses.length > 0) {
+                    // Switch to courses and show filtered courses
+                    switchContentSection('my-courses');
+                    
+                    // Create filtered course cards
+                    const coursesContainer = document.getElementById('courses-container');
+                    coursesContainer.innerHTML = '';
+                    
+                    filteredCourses.forEach(course => {
+                        const card = document.createElement('div');
+                        card.classList.add('course-card');
+                        
+                        card.innerHTML = `
+                            <div class="course-header">
+                                <div class="course-icon">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <div class="course-info">
+                                    <h3>${course.name}</h3>
+                                    <p>${course.platform} • Instructor: ${course.instructor}</p>
+                                </div>
+                            </div>
+                            <div class="course-content">
+                                <div class="progress-text">
+                                    <span>Progress</span>
+                                    <span>${course.progress}%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: ${course.progress}%"></div>
+                                </div>
+                            </div>
+                            <div class="course-footer">
+                                <span>Next: ${course.nextLesson}</span>
+                                <span>${course.duration}</span>
+                            </div>
+                        `;
+                        
+                        coursesContainer.appendChild(card);
+                    });
+                    
+                    // Update navigation
+                    updateNavigation('my-courses');
+                } else {
+                    alert(`No results found for: "${query}"`);
+                }
+                
+                document.getElementById('search-input').value = '';
+            }
+        }
+
+        // Function to switch content sections
+        function switchContentSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show the selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // If switching to dashboard, make sure platforms are shown
+            if (sectionId === 'dashboard') {
+                createPlatformCards();
+            }
+        }
+
+        // Function to update navigation
+        function updateNavigation(activeItem) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-target') === activeItem) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Initialize the dashboard when page loads
+        window.onload = function() {
+            createPlatformCards();
+            createCourseCards();
+            createProgressCards();
+            createCertificateCards();
+            createSchedule();
+            
+            // Add click event to navigation items
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    if (target) {
+                        switchContentSection(target);
+                        updateNavigation(target);
+                    }
+                });
+            });
+            
+            // Add search functionality
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-button');
+            
+            searchButton.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        };
+    </script>
+</body>
+</html>

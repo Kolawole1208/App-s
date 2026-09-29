@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAMB UTME - Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #1a237e;
+            margin-bottom: 10px;
+        }
+
+        .user-info {
+            background: #f0f9ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .subject-option {
+            background: #f8f9fa;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .subject-option:hover {
+            border-color: #1a237e;
+            background: #f0f7ff;
+        }
+
+        .subject-option.mandatory {
+            background: #e3f2fd;
+            border-color: #1a237e;
+        }
+
+        .subject-option input {
+            margin-right: 8px;
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 15px;
+            background: #1a237e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .start-btn:hover {
+            background: #283593;
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 10px;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Check if user is logged in
+        const currentUser = JSON.parse(localStorage.getItem('current_user') || 'null');
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+    </script>
+
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>UTME Exam Registration</h1>
+                <div class="user-info" id="userInfo">
+                    <!-- User info will be filled by JavaScript -->
+                </div>
+            </div>
+
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label for="studentName">Full Name</label>
+                    <input type="text" id="studentName" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <h3>Select 4 Subjects (English is mandatory)</h3>
+                    <div class="subjects-grid">
+                        <label class="subject-option mandatory">
+                            <input type="checkbox" value="English" checked disabled>
+                            English (mandatory)
+                        </label>
+                        <label class="subject-option">
+                            <input type="checkbox" value="Mathematics">
+                            Mathematics
+                        </label>
+                        <label class="subject-option">
+                            <input type="checkbox" value="Physics">
+                            Physics
+                        </label>
+                        <label class="subject-option">
+                            <input type="checkbox" value="Chemistry">
+                            Chemistry
+                        </label>
+                        <label class="subject-option">
+                            <input type="checkbox" value="Biology">
+                            Biology
+                        </label>
+                        <label class="subject-option">
+                            <input type="checkbox" value="Economics">
+                            Economics
+                        </label>
+                        <label class="subject-option">
+                            <input type="checkbox" value="Government">
+                            Government
+                        </label>
+                        <label class="subject-option">
+                            <input type="checkbox" value="Literature">
+                            Literature
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="start-btn">Start Exam</button>
+                <button type="button" class="logout-btn" onclick="logout()">Logout</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Display user info
+        document.getElementById('userInfo').innerHTML = `
+            <strong>Welcome, ${currentUser.fullName}!</strong>
+            <br><small>Registration No: ${currentUser.regNumber}</small>
+        `;
+
+        // Set student name from user data
+        document.getElementById('studentName').value = currentUser.fullName;
+
+        // Limit to 3 additional subjects
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]:not(:disabled)');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+                if (checkedCount > 3) {
+                    this.checked = false;
+                    alert('You can only select 3 additional subjects (4 total including English)');
+                }
+            });
+        });
+
+        // Form submission
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('studentName').value.trim();
+            const selectedSubjects = Array.from(checkboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+            
+            const allSubjects = ['English', ...selectedSubjects];
+            
+            if (!name) {
+                alert('Please enter your full name');
+                return;
+            }
+            
+            if (allSubjects.length !== 4) {
+                alert('Please select exactly 3 additional subjects (total 4 subjects including English)');
+                return;
+            }
+            
+            // Save data and redirect to exam
+            localStorage.setItem('studentName', name);
+            localStorage.setItem('subjects', JSON.stringify(allSubjects));
+            window.location.href = 'exam.html';
+        });
+
+        function logout() {
+            localStorage.removeItem('current_user');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

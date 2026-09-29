@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEGBOR GLOBAL - Select Your Service</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f4c75, #1b262c, #3282b8);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .header {
+            background: linear-gradient(to right, #0f4c75, #3282b8);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .logo-icon {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2.5rem;
+            opacity: 0.8;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .intro-text {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            border-color: #0f4c75;
+        }
+
+        .service-card.selected {
+            border-color: #0f4c75;
+            background: linear-gradient(to right, #f0f8ff, #ffffff);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #0f4c75;
+        }
+
+        .service-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .service-description {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .select-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, #0f4c75, #3282b8);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(15, 76, 117, 0.4);
+        }
+
+        .select-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(15, 76, 117, 0.6);
+        }
+
+        .select-button:active {
+            transform: translateY(1px);
+        }
+
+        .select-button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #28a745;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translate(-50%, 20px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <i class="fas fa-globe-americas logo-icon"></i>
+                <h1>Welcome to SEGBOR GLOBAL</h1>
+                <p>Select your desired service</p>
+            </div>
+            
+            <div class="content">
+                <p class="intro-text">Choose from our available services to explore our goods and services</p>
+                
+                <div class="services-grid" id="servicesGrid">
+                    <!-- Service cards will be generated by JavaScript -->
+                </div>
+                
+                <button class="select-button" id="selectButton" disabled>Select Service</button>
+                
+                <div class="footer">
+                    <p>© 2025 SEGBOR GLOBAL. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">
+        Service selected successfully!
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const services = [
+                { 
+                    name: "Eatery", 
+                    description: "Delicious meals and catering services for all occasions",
+                    icon: "fa-utensils",
+                    status: "available",
+                    redirect: "eatery.html"
+                },
+                { 
+                    name: "Estates", 
+                    description: "Premium real estate and property management solutions",
+                    icon: "fa-building",
+                    status: "available",
+                    redirect: "estates.html"
+                },
+                { 
+                    name: "Hotels", 
+                    description: "Luxurious accommodations with world-class amenities",
+                    icon: "fa-hotel",
+                    status: "available",
+                    redirect: "hotels.html"
+                },
+                { 
+                    name: "Water Factory", 
+                    description: "Pure, clean drinking water for homes and businesses",
+                    icon: "fa-tint",
+                    status: "available",
+                    redirect: "water-factory.html"
+                },
+                { 
+                    name: "Other Services", 
+                    description: "Various business solutions and consultancy services",
+                    icon: "fa-cogs",
+                    status: "available",
+                    redirect: "other-services.html"
+                }
+            ];
+            
+            const servicesGrid = document.getElementById('servicesGrid');
+            const selectButton = document.getElementById('selectButton');
+            const notification = document.getElementById('notification');
+            
+            let selectedService = null;
+            
+            // Generate service cards
+            services.forEach(service => {
+                const card = document.createElement('div');
+                card.className = 'service-card';
+                card.innerHTML = `
+                    <div class="service-icon">
+                        <i class="fas ${service.icon}"></i>
+                    </div>
+                    <div class="service-name">${service.name}</div>
+                    <div class="service-description">${service.description}</div>
+                `;
+                
+                card.addEventListener('click', () => {
+                    // Remove selected class from all cards
+                    document.querySelectorAll('.service-card').forEach(c => {
+                        c.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked card
+                    card.classList.add('selected');
+                    selectedService = service;
+                    
+                    // Enable the select button
+                    selectButton.disabled = false;
+                });
+                
+                servicesGrid.appendChild(card);
+            });
+            
+            // Handle service selection
+            selectButton.addEventListener('click', () => {
+                if (selectedService) {
+                    // Show notification
+                    notification.textContent = `${selectedService.name} service selected successfully!`;
+                    notification.style.display = 'block';
+                    notification.style.background = '#28a745';
+                    
+                    // Hide notification after 1.5 seconds and then redirect
+                    setTimeout(() => {
+                        notification.style.display = 'none';
+                        
+                        // Redirect to the selected service page
+                        if (selectedService.redirect) {
+                            window.location.href = selectedService.redirect;
+                        }
+                    }, 1000);
+                    
+                    // In a real app, you would redirect to the service page or store the selection
+                    console.log(`Selected service: ${selectedService.name}`);
+                    console.log(`Redirecting to: ${selectedService.redirect}`);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

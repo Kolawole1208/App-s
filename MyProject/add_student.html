@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Add Student</title>
+
+<!-- Google Fonts for better typography -->
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
+
+<style>
+  body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f4f6f8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 20px;
+    margin: 0;
+  }
+
+  h2 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  form {
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    max-width: 500px;
+    width: 100%;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+
+  label input, label select {
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+
+  button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 4px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+
+  #response {
+    font-weight: 600;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+  }
+
+  .success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  .error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+
+  a {
+    margin-top: 15px;
+    display: inline-block;
+    color: #555;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  a:hover {
+    color: #007bff;
+  }
+</style>
+</head>
+<body>
+
+<h2>Add Student</h2>
+
+<form id="studentForm">
+  <label>
+    First Name:
+    <input type="text" id="firstName" required>
+  </label>
+
+  <label>
+    Second Name:
+    <input type="text" id="secondName" required>
+  </label>
+
+  <label>
+    Other Name (Optional):
+    <input type="text" id="otherName">
+  </label>
+
+  <label>
+    Student ID:
+    <input type="text" id="student_id" required>
+  </label>
+
+  <label>
+    Religion:
+    <input type="text" id="religion">
+  </label>
+
+  <label>
+    State:
+    <input type="text" id="state">
+  </label>
+
+  <label>
+    Country:
+    <input type="text" id="country" value="Nigeria">
+  </label>
+
+  <label>
+    Date of Birth:
+    <input type="date" id="dob">
+  </label>
+
+  <label>
+    City/Location:
+    <input type="text" id="city">
+  </label>
+
+  <button type="submit">Add Student</button>
+</form>
+
+<div id="response"></div>
+
+<a href="/">Back to Home</a>
+
+<script>
+document.getElementById("studentForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    
+    const responseDiv = document.getElementById("response");
+    responseDiv.textContent = "Processing...";
+    responseDiv.className = "";
+
+    // Combine names into one full name
+    const fullName = `${document.getElementById("firstName").value} ${document.getElementById("secondName").value} ${document.getElementById("otherName").value}`.trim();
+
+    const formData = {
+        student_id: document.getElementById("student_id").value,
+        name: fullName,
+        religion: document.getElementById("religion").value,
+        state: document.getElementById("state").value,
+        country: document.getElementById("country").value,
+        dob: document.getElementById("dob").value,
+        city: document.getElementById("city").value
+    };
+
+    try {
+        const response = await fetch("/add_student", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(result.error || "Failed to add student");
+        }
+
+        responseDiv.textContent = result.message;
+        responseDiv.className = "success";
+        document.getElementById("studentForm").reset();
+        
+    } catch (error) {
+        responseDiv.textContent = `Error: ${error.message}`;
+        responseDiv.className = "error";
+        console.error("Error:", error);
+    }
+});
+</script>
+
+<footer>
+    <p>My name: BREATH @2025</p>
+  </footer>
+
+</body>
+</html>

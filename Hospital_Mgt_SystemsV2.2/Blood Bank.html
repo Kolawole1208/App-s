@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Breath_Smart Regional Hospital - Blood Bank</title>
+  <style>
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(120deg, #fdfdfd, #f8f8f8);
+    margin: 0;
+  }
+  header {
+    background-color:green;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+  .container {
+    width: 90%;
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+  }
+  .cards {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .card {
+    background: #fafafa;
+    flex: 1;
+    min-width: 200px;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  }
+  .card h2 {
+    color: green;
+    font-size: 2em;
+    background: #ffe6e6;
+    padding: 8px;
+    border-radius: 6px;
+  }
+  form {
+    background: #fafafa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  }
+  form h3 {
+    margin-bottom: 10px;
+    color: green;
+    background: #ffe6e6;
+    padding: 6px;
+    border-radius: 4px;
+  }
+  input, select, button {
+    width: 100%;
+    padding: 8px;
+    margin: 6px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  button {
+    background: green;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  button:hover {
+    background: green;
+  }
+</style>
+</head>
+<body>
+
+<header>Breath_Smart Regional Hospital - Blood Bank</header>
+
+<div class="container">
+
+  <!-- Statistics Cards -->
+  <div class="cards">
+    <div class="card">
+      <h2 id="totalDonors">0</h2>
+      <p>Total Donors</p>
+    </div>
+    <div class="card">
+      <h2 id="availableUnits">0</h2>
+      <p>Available Units</p>
+    </div>
+    <div class="card">
+      <h2 id="pendingRequests">0</h2>
+      <p>Pending Requests</p>
+    </div>
+  </div>
+
+  <!-- Add Donor Form -->
+  <form id="donorForm">
+    <h3>Add New Donor</h3>
+    <input type="text" id="donorName" placeholder="Donor Name" required>
+    <select id="donorBlood" required>
+      <option value="">Select Blood Type</option>
+      <option>A+</option><option>A-</option>
+      <option>B+</option><option>B-</option>
+      <option>AB+</option><option>AB-</option>
+      <option>O+</option><option>O-</option>
+    </select>
+    <input type="number" id="donorUnits" placeholder="Units Donated" min="1" required>
+    <button type="submit">Add Donor</button>
+  </form>
+
+  <!-- Add Request Form -->
+  <form id="requestForm">
+    <h3>Add Blood Request</h3>
+    <input type="text" id="requestName" placeholder="Requestor Name" required>
+    <select id="requestBlood" required>
+      <option value="">Select Blood Type</option>
+      <option>A+</option><option>A-</option>
+      <option>B+</option><option>B-</option>
+      <option>AB+</option><option>AB-</option>
+      <option>O+</option><option>O-</option>
+    </select>
+    <input type="number" id="requestUnits" placeholder="Units Needed" min="1" required>
+    <button type="submit">Add Request</button>
+  </form>
+
+</div>
+
+<script>
+  // Load saved stats or start fresh
+  let totalDonors = parseInt(localStorage.getItem("totalDonors")) || 0;
+  let availableUnits = parseInt(localStorage.getItem("availableUnits")) || 0;
+  let pendingRequests = parseInt(localStorage.getItem("pendingRequests")) || 0;
+
+  // Display initial values
+  document.getElementById("totalDonors").textContent = totalDonors;
+  document.getElementById("availableUnits").textContent = availableUnits;
+  document.getElementById("pendingRequests").textContent = pendingRequests;
+
+  // Add Donor
+  document.getElementById("donorForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    let units = parseInt(document.getElementById("donorUnits").value);
+    totalDonors++;
+    availableUnits += units;
+    localStorage.setItem("totalDonors", totalDonors);
+    localStorage.setItem("availableUnits", availableUnits);
+    document.getElementById("totalDonors").textContent = totalDonors;
+    document.getElementById("availableUnits").textContent = availableUnits;
+    this.reset();
+  });
+
+  // Add Request
+  document.getElementById("requestForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    let units = parseInt(document.getElementById("requestUnits").value);
+    pendingRequests++;
+    availableUnits -= units;
+    if (availableUnits < 0) availableUnits = 0;
+    localStorage.setItem("pendingRequests", pendingRequests);
+    localStorage.setItem("availableUnits", availableUnits);
+    document.getElementById("pendingRequests").textContent = pendingRequests;
+    document.getElementById("availableUnits").textContent = availableUnits;
+    this.reset();
+  });
+</script>
+
+</body>
+</html>

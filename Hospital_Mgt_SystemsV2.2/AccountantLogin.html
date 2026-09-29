@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital Accountant Login</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                    url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+        background-size: cover;
+        background-position: center;
+        color: #333;
+    }
+    
+    .login-container {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        width: 350px;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        animation: fadeIn 0.5s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    h2 {
+        text-align: center;
+        color: #2c7be5;
+        margin-bottom: 25px;
+        font-weight: 600;
+    }
+    
+    .logo {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    .logo i {
+        font-size: 40px;
+        color: #2c7be5;
+    }
+    
+    input {
+        width: 100%;
+        padding: 12px 15px;
+        margin: 10px 0;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        transition: all 0.3s;
+        box-sizing: border-box;
+    }
+    
+    input:focus {
+        outline: none;
+        border-color: #2c7be5;
+        box-shadow: 0 0 0 3px rgba(44, 123, 229, 0.2);
+    }
+    
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #2c7be5;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 500;
+        margin-top: 15px;
+        transition: all 0.3s;
+    }
+    
+    button:hover {
+        background: #1a68d1;
+        transform: translateY(-2px);
+    }
+    
+    .error {
+        color: #e63757;
+        display: none;
+        text-align: center;
+        margin: 10px 0;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    .forgot-password {
+        text-align: right;
+        margin-top: 5px;
+    }
+    
+    .forgot-password a {
+        color: #6c757d;
+        text-decoration: none;
+        font-size: 13px;
+        transition: color 0.3s;
+    }
+    
+    .forgot-password a:hover {
+        color: #2c7be5;
+    }
+    
+    .footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 12px;
+        color: #6c757d;
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<div class="login-container">
+    <div class="logo">
+        <i class="fas fa-hospital-alt"></i>
+    </div>
+    <h2>Hospital Account Login</h2>
+    <form id="loginForm">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <div class="forgot-password">
+            <a href="#">Forgot password?</a>
+        </div>
+        <div id="errorMsg" class="error">Invalid Username or Password</div>
+        <button type="submit">Login</button>
+    </form>
+    <div class="footer">
+        &copy; 2025 Breath_Smart Regional Hospital
+    </div>
+</div>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    let username = document.getElementById("username").value.trim();
+    let password = document.getElementById("password").value.trim();
+    let errorMsg = document.getElementById("errorMsg");
+
+    if (username === "Admin" && password === "Admin@123") {
+        sessionStorage.setItem("loggedIn", "true");
+        window.location.href = "Accountant.html"; // Redirect after login
+    } else {
+        errorMsg.style.display = "block";
+    }
+});
+</script>
+
+</body>
+</html>

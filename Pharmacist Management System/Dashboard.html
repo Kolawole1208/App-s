@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PharmaManage - Pharmacist Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2a7de1;
+            --secondary: #4CAF50;
+            --accent: #ff9800;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --danger: #dc3545;
+            --success: #28a745;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+
+        body {
+            background-color: #f5f7fb;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: var(--primary);
+            color: white;
+            padding: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo h2 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            margin-top: 20px;
+            list-style: none;
+        }
+
+        .nav-links li {
+            padding: 15px 0;
+            position: relative;
+        }
+
+        .nav-links li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 25px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links li a i {
+            margin-right: 15px;
+            font-size: 18px;
+        }
+
+        .nav-links li a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--accent);
+            padding-left: 21px;
+        }
+
+        .nav-links li.active a {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--accent);
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #f0f2f5;
+            border-radius: 20px;
+            padding: 5px 15px;
+            width: 300px;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 8px;
+            width: 100%;
+        }
+
+        .search-box i {
+            color: #6c757d;
+            cursor: pointer;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 24px;
+        }
+
+        .card-info h3 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .card-info p {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        /* Content Sections */
+        .content-section {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .section-header h2 {
+            font-size: 20px;
+            color: var(--dark);
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1c6ac8;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        /* Table Styles */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #e8f5e9;
+            color: var(--success);
+        }
+
+        .status-inactive {
+            background: #ffebee;
+            color: var(--danger);
+        }
+
+        .action-buttons button {
+            padding: 5px 10px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .edit-btn {
+            background: #ffe082;
+            color: #7d6608;
+        }
+
+        .delete-btn {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+
+        .view-btn {
+            background: #bbdefb;
+            color: #0d47a1;
+        }
+
+        /* Form Styles */
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(42, 125, 225, 0.2);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            width: 500px;
+            max-width: 90%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-header h2 {
+            font-size: 22px;
+            color: var(--dark);
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: var(--dark);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+            font-size: 14px;
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 10px;
+            }
+            
+            .nav-links {
+                display: flex;
+                overflow-x: auto;
+            }
+            
+            .nav-links li {
+                padding: 10px 0;
+            }
+            
+            .nav-links li a {
+                padding: 10px 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+        }
+
+        .stock-low {
+            color: var(--danger);
+            font-weight: bold;
+        }
+        
+        .stock-ok {
+            color: var(--success);
+        }
+        
+        .price-display {
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h2>Pharma<span>Manage</span></h2>
+            </div>
+            <ul class="nav-links">
+                <li class="active"><a href="#"><i class="fas fa-home"></i>Dashboard</a></li>
+                <li><a href="#"><i class="fas fa-pills"></i>Inventory</a></li>
+                <li><a href="#"><i class="fas fa-prescription"></i>Prescriptions</a></li>
+                <li><a href="#"><i class="fas fa-users"></i>Patients</a></li>
+                <li><a href="#"><i class="fas fa-user-md"></i>Pharmacists</a></li>
+                <li><a href="#"><i class="fas fa-chart-bar"></i>Reports</a></li>
+                <li><a href="#"><i class="fas fa-cog"></i>Settings</a></li>
+                <li><a href="#"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="search-box">
+                    <i class="fas fa-search" id="searchIcon"></i>
+                    <input type="text" id="searchInput" placeholder="Search medicines, prescriptions...">
+                </div>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Pharmacist&background=0D8ABC&color=fff" alt="User">
+                    <div>
+                        <h4>Dr. Sarah Johnson</h4>
+                        <p>Chief Pharmacist</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Cards -->
+            <div class="dashboard-cards">
+                <div class="card">
+                    <div class="card-icon" style="background: #e3f2fd; color: var(--primary);">
+                        <i class="fas fa-pills"></i>
+                    </div>
+                    <div class="card-info">
+                        <h3 id="totalMedicines">1,248</h3>
+                        <p>Total Medicines</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon" style="background: #e8f5e9; color: var(--success);">
+                        <i class="fas fa-prescription"></i>
+                    </div>
+                    <div class="card-info">
+                        <h3>324</h3>
+                        <p>Today's Prescriptions</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon" style="background: #fff3e0; color: var(--accent);">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="card-info">
+                        <h3>86</h3>
+                        <p>Patients Today</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon" style="background: #fbe9e7; color: var(--danger);">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="card-info">
+                        <h3 id="lowStockCount">12</h3>
+                        <p>Low Stock Items</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Prescriptions Section -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Recent Prescriptions</h2>
+                    <button class="btn btn-primary" id="viewAllBtn">View All</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="prescriptionsTable">
+                        <thead>
+                            <tr>
+                                <th>Prescription ID</th>
+                                <th>Patient Name</th>
+                                <th>Date</th>
+                                <th>Medicines</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#RX-7892</td>
+                                <td>John Smith</td>
+                                <td>12 Nov 2023</td>
+                                <td>Amoxicillin, Paracetamol</td>
+                                <td><span class="status status-active">Dispensed</span></td>
+                                <td class="action-buttons">
+                                    <button class="view-btn" onclick="viewPrescription('RX-7892')"><i class="fas fa-eye"></i></button>
+                                    <button class="edit-btn" onclick="editPrescription('RX-7892')"><i class="fas fa-edit"></i></button>
+                                    <button class="delete-btn" onclick="deletePrescription('RX-7892')"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#RX-7891</td>
+                                <td>Emily Johnson</td>
+                                <td>12 Nov 2023</td>
+                                <td>Atorvastatin, Metformin</td>
+                                <td><span class="status status-active">Dispensed</span></td>
+                                <td class="action-buttons">
+                                    <button class="view-btn" onclick="viewPrescription('RX-7891')"><i class="fas fa-eye"></i></button>
+                                    <button class="edit-btn" onclick="editPrescription('RX-7891')"><i class="fas fa-edit"></i></button>
+                                    <button class="delete-btn" onclick="deletePrescription('RX-7891')"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#RX-7890</td>
+                                <td>Robert Brown</td>
+                                <td>11 Nov 2023</td>
+                                <td>Lisinopril, Amlodipine</td>
+                                <td><span class="status status-inactive">Pending</span></td>
+                                <td class="action-buttons">
+                                    <button class="view-btn" onclick="viewPrescription('RX-7890')"><i class="fas fa-eye"></i></button>
+                                    <button class="edit-btn" onclick="editPrescription('RX-7890')"><i class="fas fa-edit"></i></button>
+                                    <button class="delete-btn" onclick="deletePrescription('RX-7890')"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Low Stock Medicines Section -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Low Stock Medicines</h2>
+                    <button class="btn btn-primary" id="orderNowBtn">Order Now</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="lowStockTable">
+                        <thead>
+                            <tr>
+                                <th>Medicine Name</th>
+                                <th>Category</th>
+                                <th>Current Stock</th>
+                                <th>Minimum Required</th>
+                                <th>Price (per unit)</th>
+                                <th>Supplier</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Add New Medicine Form -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Add New Medicine</h2>
+                </div>
+                <form id="medicineForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="medicineName">Medicine Name</label>
+                            <input type="text" id="medicineName" class="form-control" placeholder="Enter medicine name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select id="category" class="form-control" required>
+                                <option value="">Select Category</option>
+                                <option value="Antibiotic">Antibiotic</option>
+                                <option value="Painkiller">Painkiller</option>
+                                <option value="Vitamin">Vitamin</option>
+                                <option value="Supplement">Supplement</option>
+                                <option value="Cholesterol">Cholesterol</option>
+                                <option value="Hormone">Hormone</option>
+                                <option value="Diabetes">Diabetes</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="stock">Current Stock</label>
+                            <input type="number" id="stock" class="form-control" placeholder="Enter quantity" required min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="minStock">Minimum Required Stock</label>
+                            <input type="number" id="minStock" class="form-control" placeholder="Enter minimum stock" required min="0" value="100">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="price">Price (per unit)</label>
+                            <input type="number" id="price" class="form-control" placeholder="Enter price per unit" step="0.01" required min="0" value="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label for="supplier">Supplier</label>
+                            <input type="text" id="supplier" class="form-control" placeholder="Enter supplier name" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiry">Expiry Date</label>
+                            <input type="date" id="expiry" class="form-control" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Medicine</button>
+                </form>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <p>&copy; 2023 PharmaManage - Pharmacist Management System. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Modal -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Order Medicines</h2>
+                <span class="close" onclick="closeModal('orderModal')">&times;</span>
+            </div>
+            <div class="form-group">
+                <label for="orderMedicine">Medicine</label>
+                <select id="orderMedicine" class="form-control" onchange="updateOrderDetails()">
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="orderQuantity">Quantity</label>
+                <input type="number" id="orderQuantity" class="form-control" placeholder="Enter quantity" min="1" value="100" oninput="updateOrderDetails()">
+            </div>
+            <div class="form-group">
+                <label for="orderPrice">Price (per unit)</label>
+                <input type="number" id="orderPrice" class="form-control" placeholder="Enter price per unit" step="0.01" min="0" oninput="updateOrderDetails()">
+            </div>
+            <div class="form-group">
+                <label for="orderSupplier">Supplier</label>
+                <input type="text" id="orderSupplier" class="form-control" placeholder="Supplier name">
+            </div>
+            <div class="form-group">
+                <label for="orderNotes">Notes</label>
+                <textarea id="orderNotes" class="form-control" placeholder="Additional notes"></textarea>
+            </div>
+            <div class="form-group">
+                <p><strong>Current Stock:</strong> <span id="currentStockDisplay">0</span></p>
+                <p><strong>Stock After Order:</strong> <span id="stockAfterOrder">0</span></p>
+                <p><strong>Total Order Cost:</strong> $<span id="totalCost">0.00</span></p>
+            </div>
+            <button class="btn btn-success" onclick="placeOrder()">Place Order</button>
+        </div>
+    </div>
+
+    <!-- View Modal -->
+    <div class="modal" id="viewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="viewModalTitle">Item Details</h2>
+                <span class="close" onclick="closeModal('viewModal')">&times;</span>
+            </div>
+            <div id="viewModalContent">
+                <!-- Content will be dynamically inserted -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data storage for demonstration
+        let medicines = [
+            { id: 1, name: "Amoxicillin 500mg", category: "Antibiotic", stock: 25, minStock: 100, price: 0.35, supplier: "MediSupply Co.", expiry: "2024-05-15" },
+            { id: 2, name: "Atorvastatin 20mg", category: "Cholesterol", stock: 42, minStock: 150, price: 1.20, supplier: "PharmaSource Inc.", expiry: "2024-08-20" },
+            { id: 3, name: "Levothyroxine 50mcg", category: "Hormone", stock: 18, minStock: 75, price: 0.85, supplier: "Global Meds", expiry: "2024-03-10" },
+            { id: 4, name: "Metformin 850mg", category: "Diabetes", stock: 35, minStock: 120, price: 0.45, supplier: "HealthCare Suppliers", expiry: "2024-06-25" },
+            { id: 5, name: "Paracetamol 500mg", category: "Painkiller", stock: 200, minStock: 100, price: 0.15, supplier: "MediSupply Co.", expiry: "2025-01-10" },
+            { id: 6, name: "Vitamin C 1000mg", category: "Vitamin", stock: 150, minStock: 80, price: 0.25, supplier: "HealthCare Suppliers", expiry: "2024-11-30" }
+        ];
+
+        let prescriptions = [
+            { id: "RX-7892", patient: "John Smith", date: "12 Nov 2023", medicines: "Amoxicillin, Paracetamol", status: "Dispensed" },
+            { id: "RX-7891", patient: "Emily Johnson", date: "12 Nov 2023", medicines: "Atorvastatin, Metformin", status: "Dispensed" },
+            { id: "RX-7890", patient: "Robert Brown", date: "11 Nov 2023", medicines: "Lisinopril, Amlodipine", status: "Pending" }
+        ];
+
+        // Initialize the application
+        function initApp() {
+            updateLowStockTable();
+            updateOrderMedicineDropdown();
+            updateDashboardCounts();
+        }
+
+        // Update dashboard counts
+        function updateDashboardCounts() {
+            document.getElementById('totalMedicines').textContent = medicines.length;
+            
+            // Count low stock items
+            const lowStockCount = medicines.filter(med => med.stock < med.minStock).length;
+            document.getElementById('lowStockCount').textContent = lowStockCount;
+        }
+
+        // Update low stock table
+        function updateLowStockTable() {
+            const tableBody = document.querySelector('#lowStockTable tbody');
+            tableBody.innerHTML = '';
+            
+            medicines.forEach(medicine => {
+                if (medicine.stock < medicine.minStock) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${medicine.name}</td>
+                        <td>${medicine.category}</td>
+                        <td class="${medicine.stock < medicine.minStock ? 'stock-low' : 'stock-ok'}">${medicine.stock}</td>
+                        <td>${medicine.minStock}</td>
+                        <td class="price-display">$${medicine.price.toFixed(2)}</td>
+                        <td>${medicine.supplier}</td>
+                        <td class="action-buttons">
+                            <button class="view-btn" onclick="viewMedicine('${medicine.name}')"><i class="fas fa-eye"></i></button>
+                            <button class="edit-btn" onclick="editMedicine('${medicine.name}')"><i class="fas fa-edit"></i></button>
+                            <button class="delete-btn" onclick="deleteMedicine('${medicine.name}')"><i class="fas fa-trash"></i></button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                }
+            });
+        }
+
+        // Update order medicine dropdown
+        function updateOrderMedicineDropdown() {
+            const dropdown = document.getElementById('orderMedicine');
+            dropdown.innerHTML = '';
+            
+            medicines.forEach(medicine => {
+                const option = document.createElement('option');
+                option.value = medicine.name;
+                option.textContent = `${medicine.name} (Current: ${medicine.stock})`;
+                option.dataset.stock = medicine.stock;
+                option.dataset.price = medicine.price;
+                dropdown.appendChild(option);
+            });
+            
+            // Update order details when dropdown changes
+            updateOrderDetails();
+        }
+
+        // Update order details based on selection
+        function updateOrderDetails() {
+            const medicineName = document.getElementById('orderMedicine').value;
+            const quantity = parseInt(document.getElementById('orderQuantity').value) || 0;
+            const price = parseFloat(document.getElementById('orderPrice').value) || 0;
+            const medicine = medicines.find(m => m.name === medicineName);
+            
+            if (medicine) {
+                document.getElementById('currentStockDisplay').textContent = medicine.stock;
+                document.getElementById('stockAfterOrder').textContent = medicine.stock + quantity;
+                
+                // Set the price if not already set
+                if (!document.getElementById('orderPrice').value) {
+                    document.getElementById('orderPrice').value = medicine.price.toFixed(2);
+                }
+                
+                // Calculate total cost
+                const totalCost = quantity * (price || medicine.price);
+                document.getElementById('totalCost').textContent = totalCost.toFixed(2);
+                
+                // Auto-populate supplier if available
+                if (medicine.supplier) {
+                    document.getElementById('orderSupplier').value = medicine.supplier;
+                }
+            }
+        }
+
+        // DOM Ready
+        document.addEventListener('DOMContentLoaded', function() {
+            initApp();
+            
+            // Highlight active navigation item
+            const navItems = document.querySelectorAll('.nav-links li');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    navItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Form submission handling
+            const form = document.getElementById('medicineForm');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                addNewMedicine();
+            });
+
+            // Search functionality
+            document.getElementById('searchIcon').addEventListener('click', function() {
+                performSearch();
+            });
+
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            // View All button
+            document.getElementById('viewAllBtn').addEventListener('click', function() {
+                alert('Showing all prescriptions. In a real application, this would load all records.');
+            });
+
+            // Order Now button
+            document.getElementById('orderNowBtn').addEventListener('click', function() {
+                openModal('orderModal');
+            });
+        });
+
+        // Search function
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (searchTerm.trim() === '') {
+                alert('Please enter a search term');
+                return;
+            }
+            
+            // Search in prescriptions
+            const prescriptionResults = prescriptions.filter(p => 
+                p.id.toLowerCase().includes(searchTerm) || 
+                p.patient.toLowerCase().includes(searchTerm) ||
+                p.medicines.toLowerCase().includes(searchTerm)
+            );
+            
+            // Search in medicines
+            const medicineResults = medicines.filter(m => 
+                m.name.toLowerCase().includes(searchTerm) || 
+                m.category.toLowerCase().includes(searchTerm) ||
+                m.supplier.toLowerCase().includes(searchTerm)
+            );
+            
+            // Display results (in a real app, this would be more sophisticated)
+            let resultMessage = '';
+            
+            if (prescriptionResults.length > 0) {
+                resultMessage += `Found ${prescriptionResults.length} prescription(s)\n`;
+                prescriptionResults.forEach(p => {
+                    resultMessage += `- ${p.id}: ${p.patient} (${p.medicines})\n`;
+                });
+            }
+            
+            if (medicineResults.length > 0) {
+                resultMessage += `\nFound ${medicineResults.length} medicine(s)\n`;
+                medicineResults.forEach(m => {
+                    resultMessage += `- ${m.name} (${m.category}), Stock: ${m.stock}, Price: $${m.price.toFixed(2)}\n`;
+                });
+            }
+            
+            if (prescriptionResults.length === 0 && medicineResults.length === 0) {
+                resultMessage = 'No results found for: ' + searchTerm;
+            }
+            
+            alert(resultMessage);
+        }
+
+        // Medicine functions
+        function addNewMedicine() {
+            const name = document.getElementById('medicineName').value;
+            const category = document.getElementById('category').value;
+            const stock = parseInt(document.getElementById('stock').value);
+            const minStock = parseInt(document.getElementById('minStock').value);
+            const price = parseFloat(document.getElementById('price').value);
+            const supplier = document.getElementById('supplier').value;
+            const expiry = document.getElementById('expiry').value;
+            
+            // Validate price
+            if (isNaN(price) || price < 0) {
+                alert('Please enter a valid price per unit');
+                return;
+            }
+            
+            // Validate stock
+            if (isNaN(stock) || stock < 0) {
+                alert('Please enter a valid stock quantity');
+                return;
+            }
+            
+            // Add to medicines array
+            const newMedicine = {
+                id: medicines.length + 1,
+                name,
+                category,
+                stock,
+                minStock,
+                price,
+                supplier,
+                expiry
+            };
+            
+            medicines.push(newMedicine);
+            
+            // Show success message
+            alert(`Successfully added ${name} to the inventory!\nStock: ${stock}\nPrice: $${price.toFixed(2)} per unit`);
+            
+            // Update UI
+            updateLowStockTable();
+            updateOrderMedicineDropdown();
+            updateDashboardCounts();
+            
+            // Reset form
+            document.getElementById('medicineForm').reset();
+            document.getElementById('minStock').value = "100";
+        }
+
+        // Order functions
+        function placeOrder() {
+            const medicineName = document.getElementById('orderMedicine').value;
+            const quantity = parseInt(document.getElementById('orderQuantity').value);
+            const price = parseFloat(document.getElementById('orderPrice').value);
+            const supplier = document.getElementById('orderSupplier').value;
+            const notes = document.getElementById('orderNotes').value;
+            
+            if (!medicineName || isNaN(quantity) || quantity <= 0) {
+                alert('Please select a medicine and enter a valid quantity');
+                return;
+            }
+            
+            if (isNaN(price) || price < 0) {
+                alert('Please enter a valid price per unit');
+                return;
+            }
+            
+            // Find the medicine and update stock
+            const medicineIndex = medicines.findIndex(m => m.name === medicineName);
+            if (medicineIndex !== -1) {
+                medicines[medicineIndex].stock += quantity;
+                
+                // Update the price if it was changed
+                if (price !== medicines[medicineIndex].price) {
+                    medicines[medicineIndex].price = price;
+                }
+                
+                // Show order confirmation
+                alert(`Order placed successfully!\n\nMedicine: ${medicineName}\nQuantity: ${quantity}\nPrice: $${price.toFixed(2)} per unit\nTotal Cost: $${(quantity * price).toFixed(2)}\nSupplier: ${supplier}\nNew Stock: ${medicines[medicineIndex].stock}`);
+                
+                // Update UI
+                updateLowStockTable();
+                updateOrderMedicineDropdown();
+                updateDashboardCounts();
+                
+                // Close modal
+                closeModal('orderModal');
+            } else {
+                alert('Medicine not found!');
+            }
+        }
+
+        // Prescription functions
+        function viewPrescription(id) {
+            const prescription = prescriptions.find(p => p.id === id);
+            if (prescription) {
+                document.getElementById('viewModalTitle').textContent = `Prescription ${id}`;
+                document.getElementById('viewModalContent').innerHTML = `
+                    <p><strong>Patient:</strong> ${prescription.patient}</p>
+                    <p><strong>Date:</strong> ${prescription.date}</p>
+                    <p><strong>Medicines:</strong> ${prescription.medicines}</p>
+                    <p><strong>Status:</strong> ${prescription.status}</p>
+                    <div style="margin-top: 20px;">
+                        <button class="btn btn-primary" onclick="dispensePrescription('${id}')">Dispense</button>
+                        <button class="btn" onclick="closeModal('viewModal')" style="margin-left: 10px;">Close</button>
+                    </div>
+                `;
+                openModal('viewModal');
+            }
+        }
+
+        function editPrescription(id) {
+            alert(`Edit functionality would open for prescription: ${id}`);
+            // In a real app, this would open an edit form
+        }
+
+        function deletePrescription(id) {
+            if (confirm(`Are you sure you want to delete prescription ${id}?`)) {
+                // Remove from array
+                prescriptions = prescriptions.filter(p => p.id !== id);
+                alert(`Prescription ${id} has been deleted.`);
+                // In a real app, you would update the UI
+            }
+        }
+
+        function dispensePrescription(id) {
+            const prescription = prescriptions.find(p => p.id === id);
+            if (prescription) {
+                prescription.status = "Dispensed";
+                alert(`Prescription ${id} has been marked as dispensed.`);
+                closeModal('viewModal');
+                // In a real app, you would update the UI
+            }
+        }
+
+        // Medicine functions
+        function viewMedicine(name) {
+            const medicine = medicines.find(m => m.name === name);
+            if (medicine) {
+                document.getElementById('viewModalTitle').textContent = `Medicine: ${name}`;
+                document.getElementById('viewModalContent').innerHTML = `
+                    <p><strong>Name:</strong> ${medicine.name}</p>
+                    <p><strong>Category:</strong> ${medicine.category}</p>
+                    <p><strong>Current Stock:</strong> ${medicine.stock}</p>
+                    <p><strong>Minimum Required:</strong> ${medicine.minStock}</p>
+                    <p><strong>Price per unit:</strong> $${medicine.price.toFixed(2)}</p>
+                    <p><strong>Supplier:</strong> ${medicine.supplier}</p>
+                    <p><strong>Expiry Date:</strong> ${medicine.expiry}</p>
+                    <div style="margin-top: 20px;">
+                        <button class="btn btn-primary" onclick="openModal('orderModal')">Order More</button>
+                        <button class="btn" onclick="closeModal('viewModal')" style="margin-left: 10px;">Close</button>
+                    </div>
+                `;
+                openModal('viewModal');
+            }
+        }
+
+        function editMedicine(name) {
+            alert(`Edit functionality would open for medicine: ${name}`);
+            // In a real app, this would open an edit form
+        }
+
+        function deleteMedicine(name) {
+            if (confirm(`Are you sure you want to delete ${name} from inventory?`)) {
+                // Remove from array
+                medicines = medicines.filter(m => m.name !== name);
+                alert(`${name} has been deleted from inventory.`);
+                // Update UI
+                updateLowStockTable();
+                updateOrderMedicineDropdown();
+                updateDashboardCounts();
+            }
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modal if clicked outside
+        window.onclick = function(event) {
+            const modals = document.getElementsByClassName('modal');
+            for (let i = 0; i < modals.length; i++) {
+                if (event.target === modals[i]) {
+                    modals[i].style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>School Management System</title>
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f4f8;
+      color: #333;
+    }
+
+    header {
+      background-color: #004080;
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 3rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      width: 180px;
+      text-align: center;
+      padding: 2rem 1rem;
+      transition: transform 0.2s ease;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card i {
+      font-size: 2.5rem;
+      color: #004080;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>School Management System</h1>
+  </header>
+
+  <div class="container">
+
+    <!-- About -->
+    <div class="card">
+      <i class="fas fa-info-circle"></i>
+      <h3>About</h3>
+    </div>
+
+    <!-- Teacher -->
+    <div class="card">
+      <i class="fas fa-chalkboard-teacher"></i>
+      <h3>Teacher</h3>
+    </div>
+
+    <!-- Library -->
+    <div class="card">
+      <i class="fas fa-book"></i>
+      <h3>Library</h3>
+    </div>
+
+    <!-- Add Student -->
+    <div class="card">
+      <i class="fas fa-user-plus"></i>
+      <h3>Add Student</h3>
+    </div>
+
+    <!-- Register -->
+    <div class="card">
+      <i class="fas fa-pen-to-square"></i>
+      <h3>Register</h3>
+    </div>
+
+    <!-- Meeting -->
+    <div class="card">
+      <i class="fas fa-users"></i>
+      <h3>Meeting</h3>
+    </div>
+
+  </div>
+
+</body>
+</html>
+h

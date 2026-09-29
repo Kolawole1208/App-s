@@ -1,0 +1,160 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+<meta charset="UTF-8" />  
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
+<title>Blood Bank Management</title>  
+<style>  
+  body {  
+    margin: 0;  
+    font-family: Arial, sans-serif;  
+    background-color: #f4f4f4;  
+  }  
+
+  /* Sidebar styles */  
+  .sidebar {  
+    width: 250px;  
+    height: 100vh;  
+    background-color: #008000; /* green */  
+    position: fixed;  
+    top: 0;  
+    left: 0;  
+    padding-top: 20px;  
+    color: #fff;  
+  }  
+  .sidebar h2 {  
+    text-align: center;  
+    font-size: 1.2em;  
+    margin-bottom: 20px;  
+    color: #4CAF50;  
+  }  
+  .sidebar ul {  
+    list-style: none;  
+    padding: 0;  
+  }  
+  .sidebar ul li {  
+    padding: 15px 20px;  
+    cursor: pointer;  
+  }  
+  .sidebar ul li:hover {  
+    background-color: #006400; /* darker green on hover */  
+  }  
+
+  /* Main container */  
+  .main {  
+    margin-left: 250px;  
+    padding: 20px;  
+  }  
+
+  /* Buttons for blood info */  
+  .blood-info {  
+    display: flex;  
+    gap: 10px;  
+    margin-bottom: 15px;  
+  }  
+  .blood-box {  
+    flex: 1;  
+    background-color: #2196F3; /* blue */  
+    color: #fff;  
+    text-align: center;  
+    padding: 20px;  
+    border-radius: 4px;  
+  }  
+  /* Controls: Show entries, search box */  
+  .controls {  
+    display: flex;  
+    justify-content: space-between;  
+    align-items: center;  
+  }  
+  .show-entries {  
+    display: flex;  
+    align-items: center;  
+    gap: 8px;  
+  }  
+  select, input[type=text] {  
+    padding: 4px 8px;  
+    border-radius: 4px;  
+    border: 1px solid #ccc;  
+  }  
+
+  /* Table styles */  
+  table {  
+    width: 100%;  
+    border-collapse: collapse;  
+    margin-top: 15px;  
+  }  
+  th, td {  
+    padding: 12px;  
+    border: 1px solid #ddd;  
+  }  
+  th {  
+    background-color: #eee;  
+  }  
+
+  /* Action buttons as circles */  
+  .circle-btn {  
+    width: 30px;  
+    height: 30px;  
+    border-radius: 50%;  
+    border: none;  
+    display: inline-flex;  
+    align-items: center;  
+    justify-content: center;  
+    font-size: 16px;  
+    color: #fff;  
+    cursor: pointer;  
+    margin: 0 2px;  
+    transition: opacity 0.3s, background-color 0.3s;  
+  }  
+  /* Icons: using Unicode characters as example */  
+  .edit-btn {  
+    background-color: #4CAF50; /* green */  
+  }  
+  .delete-btn {  
+    background-color: red;  
+  }  
+  .circle-btn:hover {  
+    opacity: 0.8;  
+  }  
+
+  /* Buttons */  
+  .add-record-btn {  
+    margin-top: 20px;  
+    padding: 10px 20px;  
+    background-color: #d32f2f;  
+    color: #fff;  
+    border: none;  
+    border-radius: 4px;  
+    cursor: pointer;  
+  }  
+   
+</style>  
+</head>  
+<body>  
+
+<!-- Sidebar -->  
+<div class="sidebar">  
+  <h2>Blood Bank System</h2>  
+  <ul>  
+    <li>Dashboard</li>  
+    <li>Blood List</li>  
+    <li>Add Blood</li>  
+    <li>Blood Out</li>  
+    <li>Blood Out List</li>  
+    <li>Blood Transaction</li>  
+    <li>Blood Stock</li>  
+    <li>Blood Donor</li>  
+    <li>Blood Store</li>  
+    <li>Blood Issue</li>  
+    <li>Blood Return</li>  
+    <li>Blood Report</li>  
+  </ul>  
+</div>  
+
+<!-- Main content -->  
+<div class="main">  
+
+<!-- Blood info boxes -->  
+<div style="display:flex; gap:10px; margin-bottom:15px;">  
+  <div class="blood-box">  
+    <h4>Blood Active</h4>  

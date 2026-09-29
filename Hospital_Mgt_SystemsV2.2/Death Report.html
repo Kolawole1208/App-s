@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Death Report Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(120deg, #f8f8f8, #f1f1f1);
+      margin: 0;
+      color: #333;
+    }
+    header {
+      background-color: #444;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 1.5em;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .container {
+      width: 90%;
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px;
+    }
+    .stats {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .card {
+      background: #fafafa;
+      flex: 1;
+      min-width: 220px;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .card h2 {
+      color: #444;
+      font-size: 2em;
+      background: #e6e6e6;
+      padding: 8px;
+      border-radius: 6px;
+    }
+    .form-section {
+      background: #fafafa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .form-section h3 {
+      margin-bottom: 10px;
+      color: #444;
+      background: #e6e6e6;
+      padding: 6px;
+      border-radius: 4px;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 8px;
+      margin: 6px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    textarea {
+      resize: vertical;
+    }
+    button {
+      background: #444;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #222;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fafafa;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #e6e6e6;
+    }
+  </style>
+</head>
+<body>
+  <header>Death Report Dashboard</header>
+  <div class="container">
+
+    <!-- Stats Section -->
+    <div class="stats">
+      <div class="card">
+        <h2>12</h2>
+        <p>Total Death Reports</p>
+      </div>
+      <div class="card">
+        <h2>7</h2>
+        <p>Male</p>
+      </div>
+      <div class="card">
+        <h2>5</h2>
+        <p>Female</p>
+      </div>
+    </div>
+
+    <!-- Add Death Report Form -->
+    <div class="form-section">
+      <h3>Record New Death</h3>
+      <form>
+        <label>Patient Name:</label>
+        <input type="text" placeholder="Enter patient full name">
+
+        <label>Gender:</label>
+        <select>
+          <option>Male</option>
+          <option>Female</option>
+        </select>
+
+        <label>Date of Death:</label>
+        <input type="date">
+
+        <label>Cause of Death:</label>
+        <input type="text" placeholder="e.g., Heart Failure, Accident">
+
+        <label>Additional Notes:</label>
+        <textarea rows="3" placeholder="Enter any additional information"></textarea>
+
+        <button type="submit">Save Record</button>
+      </form>
+    </div>
+
+    <!-- Records Table -->
+    <div class="form-section">
+      <h3>Death Report Records</h3>
+      <table>
+        <tr>
+          <th>Patient Name</th>
+          <th>Gender</th>
+          <th>Date of Death</th>
+          <th>Cause</th>
+          <th>Notes</th>
+        </tr>
+        <tr>
+          <td>John Doe</td>
+          <td>Male</td>
+          <td>2025-08-05</td>
+          <td>Cardiac Arrest</td>
+          <td>Passed away during surgery</td>
+        </tr>
+        <tr>
+          <td>Mary Smith</td>
+          <td>Female</td>
+          <td>2025-07-22</td>
+          <td>Accident</td>
+          <td>Severe injuries</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediaBlog - Your Creative Space</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+        }
+
+        body {
+            background-color: #f5f7fb;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--accent);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        /* Blog Post Styles */
+        .blog-post {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .post-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .post-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+
+        .post-meta {
+            display: flex;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .post-meta span {
+            margin-right: 1rem;
+        }
+
+        .post-content {
+            padding: 1.5rem;
+        }
+
+        .post-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .post-text {
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        /* Media Player Styles */
+        .media-player {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .player-controls button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-right: 1rem;
+        }
+
+        .progress-bar {
+            flex-grow: 1;
+            height: 6px;
+            background: #ddd;
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .progress {
+            position: absolute;
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+            width: 30%;
+        }
+
+        .time {
+            margin-left: 1rem;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* Comments Section */
+        .comments-section {
+            padding: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+
+        .comments-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1.5rem;
+        }
+
+        .comment-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .comment-name-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .comment-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+            min-height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .comment-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            align-self: flex-end;
+            transition: background 0.3s;
+        }
+
+        .comment-submit:hover {
+            background: var(--secondary);
+        }
+
+        .comment {
+            display: flex;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .comment:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+
+        .comment-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .comment-content {
+            flex-grow: 1;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .comment-date {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .comment-text {
+            line-height: 1.5;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            height: fit-content;
+        }
+
+        .sidebar-widget {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-widget:last-child {
+            margin-bottom: 0;
+        }
+
+        .widget-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .about-text {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-3px);
+        }
+
+        .categories-list {
+            list-style: none;
+        }
+
+        .categories-list li {
+            margin-bottom: 0.7rem;
+            padding-bottom: 0.7rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .categories-list li:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+
+        .categories-list a {
+            color: var(--dark);
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .categories-list a:hover {
+            color: var(--primary);
+        }
+
+        .categories-list span {
+            background: var(--light);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        /* Ad Space */
+        .ad-space {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 1px dashed var(--gray);
+            border-radius: 8px;
+            padding: 2rem 1rem;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .ad-space h3 {
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .ad-space p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--success);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #495057;
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin: 1rem 0;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-blog"></i>
+                    MediaBlog
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="active">Home</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="#">Gallery</a></li>
+                        <li><a href="#">Podcasts</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <!-- Main Blog Content -->
+            <div class="blog-content">
+                <!-- Blog Post 1 -->
+                <article class="blog-post" id="post1">
+                    <div class="post-header">
+                        <h2 class="post-title">Exploring the Beauty of Nature Through Photography</h2>
+                        <div class="post-meta">
+                            <span><i class="far fa-user"></i> John Doe</span>
+                            <span><i class="far fa-calendar"></i> June 15, 2023</span>
+                            <span><i class="far fa-comment"></i> <span class="comment-count">12</span> Comments</span>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Nature Photography" class="post-image">
+                        <p class="post-text">
+                            Nature photography is more than just capturing beautiful landscapes; it's about telling a story and conveying emotions. In this post, I'll share my journey into nature photography and some tips for capturing stunning outdoor shots.
+                        </p>
+                        <p class="post-text">
+                            Whether you're a beginner or an experienced photographer, there's always something new to learn when it comes to photographing the natural world. From understanding light to composing your shots, every element plays a crucial role in creating compelling images.
+                        </p>
+                        
+                        <!-- Audio Player -->
+                        <div class="media-player">
+                            <h3><i class="fas fa-headphones"></i> Listen to the Podcast Version</h3>
+                            <div class="player-controls">
+                                <button id="playBtn"><i class="fas fa-play"></i></button>
+                                <div class="progress-bar">
+                                    <div class="progress"></div>
+                                </div>
+                                <div class="time">2:34 / 15:28</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Ad Space -->
+                        <div class="ad-space">
+                            <h3>Advertisement</h3>
+                            <p>Your ad could be here! Contact us for advertising opportunities.</p>
+                        </div>
+                        
+                        <p class="post-text">
+                            One of the most important aspects of nature photography is patience. Wildlife doesn't operate on our schedule, and the perfect light might only last for a few minutes. Being prepared to wait for the right moment can make all the difference between a good photo and a great one.
+                        </p>
+                    </div>
+                    
+                    <!-- Comments Section -->
+                    <div class="comments-section">
+                        <h3 class="comments-title">Comments (<span class="comment-count">12</span>)</h3>
+                        
+                        <div class="comment-form">
+                            <div class="comment-input-group">
+                                <input type="text" class="comment-name-input" placeholder="Your Name" id="commenter-name-1">
+                            </div>
+                            <textarea class="comment-input" placeholder="Add a comment..." id="comment-input-1"></textarea>
+                            <button class="comment-submit" data-post="1">Post Comment</button>
+                        </div>
+                        
+                        <div class="comments-list">
+                            <div class="comment">
+                                <div class="comment-avatar">JD</div>
+                                <div class="comment-content">
+                                    <div class="comment-author">Jane Doe</div>
+                                    <div class="comment-date">June 16, 2023 at 10:30 AM</div>
+                                    <div class="comment-text">
+                                        This is such an inspiring post! I've always wanted to get into nature photography but didn't know where to start. Your tips are really helpful.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="comment">
+                                <div class="comment-avatar">AS</div>
+                                <div class="comment-content">
+                                    <div class="comment-author">Alex Smith</div>
+                                    <div class="comment-date">June 15, 2023 at 4:12 PM</div>
+                                    <div class="comment-text">
+                                        I completely agree about the patience aspect. I once waited three hours for a bird to return to its nest just to get the perfect shot. It was totally worth it!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                
+                <!-- Blog Post 2 -->
+                <article class="blog-post" id="post2">
+                    <div class="post-header">
+                        <h2 class="post-title">The Future of Digital Media Consumption</h2>
+                        <div class="post-meta">
+                            <span><i class="far fa-user"></i> Sarah Johnson</span>
+                            <span><i class="far fa-calendar"></i> June 10, 2023</span>
+                            <span><i class="far fa-comment"></i> <span class="comment-count">8</span> Comments</span>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <!-- Video Player -->
+                        <div class="media-player">
+                            <h3><i class="fas fa-video"></i> Watch the Video</h3>
+                            <div style="position: relative; padding-bottom: 56.25%; height: 0; margin-bottom: 1rem;">
+                                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <i class="fas fa-play" style="font-size: 3rem;"></i>
+                                </div>
+                            </div>
+                            <div class="player-controls">
+                                <button id="playBtn2"><i class="fas fa-play"></i></button>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 45%;"></div>
+                                </div>
+                                <div class="time">5:12 / 11:24</div>
+                            </div>
+                        </div>
+                        
+                        <p class="post-text">
+                            The way we consume media has dramatically changed over the past decade. From streaming services to social media platforms, digital content is now at our fingertips 24/7. In this video, I explore the trends shaping the future of media consumption.
+                        </p>
+                        
+                        <!-- Ad Space -->
+                        <div class="ad-space">
+                            <h3>Sponsored Content</h3>
+                            <p>Check out our new photography masterclass - limited spots available!</p>
+                        </div>
+                        
+                        <p class="post-text">
+                            As technology continues to evolve, we can expect even more personalized and immersive media experiences. Virtual reality, augmented reality, and AI-driven content recommendations are just the beginning of this transformation.
+                        </p>
+                    </div>
+                    
+                    <!-- Comments Section -->
+                    <div class="comments-section">
+                        <h3 class="comments-title">Comments (<span class="comment-count">8</span>)</h3>
+                        
+                        <div class="comment-form">
+                            <div class="comment-input-group">
+                                <input type="text" class="comment-name-input" placeholder="Your Name" id="commenter-name-2">
+                            </div>
+                            <textarea class="comment-input" placeholder="Add a comment..." id="comment-input-2"></textarea>
+                            <button class="comment-submit" data-post="2">Post Comment</button>
+                        </div>
+                        
+                        <div class="comments-list">
+                            <div class="comment">
+                                <div class="comment-avatar">MJ</div>
+                                <div class="comment-content">
+                                    <div class="comment-author">Mike Johnson</div>
+                                    <div class="comment-date">June 12, 2023 at 9:15 AM</div>
+                                    <div class="comment-text">
+                                        Great insights! I'm particularly interested in how AI will change content discovery. The current algorithms already know my preferences scarily well.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">About Me</h3>
+                    <p class="about-text">
+                        Welcome to MediaBlog! I'm a passionate content creator sharing my experiences with photography, audio production, and digital media.
+                    </p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">Categories</h3>
+                    <ul class="categories-list">
+                        <li><a href="#">Photography <span>12</span></a></li>
+                        <li><a href="#">Audio Production <span>8</span></a></li>
+                        <li><a href="#">Video Editing <span>5</span></a></li>
+                        <li><a href="#">Digital Art <span>7</span></a></li>
+                        <li><a href="#">Tech Reviews <span>9</span></a></li>
+                    </ul>
+                </div>
+                
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">Popular Posts</h3>
+                    <div class="popular-posts">
+                        <div class="post-preview">
+                            <h4><a href="#">10 Tips for Better Landscape Photography</a></h4>
+                            <div class="post-meta">May 28, 2023</div>
+                        </div>
+                        <div class="post-preview">
+                            <h4><a href="#">How to Start a Podcast with Minimal Equipment</a></h4>
+                            <div class="post-meta">April 15, 2023</div>
+                        </div>
+                        <div class="post-preview">
+                            <h4><a href="#">The Best Video Editing Software in 2023</a></h4>
+                            <div class="post-meta">June 5, 2023</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ad Space in Sidebar -->
+                <div class="ad-space">
+                    <h3>Advertisement</h3>
+                    <p>Promote your brand here. Reach thousands of creative professionals.</p>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>MediaBlog</h3>
+                    <p>Your creative space for sharing images, audio, and video content with the world.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Gallery</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Categories</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Photography</a></li>
+                        <li><a href="#">Audio</a></li>
+                        <li><a href="#">Video</a></li>
+                        <li><a href="#">Tutorials</a></li>
+                        <li><a href="#">Reviews</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Connect With Us</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                        <li><a href="https://web.facebook.com/"><i class="fab fa-facebook"></i> Facebook</a></li>
+                        <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+                        <li><a href="#"><i class="fab fa-youtube"></i> YouTube</a></li>
+                        <li><a href="#"><i class="fab fa-pinterest"></i> Pinterest</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 MediaBlog. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple media player functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const playButtons = document.querySelectorAll('.player-controls button');
+            
+            playButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const icon = this.querySelector('i');
+                    
+                    if (icon.classList.contains('fa-play')) {
+                        icon.classList.remove('fa-play');
+                        icon.classList.add('fa-pause');
+                    } else {
+                        icon.classList.remove('fa-pause');
+                        icon.classList.add('fa-play');
+                    }
+                });
+            });
+            
+            // Comment submission
+            const commentButtons = document.querySelectorAll('.comment-submit');
+            
+            commentButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const postId = this.getAttribute('data-post');
+                    const nameInput = document.getElementById(`commenter-name-${postId}`);
+                    const commentInput = document.getElementById(`comment-input-${postId}`);
+                    const commenterName = nameInput.value.trim();
+                    const commentText = commentInput.value.trim();
+                    
+                    if (commenterName && commentText) {
+                        addComment(postId, commenterName, commentText);
+                        nameInput.value = '';
+                        commentInput.value = '';
+                    } else {
+                        alert('Please enter both your name and a comment before posting.');
+                    }
+                });
+            });
+            
+            // Function to add a new comment
+            function addComment(postId, name, text) {
+                const commentsList = document.querySelector(`#post${postId} .comments-list`);
+                const commentCountElements = document.querySelectorAll(`#post${postId} .comment-count`);
+                
+                // Create new comment element
+                const newComment = document.createElement('div');
+                newComment.className = 'comment';
+                
+                // Create avatar from initials
+                const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+                
+                // Get current date
+                const now = new Date();
+                const dateString = now.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                }) + ' at ' + now.toLocaleTimeString('en-US', { 
+                    hour: 'numeric', 
+                    minute: '2-digit' 
+                });
+                
+                newComment.innerHTML = `
+                    <div class="comment-avatar">${initials}</div>
+                    <div class="comment-content">
+                        <div class="comment-author">${name}</div>
+                        <div class="comment-date">${dateString}</div>
+                        <div class="comment-text">${text}</div>
+                    </div>
+                `;
+                
+                // Add the new comment to the top of the comments list
+                commentsList.prepend(newComment);
+                
+                // Update comment count
+                commentCountElements.forEach(element => {
+                    const currentCount = parseInt(element.textContent);
+                    element.textContent = currentCount + 1;
+                });
+            }
+            
+            // Progress bar click functionality
+            const progressBars = document.querySelectorAll('.progress-bar');
+            
+            progressBars.forEach(bar => {
+                bar.addEventListener('click', function(e) {
+                    const rect = this.getBoundingClientRect();
+                    const pos = (e.clientX - rect.left) / rect.width;
+                    const progress = this.querySelector('.progress');
+                    progress.style.width = (pos * 100) + '%';
+                    
+                    // Update time display (simulated)
+                    const timeDisplay = this.nextElementSibling;
+                    if (timeDisplay && timeDisplay.classList.contains('time')) {
+                        const totalTime = 15 * 60; // 15 minutes in seconds
+                        const newTime = Math.floor(totalTime * pos);
+                        const minutes = Math.floor(newTime / 60);
+                        const seconds = newTime % 60;
+                        timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')} / 15:00`;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

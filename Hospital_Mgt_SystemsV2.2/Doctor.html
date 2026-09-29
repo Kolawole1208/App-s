@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Doctor Management Dashboard</title>
+  <style>
+    :root {
+      --primary-color: #1b5e20;
+      --primary-light: #4caf50;
+      --primary-dark: #003300;
+      --secondary-color: #f5f5f5;
+      --success-color: #d4edda;
+      --success-text: #155724;
+      --warning-color: #fff3cd;
+      --warning-text: #856404;
+      --danger-color: #f8d7da;
+      --danger-text: #721c24;
+      --info-color: #d1ecf1;
+      --info-text: #0c5460;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)), 
+                  url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      background: var(--primary-color);
+      color: #fff;
+      padding: 16px 20px;
+      border-radius: var(--border-radius);
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--box-shadow);
+    }
+
+    .header .title {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .btn {
+      background: #fff;
+      color: var(--primary-color);
+      border: none;
+      padding: 8px 16px;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      background-color: var(--primary-light);
+      color: white;
+    }
+
+    .btn-primary {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #c82333;
+    }
+
+    .btn-warning {
+      background: #ffc107;
+      color: #212529;
+    }
+
+    .btn-warning:hover {
+      background: #e0a800;
+    }
+
+    .action-btn {
+      padding: 6px 12px;
+      margin-right: 5px;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .kpi {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      text-align: center;
+      transition: var(--transition);
+      backdrop-filter: blur(5px);
+    }
+
+    .kpi:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    .kpi h3 {
+      margin: 0;
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+
+    .kpi small {
+      font-size: 0.9rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .dashboard-section {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 25px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      margin-bottom: 30px;
+      backdrop-filter: blur(5px);
+    }
+
+    .section-title {
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-weight: 600;
+      color: var(--primary-color);
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-title:before {
+      content: "";
+      display: inline-block;
+      width: 8px;
+      height: 24px;
+      background: var(--primary-color);
+      margin-right: 12px;
+      border-radius: 4px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    thead {
+      background: var(--primary-color);
+      color: #fff;
+    }
+
+    th {
+      padding: 14px;
+      text-align: left;
+      font-weight: 500;
+    }
+
+    th:first-child {
+      border-top-left-radius: var(--border-radius);
+    }
+
+    th:last-child {
+      border-top-right-radius: var(--border-radius);
+    }
+
+    tbody tr {
+      transition: var(--transition);
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: rgba(249, 249, 249, 0.8);
+    }
+
+    tbody tr:nth-child(odd) {
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    tbody tr:hover {
+      background-color: rgba(240, 240, 240, 0.9);
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .status-active {
+      background: var(--success-color);
+      color: var(--success-text);
+    }
+
+    .status-leave {
+      background: var(--warning-color);
+      color: var(--warning-text);
+    }
+
+    .status-inactive {
+      background: var(--danger-color);
+      color: var(--danger-text);
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      backdrop-filter: blur(3px);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto;
+      padding: 30px;
+      border: 1px solid #888;
+      width: 60%;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .close:hover {
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      font-family: inherit;
+      background-color: #f9f9f9;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+      background-color: #fff;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 15px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    /* Delete Confirmation Modal */
+    .confirm-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      backdrop-filter: blur(3px);
+    }
+
+    .confirm-content {
+      background-color: #fefefe;
+      margin: 20% auto;
+      padding: 30px;
+      border: 1px solid #888;
+      width: 40%;
+      border-radius: var(--border-radius);
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .confirm-buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    @media (max-width: 1024px) {
+      .modal-content {
+        width: 80%;
+      }
+      
+      .confirm-content {
+        width: 60%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .kpi-row {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .dashboard-section {
+        padding: 15px;
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+
+      .modal-content {
+        width: 90%;
+        padding: 20px;
+      }
+
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+      
+      .confirm-content {
+        width: 80%;
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .kpi-row {
+        grid-template-columns: 1fr;
+      }
+
+      .confirm-content {
+        width: 90%;
+      }
+      
+      .header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+  <!-- KPI Cards -->
+  <div class="kpi-row">
+    <div class="kpi">
+      <h3 id="totalDoctors">25</h3>
+      <small>Total Doctors</small>
+    </div>
+    <div class="kpi">
+      <h3>58</h3>
+      <small>Patients Today</small>
+    </div>
+    <div class="kpi">
+      <h3>7</h3>
+      <small>Pending Appointments</small>
+    </div>
+    <div class="kpi">
+      <h3>12</h3>
+      <small>New Messages</small>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="title">Doctor Management</div>
+    <div>
+      <a href="Admin_Dashboard.html" class="btn btn-primary"><i class="fas fa-tachometer-alt"></i> Admin Panel</a>
+    </div>
+  </div>
+
+  <!-- Doctor Table Section -->
+  <section class="dashboard-section">
+    <h2 class="section-title">
+      Doctor Information
+      <button class="btn btn-primary" id="addDoctorBtn"><i class="fas fa-plus"></i> Add Doctor</button>
+    </h2>
+    <div style="overflow-x: auto;">
+      <table id="doctorTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Sex</th>
+            <th>Gender</th>
+            <th>Phone</th>
+            <th>Position</th>
+            <th>Department</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>001</td>
+            <td>Dr. James Samson</td>
+            <td>Male</td>
+            <td>He/Him</td>
+            <td>+234 801 234 5678</td>
+            <td>Consultant</td>
+            <td>Cardiology</td>
+            <td>james@example.com</td>
+            <td><span class="status-badge status-active">Active</span></td>
+            <td>
+              <button class="action-btn btn-primary edit-btn"><i class="fas fa-edit"></i> Edit</button>
+              <button class="action-btn btn-danger delete-btn"><i class="fas fa-trash"></i> Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>002</td>
+            <td>Dr. Uche Godwin</td>
+            <td>Male</td>
+            <td>He/Him</td>
+            <td>+234 801 234 5008</td>
+            <td>Consultant</td>
+            <td>General Practitioner</td>
+            <td>uche@example.com</td>
+            <td><span class="status-badge status-active">Active</span></td>
+            <td>
+              <button class="action-btn btn-primary edit-btn"><i class="fas fa-edit"></i> Edit</button>
+              <button class="action-btn btn-danger delete-btn"><i class="fas fa-trash"></i> Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>003</td>
+            <td>Dr. Smart Mirabel</td>
+            <td>Male</td>
+            <td>He/Him</td>
+            <td>+234 801 234 5458</td>
+            <td>Consultant</td>
+            <td>General Surgeon</td>
+            <td>smart@example.com</td>
+            <td><span class="status-badge status-leave">On Leave</span></td>
+            <td>
+              <button class="action-btn btn-primary edit-btn"><i class="fas fa-edit"></i> Edit</button>
+              <button class="action-btn btn-danger delete-btn"><i class="fas fa-trash"></i> Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>004</td>
+            <td>Dr. Adebayo Tunde</td>
+            <td>Male</td>
+            <td>He/Him</td>
+            <td>+234 801 234 5666</td>
+            <td>Consultant</td>
+            <td>Orthopedic</td>
+            <td>adebatun@example.com</td>
+            <td><span class="status-badge status-inactive">Inactive</span></td>
+            <td>
+              <button class="action-btn btn-primary edit-btn"><i class="fas fa-edit"></i> Edit</button>
+              <button class="action-btn btn-danger delete-btn"><i class="fas fa-trash"></i> Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>005</td>
+            <td>Dr. Susan Grace</td>
+            <td>Female</td>
+            <td>She/Her</td>
+            <td>+234 802 987 6543</td>
+            <td>Resident</td>
+            <td>Cardiology</td>
+            <td>susan@example.com</td>
+            <td><span class="status-badge status-leave">On Leave</span></td>
+            <td>
+              <button class="action-btn btn-primary edit-btn"><i class="fas fa-edit"></i> Edit</button>
+              <button class="action-btn btn-danger delete-btn"><i class="fas fa-trash"></i> Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Add/Edit Doctor Modal -->
+  <div id="doctorModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="modalTitle">Add New Doctor</h2>
+      <form id="doctorForm">
+        <input type="hidden" id="doctorId">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" required>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" required>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="sex">Sex</label>
+            <select id="sex" required>
+              <option value="">Select</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" required>
+              <option value="">Select</option>
+              <option value="He/Him">He/Him</option>
+              <option value="She/Her">She/Her</option>
+              <option value="They/Them">They/Them</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" required>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="position">Position</label>
+            <select id="position" required>
+              <option value="">Select Position</option>
+              <option value="Consultant">Consultant</option>
+              <option value="Resident">Resident</option>
+              <option value="Specialist">Specialist</option>
+              <option value="Registrar">Registrar</option>
+              <option value="House Officer">House Officer</option>
+              <option value="Medical Officer">Medical Officer</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="department">Department</label>
+            <select id="department" required>
+              <option value="">Select Department</option>
+              <option value="Cardiology">Cardiology</option>
+              <option value="General Practitioner">General Practitioner</option>
+              <option value="General Surgeon">General Surgeon</option>
+              <option value="Orthopedic">Orthopedic</option>
+              <option value="Pediatrics">Pediatrics</option>
+              <option value="Neurology">Neurology</option>
+              <option value="Emergency">Emergency</option>
+              <option value="Radiology">Radiology</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select id="status" required>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+            <option value="On Leave">On Leave</option>
+          </select>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" id="cancelBtn"><i class="fas fa-times"></i> Cancel</button>
+          <button type="submit" class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="confirmModal" class="confirm-modal">
+    <div class="confirm-content">
+      <span class="close" id="confirmClose">&times;</span>
+      <h2>Confirm Delete</h2>
+      <p>Are you sure you want to delete this doctor record?</p>
+      <div class="confirm-buttons">
+        <button class="btn btn-danger" id="confirmCancel"><i class="fas fa-times"></i> Cancel</button>
+        <button class="btn btn-primary" id="confirmDelete"><i class="fas fa-trash"></i> Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // DOM Elements
+    const addDoctorBtn = document.getElementById('addDoctorBtn');
+    const doctorModal = document.getElementById('doctorModal');
+    const confirmModal = document.getElementById('confirmModal');
+    const closeBtns = document.querySelectorAll('.close');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const confirmCancel = document.getElementById('confirmCancel');
+    const doctorForm = document.getElementById('doctorForm');
+    const doctorTable = document.getElementById('doctorTable').getElementsByTagName('tbody')[0];
+    const modalTitle = document.getElementById('modalTitle');
+    const saveBtn = document.getElementById('saveBtn');
+    const totalDoctors = document.getElementById('totalDoctors');
+    
+    // Variables
+    let nextId = 6; // Starting after the last ID in the table
+    let currentRow = null;
+    let isEditMode = false;
+    let doctorToDelete = null;
+
+    // Event Listeners
+    addDoctorBtn.addEventListener('click', openAddModal);
+    closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
+    cancelBtn.addEventListener('click', closeModal);
+    confirmCancel.addEventListener('click', closeConfirmModal);
+    doctorForm.addEventListener('submit', handleFormSubmit);
+    document.getElementById('confirmDelete').addEventListener('click', confirmDelete);
+
+    // Initialize existing buttons
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        openEditModal(this.closest('tr'));
+      });
+    });
+
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        showConfirmModal(this.closest('tr'));
+      });
+    });
+
+    // Functions
+    function openAddModal() {
+      isEditMode = false;
+      modalTitle.textContent = 'Add New Doctor';
+      saveBtn.textContent = 'Save';
+      doctorForm.reset();
+      document.getElementById('doctorId').value = '';
+      doctorModal.style.display = 'block';
+    }
+
+    function openEditModal(row) {
+      isEditMode = true;
+      currentRow = row;
+      modalTitle.textContent = 'Edit Doctor';
+      saveBtn.textContent = 'Update';
+      
+      // Fill form with row data
+      const cells = row.cells;
+      document.getElementById('doctorId').value = cells[0].textContent;
+      
+      // Split full name into first and last names
+      const fullName = cells[1].textContent.replace('Dr. ', '').split(' ');
+      document.getElementById('firstName').value = fullName[0];
+      document.getElementById('lastName').value = fullName.slice(1).join(' ');
+      
+      document.getElementById('sex').value = cells[2].textContent;
+      document.getElementById('gender').value = cells[3].textContent;
+      document.getElementById('phone').value = cells[4].textContent;
+      document.getElementById('position').value = cells[5].textContent;
+      document.getElementById('department').value = cells[6].textContent;
+      document.getElementById('email').value = cells[7].textContent;
+      
+      // Extract status from badge
+      const statusBadge = cells[8].querySelector('.status-badge');
+      document.getElementById('status').value = statusBadge.textContent;
+      
+      doctorModal.style.display = 'block';
+    }
+
+    function showConfirmModal(row) {
+      doctorToDelete = row;
+      confirmModal.style.display = 'block';
+    }
+
+    function closeModal() {
+      doctorModal.style.display = 'none';
+      doctorForm.reset();
+      currentRow = null;
+    }
+
+    function closeConfirmModal() {
+      confirmModal.style.display = 'none';
+      doctorToDelete = null;
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      
+      // Get form values
+      const doctorId = document.getElementById('doctorId').value;
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const sex = document.getElementById('sex').value;
+      const gender = document.getElementById('gender').value;
+      const phone = document.getElementById('phone').value;
+      const position = document.getElementById('position').value;
+      const department = document.getElementById('department').value;
+      const email = document.getElementById('email').value;
+      const status = document.getElementById('status').value;
+      
+      // Determine status class
+      let statusClass = '';
+      if (status === 'Active') statusClass = 'status-active';
+      else if (status === 'Inactive') statusClass = 'status-inactive';
+      else if (status === 'On Leave') statusClass = 'status-leave';
+      
+      if (isEditMode) {
+        // Update existing row
+        const cells = currentRow.cells;
+        cells[0].textContent = doctorId;
+        cells[1].textContent = `Dr. ${firstName} ${lastName}`;
+        cells[2].textContent = sex;
+        cells[3].textContent = gender;
+        cells[4].textContent = phone;
+        cells[5].textContent = position;
+        cells[6].textContent = department;
+        cells[7].textContent = email;
+        cells[8].innerHTML = `<span class="status-badge ${statusClass}">${status}</span>`;
+      } else {
+        // Create new row
+        const newRow = doctorTable.insertRow();
+        const newId = doctorId || `00${nextId++}`;
+        
+        newRow.innerHTML = `
+          <td>${newId}</td>
+          <td>Dr. ${firstName} ${lastName}</td>
+          <td>${sex}</td>
+          <td>${gender}</td>
+          <td>${phone}</td>
+          <td>${position}</td>
+          <td>${department}</td>
+          <td>${email}</td>
+          <td><span class="status-badge ${statusClass}">${status}</span></td>
+          <td>
+            <button class="action-btn btn-primary edit-btn"><i class="fas fa-edit"></i> Edit</button>
+            <button class="action-btn btn-danger delete-btn"><i class="fas fa-trash"></i> Delete</button>
+          </td>
+        `;
+        
+        // Add event listeners to new buttons
+        newRow.querySelector('.edit-btn').addEventListener('click', function() {
+          openEditModal(this.closest('tr'));
+        });
+        
+        newRow.querySelector('.delete-btn').addEventListener('click', function() {
+          showConfirmModal(this.closest('tr'));
+        });
+        
+        // Update total doctors count
+        totalDoctors.textContent = nextId - 1;
+      }
+      
+      closeModal();
+    }
+
+    function confirmDelete() {
+      if (doctorToDelete) {
+        doctorToDelete.remove();
+        
+        // Update total doctors count
+        const rowCount = doctorTable.rows.length;
+        totalDoctors.textContent = rowCount;
+        
+        closeConfirmModal();
+      }
+    }
+
+    // Close modals when clicking outside
+    window.addEventListener('click', function(event) {
+      if (event.target === doctorModal) {
+        closeModal();
+      }
+      if (event.target === confirmModal) {
+        closeConfirmModal();
+      }
+    });
+  </script>
+</body>
+</html>

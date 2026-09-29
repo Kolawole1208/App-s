@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAMB UTME - Exam</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .exam-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .exam-header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .timer {
+            background: #1a237e;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .exam-content {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+        }
+
+        .questions-sidebar {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: 500px;
+            overflow-y: auto;
+        }
+
+        .subject-filter {
+            margin-bottom: 15px;
+        }
+
+        .subject-filter select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .question-nav {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .q-number {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .q-number:hover {
+            border-color: #1a237e;
+        }
+
+        .q-number.current {
+            border-color: #1a237e;
+            background: #1a237e;
+            color: white;
+        }
+
+        .q-number.answered {
+            background: #27ae60;
+            color: white;
+            border-color: #27ae60;
+        }
+
+        .question-area {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .options {
+            flex: 1;
+        }
+
+        .option {
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            border-color: #1a237e;
+            background: #f0f7ff;
+        }
+
+        .option.selected {
+            border-color: #1a237e;
+            background: #e3f2fd;
+        }
+
+        .exam-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .control-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .prev-btn {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .prev-btn:hover {
+            background: #7f8c8d;
+        }
+
+        .next-btn {
+            background: #1a237e;
+            color: white;
+        }
+
+        .next-btn:hover {
+            background: #283593;
+        }
+
+        .submit-btn {
+            background: #27ae60;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background: #219653;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Check if user is logged in
+        const currentUser = JSON.parse(localStorage.getItem('current_user') || 'null');
+        if (!currentUser) {
+            alert('Please login first');
+            window.location.href = 'login.html';
+        }
+
+        // Check if user has selected subjects
+        const selectedSubjects = JSON.parse(localStorage.getItem('subjects'));
+        if (!selectedSubjects || selectedSubjects.length < 3) {
+            alert('Please select your subjects first');
+            window.location.href = 'subject-selection.html';
+        }
+    </script>
+
+    <div class="exam-container">
+        <div class="exam-header">
+            <div>
+                <h2>UTME Computer-Based Test</h2>
+                <p>Candidate: <span id="studentName"></span> | Subjects: <span id="subjectList"></span></p>
+            </div>
+            <div class="timer" id="timer">02:00:00</div>
+        </div>
+
+        <div class="exam-content">
+            <div class="questions-sidebar">
+                <h3>Questions</h3>
+                <div class="subject-filter">
+                    <select id="subjectFilter" onchange="filterQuestions()">
+                        <option value="all">All Subjects</option>
+                        <option value="english">English</option>
+                        <option value="mathematics">Mathematics</option>
+                        <option value="physics">Physics</option>
+                        <option value="chemistry">Chemistry</option>
+                    </select>
+                </div>
+                <div class="question-nav" id="questionNav">
+                    <!-- Questions will be generated by JavaScript -->
+                </div>
+                <button class="submit-btn" onclick="submitExam()">Submit Exam</button>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+
+            <div class="question-area">
+                <div class="question-text" id="questionText">
+                    Loading questions...
+                </div>
+                <div class="options" id="optionsContainer">
+                    <!-- Options will be generated by JavaScript -->
+                </div>
+                <div class="exam-controls">
+                    <button class="control-btn prev-btn" onclick="previousQuestion()">Previous</button>
+                    <button class="control-btn next-btn" onclick="nextQuestion()">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Exam questions - expanded to include at least 20 questions per subject
+        const questions = [
+            // English Language (20 questions)
+            {
+                subject: "english",
+                question: "What is the capital of Nigeria?",
+                options: ["Lagos", "Abuja", "Kano", "Ibadan"],
+                correctAnswer: 1
+            },
+            {
+                subject: "english",
+                question: "Which of these is a synonym for 'happy'?",
+                options: ["Sad", "Joyful", "Angry", "Tired"],
+                correctAnswer: 1
+            },
+            {
+                subject: "english",
+                question: "Identify the noun in the sentence: 'The quick brown fox jumps over the lazy dog.'",
+                options: ["quick", "jumps", "fox", "over"],
+                correctAnswer: 2
+            },
+            {
+                subject: "english",
+                question: "What is the past tense of 'go'?",
+                options: ["goed", "went", "gone", "going"],
+                correctAnswer: 1
+            },
+            {
+                subject: "english",
+                question: "Which word is an adjective?",
+                options: ["run", "beautiful", "quickly", "they"],
+                correctAnswer: 1
+            },
+            {
+                subject: "english",
+                question: "What is the plural form of 'child'?",
+                options: ["childs", "children", "childes", "child"],
+                correctAnswer: 1
+            },
+            {
+                subject: "english",
+                question: "Which sentence is in the passive voice?",
+                options: ["The cat chased the mouse.", "The mouse was chased by the cat.", "Chasing the mouse, the cat ran.", "The cat and mouse ran."],
+                correctAnswer: 1
+            },
+            {
+                subject: "english",
+                question: "What is the meaning of 'benevolent'?",
+                options: ["evil", "kind", "small", "large"],
+                correctAnswer: 1
+            },
+            {
+                subject: "english",
+                question: "Which of these is a preposition?",
+                options: ["and", "but", "under", "quickly"],
+                correctAnswer: 2
+            },
+            {
+                subject: "english",
+                question: "What is the correct punctuation for this sentence: 'What time is it_'",
+                options: [".", "!", "?", ","],
+                correctAnswer: 2
+            },
+            {
+                subject: "english",
+                question: "Which word is spelled correctly?",
+                options: ["recieve", "recieve", "receive", "recive"],
+                correctAnswer: 2
+            },
+            {
+                subject: "english",
+                question: "What is the literary term for giving human qualities to non-human things?",
+                options: ["Metaphor", "Simile", "Personification", "Hyperbole"],
+                correctAnswer: 2
+            },
+            {
+                subject: "english",
+                question: "Which of these is a compound sentence?",
+                options: ["I like apples.", "I like apples and oranges.", "I like apples, but my brother prefers oranges.", "Apples are delicious."],
+                correctAnswer: 2
+            },
+            {
+                subject: "english",
+                question: "What is the antonym of 'ancient'?",
+                options: ["old", "modern", "historic", "aged"],
+                correctAnswer: 1
+            },
+            {
+                subject: "english",
+                question: "Which verb form is correct: 'She ___ to school every day.'",
+                options: ["go", "goes", "going", "gone"],
+                correctAnswer: 1
+            },
+            {
+                subject: "english",
+                question: "What type of word is 'quickly'?",
+                options: ["noun", "verb", "adjective", "adverb"],
+                correctAnswer: 3
+            },
+            {
+                subject: "english",
+                question: "Which sentence contains a metaphor?",
+                options: ["He is as strong as an ox.", "Life is a journey.", "The wind whispered through the trees.", "I'm so hungry I could eat a horse."],
+                correctAnswer: 1
+            },
+            {
+                subject: "english",
+                question: "What is the correct form: 'There ___ many books on the shelf.'",
+                options: ["is", "are", "be", "being"],
+                correctAnswer: 1
+            },
+            {
+                subject: "english",
+                question: "Which word is a conjunction?",
+                options: ["run", "and", "happy", "quickly"],
+                correctAnswer: 1
+            },
+            {
+                subject: "english",
+                question: "What is the meaning of 'ambiguous'?",
+                options: ["clear", "uncertain", "happy", "sad"],
+                correctAnswer: 1
+            },
+
+            // Mathematics (20 questions)
+            {
+                subject: "mathematics",
+                question: "What is 15 + 27?",
+                options: ["32", "42", "38", "45"],
+                correctAnswer: 1
+            },
+            {
+                subject: "mathematics",
+                question: "What is the value of π (pi) to two decimal places?",
+                options: ["3.12", "3.14", "3.16", "3.18"],
+                correctAnswer: 1
+            },
+            {
+                subject: "mathematics",
+                question: "Solve for x: 2x + 5 = 15",
+                options: ["5", "10", "7.5", "2.5"],
+                correctAnswer: 0
+            },
+            {
+                subject: "mathematics",
+                question: "What is the area of a rectangle with length 8cm and width 5cm?",
+                options: ["13cm²", "40cm²", "26cm²", "35cm²"],
+                correctAnswer: 1
+            },
+            {
+                subject: "mathematics",
+                question: "What is 25% of 200?",
+                options: ["25", "50", "75", "100"],
+                correctAnswer: 1
+            },
+            {
+                subject: "mathematics",
+                question: "Simplify: (3x²)(4x³)",
+                options: ["7x⁵", "12x⁵", "12x⁶", "7x⁶"],
+                correctAnswer: 1
+            },
+            {
+                subject: "mathematics",
+                question: "What is the square root of 144?",
+                options: ["11", "12", "13", "14"],
+                correctAnswer: 1
+            },
+            {
+                subject: "mathematics",
+                question: "If a triangle has angles of 45° and 55°, what is the third angle?",
+                options: ["60°", "70°", "80°", "90°"],
+                correctAnswer: 2
+            },
+            {
+                subject: "mathematics",
+                question: "What is the next number in the sequence: 2, 4, 8, 16, ...?",
+                options: ["24", "32", "30", "20"],
+                correctAnswer: 1
+            },
+            {
+                subject: "mathematics",
+                question: "Calculate: 7 × 8 - 6 ÷ 2",
+                options: ["50", "53", "25", "29"],
+                correctAnswer: 1
+            },
+            {
+                subject: "mathematics",
+                question: "What is the formula for the circumference of a circle?",
+                options: ["πr", "2πr", "πr²", "2πr²"],
+                correctAnswer: 1
+            },
+            {
+                subject: "mathematics",
+                question: "Solve: 3(x - 4) = 15",
+                options: ["x = 7", "x = 9", "x = 5", "x = 3"],
+                correctAnswer: 1
+            },
+            {
+                subject: "mathematics",
+                question: "What is the value of 5³?",
+                options: ["15", "25", "125", "225"],
+                correctAnswer: 2
+            },
+            {
+                subject: "mathematics",
+                question: "If a = 3 and b = 4, what is a² + b²?",
+                options: ["7", "12", "25", "49"],
+                correctAnswer: 2
+            },
+            {
+                subject: "mathematics",
+                question: "What is the median of: 3, 5, 7, 9, 11?",
+                options: ["5", "6", "7", "9"],
+                correctAnswer: 2
+            },
+            {
+                subject: "mathematics",
+                question: "Calculate: 0.25 × 0.4",
+                options: ["0.1", "0.01", "1.0", "10"],
+                correctAnswer: 0
+            },
+            {
+                subject: "mathematics",
+                question: "What is the slope of the line y = 2x + 3?",
+                options: ["2", "3", "1", "0"],
+                correctAnswer: 0
+            },
+            {
+                subject: "mathematics",
+                question: "Factor: x² - 9",
+                options: ["(x-3)(x+3)", "(x-9)(x+1)", "(x-3)²", "(x+3)²"],
+                correctAnswer: 0
+            },
+            {
+                subject: "mathematics",
+                question: "What is 3/4 as a decimal?",
+                options: ["0.25", "0.5", "0.75", "1.33"],
+                correctAnswer: 2
+            },
+            {
+                subject: "mathematics",
+                question: "If a car travels 60km in 1 hour, how far will it travel in 2.5 hours?",
+                options: ["120km", "150km", "180km", "200km"],
+                correctAnswer: 1
+            },
+
+            // Physics (20 questions)
+            {
+                subject: "physics",
+                question: "Which planet is known as the Red Planet?",
+                options: ["Venus", "Mars", "Jupiter", "Saturn"],
+                correctAnswer: 1
+            },
+            {
+                subject: "physics",
+                question: "What is the SI unit of force?",
+                options: ["Joule", "Newton", "Watt", "Pascal"],
+                correctAnswer: 1
+            },
+            {
+                subject: "physics",
+                question: "What is the speed of light in a vacuum?",
+                options: ["300,000 km/s", "150,000 km/s", "500,000 km/s", "1,000,000 km/s"],
+                correctAnswer: 0
+            },
+            {
+                subject: "physics",
+                question: "Which law states that for every action, there is an equal and opposite reaction?",
+                options: ["Newton's First Law", "Newton's Second Law", "Newton's Third Law", "Law of Gravitation"],
+                correctAnswer: 2
+            },
+            {
+                subject: "physics",
+                question: "What is the unit of electric current?",
+                options: ["Volt", "Ampere", "Ohm", "Watt"],
+                correctAnswer: 1
+            },
+            {
+                subject: "physics",
+                question: "Which of these is a vector quantity?",
+                options: ["Mass", "Time", "Velocity", "Temperature"],
+                correctAnswer: 2
+            },
+            {
+                subject: "physics",
+                question: "What is the formula for kinetic energy?",
+                options: ["mv", "mgh", "½mv²", "Fd"],
+                correctAnswer: 2
+            },
+            {
+                subject: "physics",
+                question: "Which color of light has the longest wavelength?",
+                options: ["Red", "Blue", "Green", "Violet"],
+                correctAnswer: 0
+            },
+            {
+                subject: "physics",
+                question: "What is the acceleration due to gravity on Earth?",
+                options: ["5 m/s²", "9.8 m/s²", "12 m/s²", "15 m/s²"],
+                correctAnswer: 1
+            },
+            {
+                subject: "physics",
+                question: "Which type of lens converges light rays?",
+                options: ["Concave", "Convex", "Plano-concave", "Diverging"],
+                correctAnswer: 1
+            },
+            {
+                subject: "physics",
+                question: "What is the unit of frequency?",
+                options: ["Hertz", "Decibel", "Watt", "Joule"],
+                correctAnswer: 0
+            },
+            {
+                subject: "physics",
+                question: "Which law states that pressure and volume are inversely proportional at constant temperature?",
+                options: ["Charles' Law", "Boyle's Law", "Gay-Lussac's Law", "Avogadro's Law"],
+                correctAnswer: 1
+            },
+            {
+                subject: "physics",
+                question: "What is the formula for density?",
+                options: ["mass/volume", "volume/mass", "mass × volume", "weight/volume"],
+                correctAnswer: 0
+            },
+            {
+                subject: "physics",
+                question: "Which subatomic particle has a negative charge?",
+                options: ["Proton", "Neutron", "Electron", "Neutrino"],
+                correctAnswer: 2
+            },
+            {
+                subject: "physics",
+                question: "What is the process by which a liquid turns into a gas?",
+                options: ["Condensation", "Evaporation", "Sublimation", "Freezing"],
+                correctAnswer: 1
+            },
+            {
+                subject: "physics",
+                question: "Which type of energy is stored in a battery?",
+                options: ["Kinetic", "Thermal", "Chemical", "Nuclear"],
+                correctAnswer: 2
+            },
+            {
+                subject: "physics",
+                question: "What is the unit of electrical resistance?",
+                options: ["Volt", "Ampere", "Ohm", "Watt"],
+                correctAnswer: 2
+            },
+            {
+                subject: "physics",
+                question: "Which electromagnetic waves have the highest frequency?",
+                options: ["Radio waves", "Microwaves", "X-rays", "Gamma rays"],
+                correctAnswer: 3
+            },
+            {
+                subject: "physics",
+                question: "What is the principle behind the working of a hydraulic lift?",
+                options: ["Bernoulli's Principle", "Pascal's Principle", "Archimedes' Principle", "Newton's Principle"],
+                correctAnswer: 1
+            },
+            {
+                subject: "physics",
+                question: "Which law states that energy cannot be created or destroyed?",
+                options: ["First Law of Thermodynamics", "Second Law of Thermodynamics", "Law of Conservation of Energy", "Law of Entropy"],
+                correctAnswer: 2
+            },
+
+            // Chemistry (20 questions)
+            {
+                subject: "chemistry",
+                question: "What is the chemical symbol for Gold?",
+                options: ["Go", "Gd", "Au", "Ag"],
+                correctAnswer: 2
+            },
+            {
+                subject: "chemistry",
+                question: "What is the pH of a neutral solution?",
+                options: ["0", "7", "14", "10"],
+                correctAnswer: 1
+            },
+            {
+                subject: "chemistry",
+                question: "Which element has the atomic number 1?",
+                options: ["Helium", "Hydrogen", "Oxygen", "Carbon"],
+                correctAnswer: 1
+            },
+            {
+                subject: "chemistry",
+                question: "What is the formula for water?",
+                options: ["HO", "H₂O", "H₂O₂", "HO₂"],
+                correctAnswer: 1
+            },
+            {
+                subject: "chemistry",
+                question: "Which gas is most abundant in Earth's atmosphere?",
+                options: ["Oxygen", "Carbon dioxide", "Nitrogen", "Argon"],
+                correctAnswer: 2
+            },
+            {
+                subject: "chemistry",
+                question: "What is the process of a solid turning directly into a gas?",
+                options: ["Evaporation", "Condensation", "Sublimation", "Deposition"],
+                correctAnswer: 2
+            },
+            {
+                subject: "chemistry",
+                question: "Which of these is an alkali metal?",
+                options: ["Calcium", "Sodium", "Aluminum", "Zinc"],
+                correctAnswer: 1
+            },
+            {
+                subject: "chemistry",
+                question: "What is the chemical formula for table salt?",
+                options: ["NaCl", "KCl", "CaCl₂", "MgCl₂"],
+                correctAnswer: 0
+            },
+            {
+                subject: "chemistry",
+                question: "Which subatomic particle determines the chemical properties of an element?",
+                options: ["Proton", "Neutron", "Electron", "Nucleus"],
+                correctAnswer: 2
+            },
+            {
+                subject: "chemistry",
+                question: "What is the atomic mass of carbon?",
+                options: ["6", "12", "14", "16"],
+                correctAnswer: 1
+            },
+            {
+                subject: "chemistry",
+                question: "Which of these is a noble gas?",
+                options: ["Oxygen", "Nitrogen", "Helium", "Chlorine"],
+                correctAnswer: 2
+            },
+            {
+                subject: "chemistry",
+                question: "What type of bond involves the sharing of electrons?",
+                options: ["Ionic", "Covalent", "Metallic", "Hydrogen"],
+                correctAnswer: 1
+            },
+            {
+                subject: "chemistry",
+                question: "What is the chemical symbol for iron?",
+                options: ["Ir", "Fe", "In", "I"],
+                correctAnswer: 1
+            },
+            {
+                subject: "chemistry",
+                question: "Which acid is found in vinegar?",
+                options: ["Sulfuric acid", "Hydrochloric acid", "Acetic acid", "Citric acid"],
+                correctAnswer: 2
+            },
+            {
+                subject: "chemistry",
+                question: "What is the process of a liquid turning into a solid?",
+                options: ["Melting", "Freezing", "Evaporation", "Condensation"],
+                correctAnswer: 1
+            },
+            {
+                subject: "chemistry",
+                question: "Which element is the main component of organic compounds?",
+                options: ["Hydrogen", "Oxygen", "Carbon", "Nitrogen"],
+                correctAnswer: 2
+            },
+            {
+                subject: "chemistry",
+                question: "What is the formula for carbon dioxide?",
+                options: ["CO", "CO₂", "C₂O", "C₂O₂"],
+                correctAnswer: 1
+            },
+            {
+                subject: "chemistry",
+                question: "Which of these is a halogen?",
+                options: ["Sodium", "Chlorine", "Calcium", "Potassium"],
+                correctAnswer: 1
+            },
+            {
+                subject: "chemistry",
+                question: "What is the pH range of acidic solutions?",
+                options: ["0-7", "7", "7-14", "0-14"],
+                correctAnswer: 0
+            },
+            {
+                subject: "chemistry",
+                question: "Which gas is produced during photosynthesis?",
+                options: ["Carbon dioxide", "Oxygen", "Nitrogen", "Hydrogen"],
+                correctAnswer: 1
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+        let timeLeft = 2 * 60 * 60; // 2 hours in seconds
+        let filteredQuestions = [...questions];
+
+        // Initialize exam
+        function initializeExam() {
+            const studentName = localStorage.getItem('studentName') || 'Student';
+            const subjects = JSON.parse(localStorage.getItem('subjects') || '["English", "Mathematics", "Physics", "Chemistry"]');
+            
+            document.getElementById('studentName').textContent = studentName;
+            document.getElementById('subjectList').textContent = subjects.join(', ');
+
+            // Create question navigation
+            updateQuestionNavigation();
+            
+            // Start timer
+            updateTimer();
+            
+            // Display first question
+            displayQuestion(currentQuestionIndex);
+        }
+
+        function filterQuestions() {
+            const subjectFilter = document.getElementById('subjectFilter').value;
+            
+            if (subjectFilter === 'all') {
+                filteredQuestions = [...questions];
+            } else {
+                filteredQuestions = questions.filter(q => q.subject === subjectFilter);
+            }
+            
+            currentQuestionIndex = 0;
+            updateQuestionNavigation();
+            displayQuestion(currentQuestionIndex);
+        }
+
+        function updateQuestionNavigation() {
+            const questionNav = document.getElementById('questionNav');
+            questionNav.innerHTML = '';
+            
+            filteredQuestions.forEach((_, index) => {
+                const qBtn = document.createElement('div');
+                qBtn.className = 'q-number';
+                qBtn.textContent = index + 1;
+                qBtn.onclick = () => goToQuestion(index);
+                questionNav.appendChild(qBtn);
+            });
+            
+            updateQuestionStatus();
+        }
+
+        function displayQuestion(index) {
+            if (filteredQuestions.length === 0) return;
+            
+            const question = filteredQuestions[index];
+            const globalIndex = questions.indexOf(question);
+            
+            document.getElementById('questionText').textContent = `Question ${index + 1}: ${question.question}`;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, optIndex) => {
+                const optDiv = document.createElement('div');
+                optDiv.className = `option ${userAnswers[globalIndex] === optIndex ? 'selected' : ''}`;
+                optDiv.textContent = `${String.fromCharCode(65 + optIndex)}) ${option}`;
+                optDiv.onclick = () => selectAnswer(optIndex);
+                optionsContainer.appendChild(optDiv);
+            });
+            
+            // Update navigation
+            updateQuestionStatus();
+        }
+
+        function selectAnswer(answerIndex) {
+            const globalIndex = questions.indexOf(filteredQuestions[currentQuestionIndex]);
+            userAnswers[globalIndex] = answerIndex;
+            displayQuestion(currentQuestionIndex);
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < filteredQuestions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        function goToQuestion(index) {
+            currentQuestionIndex = index;
+            displayQuestion(currentQuestionIndex);
+        }
+
+        function updateQuestionStatus() {
+            document.querySelectorAll('.q-number').forEach((btn, i) => {
+                btn.className = 'q-number';
+                if (i === currentQuestionIndex) btn.classList.add('current');
+                
+                const globalIndex = questions.indexOf(filteredQuestions[i]);
+                if (userAnswers[globalIndex] !== null) btn.classList.add('answered');
+            });
+        }
+
+        function updateTimer() {
+            const hours = Math.floor(timeLeft / 3600);
+            const minutes = Math.floor((timeLeft % 3600) / 60);
+            const seconds = timeLeft % 60;
+            
+            document.getElementById('timer').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft > 0) {
+                timeLeft--;
+                setTimeout(updateTimer, 1000);
+            } else {
+                submitExam();
+            }
+        }
+
+        function submitExam() {
+            // Calculate score by comparing user answers with correct answers
+            let score = 0;
+            questions.forEach((question, index) => {
+                if (userAnswers[index] === question.correctAnswer) {
+                    score++;
+                }
+            });
+            
+            // Calculate percentage
+            const percentage = Math.round((score / questions.length) * 100);
+            
+            // Save results
+            const results = {
+                score: score,
+                total: questions.length,
+                percentage: percentage,
+                answers: userAnswers,
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('examResults', JSON.stringify(results));
+            window.location.href = 'result.html';
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout? Your progress will be lost.')) {
+                localStorage.removeItem('current_user');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Start the exam when page loads
+        initializeExam();
+    </script>
+</body>
+</html>

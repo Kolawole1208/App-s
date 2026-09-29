@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Accountant Dashboard - Hospital</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f4f4;
+  }
+  header {
+    background-color: green;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+  }
+  .cards {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem;
+  }
+  .card {
+    background: yellowgreen;
+    flex: 1;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  .card.highlight {
+    animation: highlightCard 0.8s ease;
+  }
+  @keyframes highlightCard {
+    0% { background-color: #ffff99; transform: scale(1.05); }
+    100% { background-color: yellowgreen; transform: scale(1); }
+  }
+  .container {
+    margin: 1rem;
+    background: green;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+  th, td {
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+  th {
+    background-color: #f1f1f1;
+    cursor: pointer;
+  }
+  .unpaid {
+    background-color: #ffe5e5;
+    color: #a00;
+    animation: unpaidFlash 1s ease-in-out;
+  }
+  @keyframes unpaidFlash {
+    0% { background-color: #fff59d; }
+    100% { background-color: #ffe5e5; }
+  }
+  form {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  input, select, button {
+    padding: 0.5rem;
+  }
+  button {
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Accountant Dashboard - Hospital</h1>
+</header>
+
+<div class="cards">
+  <div class="card" id="revenueCard">
+    <h3>Total Revenue 💰</h3>
+    <span id="totalRevenue">₦1,200,000</span>
+  </div>
+  <div class="card" id="expensesCard">
+    <h3>Total Expenses 💸</h3>
+    <span id="totalExpenses">₦850,000</span>
+  </div>
+  <div class="card" id="pendingCard">
+    <h3>Pending Payments 📂</h3>
+    <span id="pendingPayments">₦120,000</span>
+  </div>
+</div>
+
+<div class="container">
+  <h2>Add Transaction</h2>
+  <form id="transactionForm">
+    <input type="text" id="patientName" placeholder="Patient Name" required>
+    <select id="transactionType" required>
+      <option value="Payment">Payment</option>
+      <option value="Expense">Expense</option>
+    </select>
+    <input type="number" id="transactionAmount" placeholder="Amount" required>
+    <input type="date" id="transactionDate" required>
+    <select id="transactionStatus" required>
+      <option value="Paid">Paid</option>
+      <option value="Unpaid">Unpaid</option>
+    </select>
+    <button type="submit">Add Transaction</button>
+  </form>
+
+  <table id="transactionTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Patient Name</th>
+        <th>Type</th>
+        <th data-sort="amount">Amount</th>
+        <th data-sort="date">Date</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="transactionBody"></tbody>
+  </table>
+</div>
+
+<script>
+const revenueSpan = document.getElementById('totalRevenue');
+const expensesSpan = document.getElementById('totalExpenses');
+const pendingSpan = document.getElementById('pendingPayments');
+const revenueCard = document.getElementById('revenueCard');
+const expensesCard = document.getElementById('expensesCard');
+const pendingCard = document.getElementById('pendingCard');
+const form = document.getElementById('transactionForm');
+const tableBody = document.getElementById('transactionBody');
+
+function parseCurrency(str) {
+  return parseInt(str.replace(/₦|,/g, '')) || 0;
+}
+function formatCurrency(num) {
+  return `₦${num.toLocaleString()}`;
+}
+
+function animateCard(card) {
+  card.classList.add('highlight');
+  setTimeout(() => card.classList.remove('highlight'), 800);
+}
+
+function updatePendingPayments() {
+  let totalPending = 0;
+  [...tableBody.rows].forEach(row => {
+    if (row.cells[5].textContent === "Unpaid") totalPending += parseCurrency(row.cells[3].textContent);
+  });
+  pendingSpan.textContent = formatCurrency(totalPending);
+  animateCard(pendingCard);
+}
+
+function recalcIDs() {
+  [...tableBody.rows].forEach((row, idx) => row.cells[0].textContent = idx + 1);
+}
+
+// ------------------ LocalStorage Functions ------------------
+function saveData() {
+  const transactions = [...tableBody.rows].map(row => ({
+    name: row.cells[1].textContent,
+    type: row.cells[2].textContent,
+    amount: parseCurrency(row.cells[3].textContent),
+    date: row.cells[4].textContent,
+    status: row.cells[5].textContent
+  }));
+
+  localStorage.setItem('dashboardData', JSON.stringify({
+    transactions,
+    totalRevenue: parseCurrency(revenueSpan.textContent),
+    totalExpenses: parseCurrency(expensesSpan.textContent)
+  }));
+}
+
+function addTransactionRow(name, type, amount, date, status) {
+  const newId = tableBody.rows.length + 1;
+  const newRow = tableBody.insertRow();
+  newRow.innerHTML = `
+    <td>${newId}</td>
+    <td>${name}</td>
+    <td>${type}</td>
+    <td>${amount.toLocaleString()}</td>
+    <td>${date}</td>
+    <td>${status}</td>
+    <td>
+      <button onclick="editTransaction(this)">Edit</button>
+      <button onclick="deleteTransaction(this)">Delete</button>
+    </td>
+  `;
+  if (status === "Unpaid") newRow.classList.add("unpaid");
+}
+
+// Load saved data on page load
+window.onload = function() {
+  const savedData = JSON.parse(localStorage.getItem('dashboardData')) || {
+    transactions: [],
+    totalRevenue: 1200000,
+    totalExpenses: 850000
+  };
+
+  revenueSpan.textContent = formatCurrency(savedData.totalRevenue);
+  expensesSpan.textContent = formatCurrency(savedData.totalExpenses);
+
+  savedData.transactions.forEach(tr => addTransactionRow(tr.name, tr.type, tr.amount, tr.date, tr.status));
+
+  updatePendingPayments();
+};
+
+// ------------------ Form Submit ------------------
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const name = document.getElementById('patientName').value;
+  const type = document.getElementById('transactionType').value;
+  const amount = parseInt(document.getElementById('transactionAmount').value);
+  const date = document.getElementById('transactionDate').value;
+  const status = document.getElementById('transactionStatus').value;
+
+  addTransactionRow(name, type, amount, date, status);
+
+  if (type === "Payment") {
+    revenueSpan.textContent = formatCurrency(parseCurrency(revenueSpan.textContent) + amount);
+    animateCard(revenueCard);
+  } else {
+    expensesSpan.textContent = formatCurrency(parseCurrency(expensesSpan.textContent) + amount);
+    animateCard(expensesCard);
+  }
+
+  updatePendingPayments();
+  saveData();
+  form.reset();
+});
+
+// ------------------ Edit & Delete Functions ------------------
+function editTransaction(btn) {
+  const row = btn.closest('tr');
+  if (btn.textContent === "Edit") {
+    for (let i = 1; i <= 5; i++) {
+      let val = row.cells[i].textContent;
+      if (i === 2) row.cells[i].innerHTML = `<select><option ${val==="Payment"?"selected":""}>Payment</option><option ${val==="Expense"?"selected":""}>Expense</option></select>`;
+      else if (i === 3) row.cells[i].innerHTML = `<input type="number" value="${parseCurrency(val)}">`;
+      else if (i === 4) row.cells[i].innerHTML = `<input type="date" value="${val}">`;
+      else if (i === 5) row.cells[i].innerHTML = `<select><option ${val==="Paid"?"selected":""}>Paid</option><option ${val==="Unpaid"?"selected":""}>Unpaid</option></select>`;
+      else row.cells[i].innerHTML = `<input type="text" value="${val}">`;
+    }
+    row.dataset.oldType = row.cells[2].textContent;
+    row.dataset.oldAmount = parseCurrency(row.cells[3].textContent);
+    btn.textContent = "Save";
+  } else {
+    const oldType = row.dataset.oldType;
+    const oldAmount = parseInt(row.dataset.oldAmount);
+
+    const name = row.cells[1].querySelector('input').value;
+    const type = row.cells[2].querySelector('select').value;
+    const amount = parseInt(row.cells[3].querySelector('input').value);
+    const date = row.cells[4].querySelector('input').value;
+    const status = row.cells[5].querySelector('select').value;
+
+    row.cells[1].textContent = name;
+    row.cells[2].textContent = type;
+    row.cells[3].textContent = amount.toLocaleString();
+    row.cells[4].textContent = date;
+    row.cells[5].textContent = status;
+
+    if (oldType === "Payment") revenueSpan.textContent = formatCurrency(parseCurrency(revenueSpan.textContent) - oldAmount);
+    else expensesSpan.textContent = formatCurrency(parseCurrency(expensesSpan.textContent) - oldAmount);
+
+    if (type === "Payment") { revenueSpan.textContent = formatCurrency(parseCurrency(revenueSpan.textContent) + amount); animateCard(revenueCard);}
+    else { expensesSpan.textContent = formatCurrency(parseCurrency(expensesSpan.textContent) + amount); animateCard(expensesCard); }
+
+    if (status === "Unpaid") row.classList.add("unpaid");
+    else row.classList.remove("unpaid");
+
+    updatePendingPayments();
+    saveData();
+    btn.textContent = "Edit";
+  }
+}
+
+function deleteTransaction(btn) {
+  const row = btn.closest('tr');
+  const type = row.cells[2].textContent;
+  const amount = parseCurrency(row.cells[3].textContent);
+
+  if (type === "Payment") { revenueSpan.textContent = formatCurrency(parseCurrency(revenueSpan.textContent) - amount); animateCard(revenueCard);}
+  else { expensesSpan.textContent = formatCurrency(parseCurrency(expensesSpan.textContent) - amount); animateCard(expensesCard);}
+
+  row.remove();
+  recalcIDs();
+  updatePendingPayments();
+  saveData();
+}
+
+// ------------------ Sorting ------------------
+document.querySelectorAll('th[data-sort]').forEach(th => {
+  th.addEventListener('click', () => {
+    const type = th.dataset.sort;
+    const rows = [...tableBody.rows];
+    rows.sort((a, b) => {
+      if (type === 'amount') return parseCurrency(b.cells[3].textContent) - parseCurrency(a.cells[3].textContent);
+      else if (type === 'date') return new Date(b.cells[4].textContent) - new Date(a.cells[4].textContent);
+    });
+    tableBody.innerHTML = '';
+    rows.forEach(r => tableBody.appendChild(r));
+    recalcIDs();
+  });
+});
+</script>
+</body>
+</html>

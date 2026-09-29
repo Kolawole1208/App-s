@@ -1,0 +1,6 @@
+{
+  "name": "DevOps and AI Mastery Metrics",
+  "description": "An interactive assessment and metric generator for tracking personal development and professional mastery in DevOps and AI domains.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

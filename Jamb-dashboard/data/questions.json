@@ -1,0 +1,818 @@
+{
+  "English": [
+    {
+      "question": "Choose the word that best completes the sentence: She ___ to the market yesterday.",
+      "options": ["go", "went", "gone", "going"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Identify the synonym of 'Benevolent'",
+      "options": ["Cruel", "Kind", "Stingy", "Selfish"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is the past tense of 'bring'?",
+      "options": ["bringed", "brang", "brought", "bring"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "Which word is spelled correctly?",
+      "options": ["Accomodate", "Acommodate", "Accommodate", "Acomodate"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "Choose the correct sentence:",
+      "options": ["She don't like apples", "She doesn't likes apples", "She doesn't like apples", "She don't likes apples"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is the antonym of 'Ancient'?",
+      "options": ["Old", "Modern", "Historic", "Traditional"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Identify the part of speech for 'quickly' in: 'He ran quickly'",
+      "options": ["Noun", "Verb", "Adjective", "Adverb"],
+      "correctAnswer": 3
+    },
+    {
+      "question": "Which is a compound sentence?",
+      "options": ["I like coffee", "I like coffee and tea", "I like coffee, but I prefer tea", "Liking coffee very much"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is the plural of 'child'?",
+      "options": ["Childs", "Children", "Childes", "Childern"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Choose the correct question tag: 'She is coming, ___?'",
+      "options": ["is she", "isn't she", "does she", "doesn't she"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which word is a preposition?",
+      "options": ["Run", "Beautiful", "Under", "Quickly"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is the direct object in: 'The boy kicked the ball'?",
+      "options": ["The boy", "kicked", "the ball", "boy"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "Identify the figurative language: 'The world is a stage'",
+      "options": ["Simile", "Metaphor", "Personification", "Hyperbole"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which sentence is in passive voice?",
+      "options": ["The cat chased the mouse", "The mouse was chased by the cat", "Chasing the mouse, the cat", "The cat and the mouse chased"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is the superlative form of 'good'?",
+      "options": ["Gooder", "Goodest", "Better", "Best"],
+      "correctAnswer": 3
+    },
+    {
+      "question": "Choose the correct word: 'There are too ___ people here'",
+      "options": ["much", "many", "few", "less"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which is an example of onomatopoeia?",
+      "options": ["Bright", "Buzz", "Beautiful", "Big"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What tense is: 'I will have finished'?",
+      "options": ["Future perfect", "Future continuous", "Present perfect", "Past perfect"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "Identify the conjunction: 'I like both tea and coffee'",
+      "options": ["I", "like", "both", "and"],
+      "correctAnswer": 3
+    },
+    {
+      "question": "Which is the correct punctuation?",
+      "options": ["What time is it.", "What time is it?", "What time is it", "What, time is it?"],
+      "correctAnswer": 1
+    }
+  ],
+  "Mathematics": [
+    {
+      "question": "Solve for x: 2x + 5 = 15",
+      "options": ["5", "10", "7.5", "8"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "What is the area of a circle with radius 7cm?",
+      "options": ["44cm²", "154cm²", "49cm²", "22cm²"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Simplify: 3(x + 4) - 2(x - 1)",
+      "options": ["x + 14", "x + 10", "5x + 10", "5x + 14"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "What is 15% of 200?",
+      "options": ["15", "30", "20", "25"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Solve: 2³ × 2² = ?",
+      "options": ["16", "32", "64", "128"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is the value of π to 2 decimal places?",
+      "options": ["3.14", "3.16", "3.12", "3.18"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "If a triangle has angles 60° and 80°, what is the third angle?",
+      "options": ["30°", "40°", "50°", "60°"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is the square root of 144?",
+      "options": ["11", "12", "13", "14"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Solve: (3 + 5) × 2 - 4 = ?",
+      "options": ["12", "14", "16", "18"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "What is the perimeter of a rectangle with length 8cm and width 5cm?",
+      "options": ["13cm", "26cm", "40cm", "20cm"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Convert 0.75 to fraction:",
+      "options": ["1/4", "1/2", "3/4", "2/3"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is the mean of: 2, 4, 6, 8, 10?",
+      "options": ["5", "6", "7", "8"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Solve: 5x - 3 = 2x + 9",
+      "options": ["2", "3", "4", "5"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is 7² + 8²?",
+      "options": ["49", "64", "113", "15"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "If y = 3x + 2 and x = 4, what is y?",
+      "options": ["10", "12", "14", "16"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is the volume of a cube with side 3cm?",
+      "options": ["9cm³", "18cm³", "27cm³", "36cm³"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "Simplify: 12/18",
+      "options": ["1/2", "2/3", "3/4", "4/6"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is the next number: 2, 4, 8, 16, ___?",
+      "options": ["24", "32", "36", "64"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Solve: ¼ + ½ = ?",
+      "options": ["1/6", "2/6", "3/4", "3/8"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is 25% as a decimal?",
+      "options": ["0.25", "0.025", "2.5", "25.0"],
+      "correctAnswer": 0
+    }
+  ],
+  "Physics": [
+    {
+      "question": "What is the SI unit of force?",
+      "options": ["Joule", "Newton", "Watt", "Pascal"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which law states that every action has an equal and opposite reaction?",
+      "options": ["Newton's First Law", "Newton's Second Law", "Newton's Third Law", "Ohm's Law"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is the speed of light in vacuum?",
+      "options": ["3 × 10⁶ m/s", "3 × 10⁸ m/s", "3 × 10¹⁰ m/s", "3 × 10⁵ m/s"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which instrument is used to measure electric current?",
+      "options": ["Voltmeter", "Ammeter", "Galvanometer", "Ohmmeter"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is the unit of electric resistance?",
+      "options": ["Volt", "Ampere", "Ohm", "Watt"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "Which color has the longest wavelength?",
+      "options": ["Violet", "Blue", "Green", "Red"],
+      "correctAnswer": 3
+    },
+    {
+      "question": "What is the acceleration due to gravity on Earth?",
+      "options": ["8.9 m/s²", "9.8 m/s²", "10.2 m/s²", "11.5 m/s²"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which type of mirror is used in vehicles for side view?",
+      "options": ["Plane mirror", "Concave mirror", "Convex mirror", "Spherical mirror"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is the SI unit of power?",
+      "options": ["Joule", "Newton", "Watt", "Pascal"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "Which law states: Pressure × Volume = Constant (at constant temperature)?",
+      "options": ["Charles' Law", "Boyle's Law", "Gay-Lussac's Law", "Avogadro's Law"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is the unit of frequency?",
+      "options": ["Hertz", "Decibel", "Watt", "Ohm"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "Which material is the best conductor of electricity?",
+      "options": ["Iron", "Copper", "Silver", "Gold"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What type of lens is used to correct short-sightedness?",
+      "options": ["Convex lens", "Concave lens", "Cylindrical lens", "Bifocal lens"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which electromagnetic wave has the highest frequency?",
+      "options": ["Radio waves", "Microwaves", "X-rays", "Gamma rays"],
+      "correctAnswer": 3
+    },
+    {
+      "question": "What is the principle behind hydraulic brakes?",
+      "options": ["Bernoulli's principle", "Pascal's principle", "Archimedes' principle", "Newton's principle"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which quantity has both magnitude and direction?",
+      "options": ["Scalar", "Vector", "Tensor", "Matrix"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is the unit of work?",
+      "options": ["Newton", "Watt", "Joule", "Pascal"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "Which gas is used in electric bulbs?",
+      "options": ["Oxygen", "Nitrogen", "Argon", "Hydrogen"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is the speed of sound in air at 20°C?",
+      "options": ["330 m/s", "343 m/s", "300 m/s", "380 m/s"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which particle has positive charge?",
+      "options": ["Electron", "Proton", "Neutron", "Photon"],
+      "correctAnswer": 1
+    }
+  ],
+  "Chemistry": [
+    {
+      "question": "What is the atomic number of Carbon?",
+      "options": ["6", "12", "14", "8"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "Which gas is most abundant in Earth's atmosphere?",
+      "options": ["Oxygen", "Carbon dioxide", "Nitrogen", "Hydrogen"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is the chemical formula for water?",
+      "options": ["H₂O", "HO₂", "H₂O₂", "OH"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "Which element has the symbol 'Au'?",
+      "options": ["Silver", "Gold", "Aluminum", "Argon"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is the pH of pure water?",
+      "options": ["5", "6", "7", "8"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "Which gas turns lime water milky?",
+      "options": ["Oxygen", "Hydrogen", "Carbon dioxide", "Nitrogen"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is the atomic mass of Hydrogen?",
+      "options": ["1", "2", "3", "4"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "Which metal is liquid at room temperature?",
+      "options": ["Iron", "Copper", "Mercury", "Sodium"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is the formula of common salt?",
+      "options": ["NaCl", "KCl", "CaCl₂", "MgCl₂"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "Which acid is present in vinegar?",
+      "options": ["Hydrochloric acid", "Sulfuric acid", "Acetic acid", "Citric acid"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is the valency of Oxygen?",
+      "options": ["1", "2", "3", "4"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which gas is used in photosynthesis?",
+      "options": ["Oxygen", "Nitrogen", "Carbon dioxide", "Hydrogen"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is the chemical name of baking soda?",
+      "options": ["Sodium carbonate", "Sodium bicarbonate", "Calcium carbonate", "Potassium bicarbonate"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which element has the highest electronegativity?",
+      "options": ["Fluorine", "Chlorine", "Oxygen", "Nitrogen"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "What is the formula of methane?",
+      "options": ["CH₄", "C₂H₆", "C₃H₈", "C₄H₁₀"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "Which process converts sugar to alcohol?",
+      "options": ["Fermentation", "Distillation", "Evaporation", "Sublimation"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "What is the atomic number of Gold?",
+      "options": ["74", "78", "79", "82"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "Which gas is used in advertising signs?",
+      "options": ["Neon", "Argon", "Helium", "Xenon"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "What is the main component of natural gas?",
+      "options": ["Ethane", "Propane", "Butane", "Methane"],
+      "correctAnswer": 3
+    },
+    {
+      "question": "Which metal is the best conductor of electricity?",
+      "options": ["Copper", "Silver", "Gold", "Aluminum"],
+      "correctAnswer": 1
+    }
+  ],
+  "Biology": [
+    {
+      "question": "Which organ is responsible for pumping blood?",
+      "options": ["Liver", "Heart", "Lungs", "Kidney"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is the basic unit of life?",
+      "options": ["Tissue", "Organ", "Cell", "Molecule"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "Which process do plants use to make food?",
+      "options": ["Respiration", "Photosynthesis", "Digestion", "Transpiration"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "How many chromosomes do humans have?",
+      "options": ["23", "46", "48", "24"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which blood group is the universal donor?",
+      "options": ["A", "B", "AB", "O"],
+      "correctAnswer": 3
+    },
+    {
+      "question": "What is the powerhouse of the cell?",
+      "options": ["Nucleus", "Mitochondria", "Ribosome", "Golgi apparatus"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which vitamin is produced when skin is exposed to sunlight?",
+      "options": ["Vitamin A", "Vitamin B", "Vitamin C", "Vitamin D"],
+      "correctAnswer": 3
+    },
+    {
+      "question": "What is the study of plants called?",
+      "options": ["Zoology", "Botany", "Ecology", "Genetics"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which part of the plant absorbs water?",
+      "options": ["Leaves", "Stem", "Roots", "Flowers"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is the largest organ in the human body?",
+      "options": ["Liver", "Skin", "Heart", "Lungs"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which gas do plants release during photosynthesis?",
+      "options": ["Oxygen", "Carbon dioxide", "Nitrogen", "Hydrogen"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "What is the normal human body temperature?",
+      "options": ["36°C", "37°C", "38°C", "39°C"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which blood cells fight infection?",
+      "options": ["Red blood cells", "White blood cells", "Platelets", "Plasma"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is the process of cell division called?",
+      "options": ["Mitosis", "Meiosis", "Cytokinesis", "Fission"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "Which organ produces insulin?",
+      "options": ["Liver", "Pancreas", "Kidney", "Stomach"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is the largest bone in human body?",
+      "options": ["Femur", "Humerus", "Tibia", "Fibula"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "Which system includes the brain and spinal cord?",
+      "options": ["Circulatory system", "Nervous system", "Respiratory system", "Digestive system"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is the function of chlorophyll?",
+      "options": ["Absorb water", "Absorb sunlight", "Produce oxygen", "Store food"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which vitamin deficiency causes scurvy?",
+      "options": ["Vitamin A", "Vitamin B", "Vitamin C", "Vitamin D"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is the scientific name of humans?",
+      "options": ["Homo erectus", "Homo habilis", "Homo sapiens", "Homo neanderthalensis"],
+      "correctAnswer": 2
+    }
+  ],
+  "Economics": [
+    {
+      "question": "What does GDP stand for?",
+      "options": ["Gross Domestic Product", "General Domestic Price", "Gross Demand Product", "General Demand Price"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "Which is NOT a factor of production?",
+      "options": ["Land", "Labor", "Money", "Capital"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is inflation?",
+      "options": ["Decrease in prices", "Increase in prices", "Stable prices", "Decrease in money supply"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Who is called the father of economics?",
+      "options": ["John Maynard Keynes", "Adam Smith", "Karl Marx", "Milton Friedman"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is the study of individual economic behavior called?",
+      "options": ["Macroeconomics", "Microeconomics", "Development economics", "International economics"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which organization regulates banking in Nigeria?",
+      "options": ["NDIC", "CBN", "SEC", "NSE"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is opportunity cost?",
+      "options": ["Cost of production", "Cost of the next best alternative", "Fixed cost", "Variable cost"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which is a direct tax?",
+      "options": ["Sales tax", "Income tax", "VAT", "Excise duty"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What does CBN stand for?",
+      "options": ["Central Bank of Nigeria", "Commercial Bank of Nigeria", "Currency Board of Nigeria", "Credit Bureau of Nigeria"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "Which is a characteristic of perfect competition?",
+      "options": ["Many buyers and sellers", "Few sellers", "Product differentiation", "Barriers to entry"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "What is fiscal policy?",
+      "options": ["Government spending and taxation", "Control of money supply", "Interest rate regulation", "Foreign exchange control"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "Which is NOT a type of unemployment?",
+      "options": ["Frictional", "Structural", "Cyclical", "Productive"],
+      "correctAnswer": 3
+    },
+    {
+      "question": "What is the law of demand?",
+      "options": ["Price increases, demand increases", "Price increases, demand decreases", "Price decreases, demand decreases", "Price has no effect on demand"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which is a renewable resource?",
+      "options": ["Coal", "Oil", "Solar energy", "Natural gas"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is a budget deficit?",
+      "options": ["Government spending equals revenue", "Government spending less than revenue", "Government spending more than revenue", "No government spending"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "Which market structure has only one seller?",
+      "options": ["Perfect competition", "Monopoly", "Oligopoly", "Monopolistic competition"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is human capital?",
+      "options": ["Money invested in business", "Skills and knowledge of workers", "Physical machinery", "Natural resources"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which is an example of a public good?",
+      "options": ["Private car", "Personal computer", "National defense", "Restaurant meal"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is barter system?",
+      "options": ["Exchange of goods for money", "Exchange of goods for goods", "Banking system", "Credit system"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which is a developing country?",
+      "options": ["United States", "Germany", "Japan", "Nigeria"],
+      "correctAnswer": 3
+    }
+  ],
+  "Government": [
+    {
+      "question": "What is the system of government in Nigeria?",
+      "options": ["Parliamentary", "Presidential", "Monarchy", "Confederal"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "How many states are in Nigeria?",
+      "options": ["36", "37", "35", "30"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "Which arm of government makes laws?",
+      "options": ["Executive", "Judiciary", "Legislature", "Military"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What year did Nigeria gain independence?",
+      "options": ["1960", "1963", "1957", "1970"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "Who is the current President of Nigeria?",
+      "options": ["Muhammadu Buhari", "Bola Tinubu", "Goodluck Jonathan", "Olusegun Obasanjo"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is the upper house of Nigerian legislature called?",
+      "options": ["House of Representatives", "Senate", "National Assembly", "Parliament"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which is NOT a tier of government in Nigeria?",
+      "options": ["Federal", "State", "Local", "Regional"],
+      "correctAnswer": 3
+    },
+    {
+      "question": "What is the capital of Nigeria?",
+      "options": ["Lagos", "Abuja", "Kano", "Port Harcourt"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "How many local government areas in Nigeria?",
+      "options": ["744", "768", "774", "790"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "Which document is the supreme law of Nigeria?",
+      "options": ["1999 Constitution", "Independence Act", "Republican Constitution", "Military Decree"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "What is the voting age in Nigeria?",
+      "options": ["16", "18", "21", "25"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which is a fundamental human right?",
+      "options": ["Right to life", "Right to property", "Right to education", "All of the above"],
+      "correctAnswer": 3
+    },
+    {
+      "question": "What does INEC stand for?",
+      "options": ["Independent National Electoral Commission", "International Nuclear Energy Commission", "Indian National Election Committee", "Industrial National Economic Council"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "Which is a characteristic of democracy?",
+      "options": ["Military rule", "One-party system", "Free and fair elections", "Life presidency"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is separation of powers?",
+      "options": ["Division of government into branches", "Division of country into states", "Separation of religion and state", "Separation of rich and poor"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "Which is NOT a type of constitution?",
+      "options": ["Written", "Unwritten", "Rigid", "Democratic"],
+      "correctAnswer": 3
+    },
+    {
+      "question": "What is federalism?",
+      "options": ["Division of power between central and regional governments", "Complete centralization of power", "Military government", "One-party system"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "Which organ implements government policies?",
+      "options": ["Legislature", "Judiciary", "Executive", "Civil Service"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "What is the term length for Nigerian President?",
+      "options": ["3 years", "4 years", "5 years", "6 years"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which is a function of government?",
+      "options": ["Maintenance of law and order", "Running private businesses", "Personal banking", "International trade only"],
+      "correctAnswer": 0
+    }
+  ],
+  "Literature": [
+    {
+      "question": "Who wrote 'Things Fall Apart'?",
+      "options": ["Wole Soyinka", "Chinua Achebe", "Chimamanda Adichie", "Ben Okri"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is a fourteen-line poem called?",
+      "options": ["Sonnet", "Haiku", "Limerick", "Ode"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "Which is a tragedy by William Shakespeare?",
+      "options": ["A Midsummer Night's Dream", "Hamlet", "Twelfth Night", "The Tempest"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is the main character in a story called?",
+      "options": ["Antagonist", "Protagonist", "Narrator", "Hero"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which literary device compares two unlike things using 'like' or 'as'?",
+      "options": ["Metaphor", "Simile", "Personification", "Hyperbole"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Who wrote 'Romeo and Juliet'?",
+      "options": ["Charles Dickens", "William Shakespeare", "Jane Austen", "George Orwell"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is the time and place of a story called?",
+      "options": ["Plot", "Setting", "Theme", "Conflict"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which is an example of prose?",
+      "options": ["Poem", "Novel", "Song", "Play"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is the emotional atmosphere of a literary work called?",
+      "options": ["Tone", "Mood", "Style", "Diction"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Who wrote 'The Lion and the Jewel'?",
+      "options": ["Chinua Achebe", "Wole Soyinka", "Ngugi wa Thiong'o", "Cyprian Ekwensi"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is a play on words called?",
+      "options": ["Pun", "Irony", "Satire", "Parody"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "Which is a characteristic of drama?",
+      "options": ["It is meant to be performed", "It always rhymes", "It has no characters", "It is always tragic"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "What is the repetition of initial consonant sounds called?",
+      "options": ["Assonance", "Consonance", "Alliteration", "Rhyme"],
+      "correctAnswer": 2
+    },
+    {
+      "question": "Who is the author of 'Animal Farm'?",
+      "options": ["George Orwell", "Aldous Huxley", "H.G. Wells", "J.R.R. Tolkien"],
+      "correctAnswer": 0
+    },
+    {
+      "question": "What is a brief story that teaches a moral lesson?",
+      "options": ["Novel", "Fable", "Epic", "Ballad"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which Nigerian writer won the Nobel Prize in Literature?",
+      "options": ["Chinua Achebe", "Wole Soyinka", "Ben Okri", "Chimamanda Adichie"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "What is the central idea of a literary work called?",
+      "options": ["Plot", "Theme", "Setting", "Character"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which is a type of conflict?",
+      "options": ["Man vs Man", "Man vs Nature", "Man vs Society", "All of the above"],
+      "correctAnswer": 3
+    },
+    {
+      "question": "What is the sequence of events in a story called?",
+      "options": ["Setting", "Plot", "Theme", "Characterization"],
+      "correctAnswer": 1
+    },
+    {
+      "question": "Which is an example of non-fiction?",
+      "options": ["Novel", "Biography", "Short story", "Poem"],
+      "correctAnswer": 1
+    }
+  ]
+}

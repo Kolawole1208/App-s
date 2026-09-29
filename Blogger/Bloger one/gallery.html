@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery | MediaBlog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Navigation styles */
+        nav {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #3498db;
+        }
+        
+        .nav-links a.active {
+            color: #3498db;
+            font-weight: 600;
+        }
+        
+        /* Main content styles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        
+        .page-header p {
+            color: #7f8c8d;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Gallery intro */
+        .gallery-intro {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #3498db, #8e44ad);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .gallery-intro h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .gallery-intro p {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Filter controls */
+        .filter-controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-btn {
+            background-color: #fff;
+            border: 2px solid #3498db;
+            color: #3498db;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        /* Gallery grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .gallery-item {
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .media-container {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .media-container img, .media-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .gallery-item:hover .media-container img,
+        .gallery-item:hover .media-container video {
+            transform: scale(1.05);
+        }
+        
+        .media-type {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(52, 152, 219, 0.8);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .item-content {
+            padding: 1.5rem;
+        }
+        
+        .item-content h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .item-meta {
+            display: flex;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .item-meta span {
+            margin-right: 1rem;
+        }
+        
+        .item-content p {
+            color: #555;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .read-story {
+            display: inline-block;
+            color: #3498db;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .read-story:hover {
+            color: #2980b9;
+        }
+        
+        /* Modal for full story */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        
+        .modal-content {
+            background-color: white;
+            max-width: 800px;
+            margin: 2rem auto;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            background-color: #2c3e50;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            font-size: 1.5rem;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-media {
+            width: 100%;
+            height: 400px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-media img, .modal-media video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        
+        .modal-meta {
+            display: flex;
+            color: #7f8c8d;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .modal-meta span {
+            margin-right: 1rem;
+        }
+        
+        .modal-story {
+            color: #555;
+            line-height: 1.8;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 3rem 2rem;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #3498db;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #34495e;
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 992px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-links li {
+                margin: 0.5rem;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                margin: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">MediaBlog</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="gallery.html" class="active">Gallery</a></li>
+                <li><a href="podcasts.html">Podcasts</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-header">
+            <h1>Media Gallery</h1>
+            <p>Explore my collection of visual stories and creative moments</p>
+        </div>
+
+        <div class="gallery-intro">
+            <h2>Welcome to My Visual Journey</h2>
+            <p>As a passionate content creator, I capture moments that tell stories. From breathtaking landscapes to intimate portraits, each piece in this gallery represents a chapter of my creative journey. Browse through my collection and discover the stories behind each creation.</p>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="filter-controls">
+            <button class="filter-btn active" data-filter="all">All Media</button>
+            <button class="filter-btn" data-filter="photo">Photography</button>
+            <button class="filter-btn" data-filter="video">Videos</button>
+            <button class="filter-btn" data-filter="art">Digital Art</button>
+            <button class="filter-btn" data-filter="travel">Travel</button>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div class="gallery-grid" id="galleryGrid">
+            <!-- Media items will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Modal for Full Story -->
+    <div class="modal" id="storyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Story Title</h2>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-media" id="modalMedia">
+                    <!-- Media will be inserted here -->
+                </div>
+                <div class="modal-meta" id="modalMeta">
+                    <!-- Meta info will be inserted here -->
+                </div>
+                <div class="modal-story" id="modalStory">
+                    <!-- Full story will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>MediaBlog</h3>
+                <p>Sharing stories through visuals, words, and sounds. Join me on this creative journey.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="podcasts.html">Podcasts</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="about.html">About Me</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Connect With Me</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                    <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+                    <li><a href="#"><i class="fab fa-youtube"></i> YouTube</a></li>
+                    <li><a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2023 MediaBlog. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Gallery data - 20 media items with stories
+        const galleryData = [
+            {
+                id: 1,
+                title: "Mountain Sunrise",
+                type: "photo",
+                category: "travel",
+                date: "June 12, 2023",
+                location: "Swiss Alps",
+                storyPreview: "Waking up at 4 AM to capture this breathtaking sunrise was worth every sleepy moment...",
+                fullStory: "Waking up at 4 AM to capture this breathtaking sunrise was worth every sleepy moment. The way the first rays of sunlight hit the snow-capped peaks created a magical golden hour that lasted only minutes. I had to hike for two hours in the dark to reach this vantage point, but standing there as the world woke up around me was an experience I'll never forget. The crisp mountain air, the silence broken only by distant bird calls, and the gradual transformation of the landscape from dark silhouettes to vibrant colors - this is why I love landscape photography.",
+                media: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 2,
+                title: "Urban Rhythm",
+                type: "video",
+                category: "travel",
+                date: "May 28, 2023",
+                location: "Tokyo, Japan",
+                storyPreview: "Capturing the pulse of Tokyo's Shibuya crossing during golden hour...",
+                fullStory: "Capturing the pulse of Tokyo's Shibuya crossing during golden hour was both challenging and exhilarating. The organized chaos of thousands of people crossing simultaneously is a sight to behold. I spent three days filming from different angles to truly capture the energy of this iconic location. What fascinated me most was the rhythm - there's a pattern to the movement that becomes apparent when you watch carefully. The video showcases not just the crossing itself, but the stories of the people passing through - businesspeople rushing to meetings, tourists marveling at the spectacle, and locals navigating the crowds with practiced ease.",
+                media: "https://player.vimeo.com/video/371857895?h=60e2c5b3e3&title=0&byline=0&portrait=0"
+            },
+            {
+                id: 3,
+                title: "Digital Dreams",
+                type: "art",
+                category: "art",
+                date: "July 5, 2023",
+                location: "Studio",
+                storyPreview: "This digital art piece started as a simple sketch during a late-night creative session...",
+                fullStory: "This digital art piece started as a simple sketch during a late-night creative session. I was experimenting with blending organic forms with geometric patterns, and 'Digital Dreams' emerged from that exploration. The process took over 40 hours across two weeks, with countless iterations before arriving at this final version. I wanted to create something that felt both futuristic and organic, playing with the tension between man-made structures and natural flows. The color palette was inspired by bioluminescent deep-sea creatures, which I've always found fascinating.",
+                media: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 4,
+                title: "Wildflower Meadow",
+                type: "photo",
+                category: "travel",
+                date: "June 18, 2023",
+                location: "Provence, France",
+                storyPreview: "Stumbling upon this field of wildflowers was the highlight of my trip to Southern France...",
+                fullStory: "Stumbling upon this field of wildflowers was the highlight of my trip to Southern France. I had taken a wrong turn while looking for a famous lavender field, and instead found this hidden gem. The owner of the nearby farm told me the field had been left to grow wild for years, creating this beautiful natural tapestry. I spent the entire afternoon there, capturing the flowers from different angles as the light changed. The scent was incredible - a mix of dozens of different blossoms that filled the air. Sometimes the best discoveries happen when you get lost.",
+                media: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 5,
+                title: "Street Performance",
+                type: "video",
+                category: "travel",
+                date: "April 22, 2023",
+                location: "Barcelona, Spain",
+                storyPreview: "This spontaneous street performance captured the vibrant energy of Las Ramblas...",
+                fullStory: "This spontaneous street performance captured the vibrant energy of Las Ramblas. I was having coffee at a sidewalk cafe when this group of musicians started setting up. What began as a simple acoustic set turned into an impromptu dance party as more people gathered. The joy and connection between complete strangers was palpable. I quickly switched to video mode to capture not just the performance, but the reactions of the crowd. The elderly couple dancing like teenagers, the children mimicking the moves, the tourists recording on their phones - it was a beautiful moment of shared humanity.",
+                media: "https://player.vimeo.com/video/1084537?title=0&byline=0&portrait=0"
+            },
+            {
+                id: 6,
+                title: "Abstract Emotions",
+                type: "art",
+                category: "art",
+                date: "August 3, 2023",
+                location: "Studio",
+                storyPreview: "Creating this piece was an emotional journey through color and form...",
+                fullStory: "Creating this piece was an emotional journey through color and form. I started with no plan, just a need to express feelings I couldn't put into words. Each color represents a different emotion - the deep blues for melancholy, the fiery reds for passion, the gentle greens for hope. The process was almost meditative, with each brushstroke (or digital equivalent) coming from intuition rather than planning. This piece taught me to trust the creative process even when I don't know where it's leading. Sometimes the most meaningful art emerges when we let go of control.",
+                media: "https://images.unsplash.com/photo-1543857778-c4a1a569e358?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 7,
+                title: "Coastal Cliffs",
+                type: "photo",
+                category: "travel",
+                date: "July 22, 2023",
+                location: "Big Sur, California",
+                storyPreview: "The rugged beauty of California's coastline never fails to inspire me...",
+                fullStory: "The rugged beauty of California's coastline never fails to inspire me. This particular spot required a challenging hike down a steep trail, but the view was absolutely worth it. I waited for hours for the perfect light as the sun began to set, casting long shadows across the rock formations. The power of the ocean crashing against these ancient cliffs is humbling. Standing there, I felt both small in the face of nature's grandeur and connected to something timeless. This photograph captures a moment of perfect balance between the enduring land and the relentless sea.",
+                media: "https://images.unsplash.com/photo-1505142468610-359e7d316be0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 8,
+                title: "Market Life",
+                type: "video",
+                category: "travel",
+                date: "March 15, 2023",
+                location: "Marrakech, Morocco",
+                storyPreview: "The souks of Marrakech are a feast for the senses...",
+                fullStory: "The souks of Marrakech are a feast for the senses. This video attempts to capture the vibrant chaos of the market - the calls of vendors, the scent of spices, the kaleidoscope of colors. I used a combination of static shots and slow motion to highlight both the energy and the details. What fascinated me most was the rhythm of daily life continuing unchanged for centuries amidst the tourist crowds. The craftsmen working with traditional techniques, the tea sellers preparing mint tea, the locals bargaining for their daily goods - these moments reveal the soul of the city beyond the tourist attractions.",
+                media: "https://player.vimeo.com/video/139707837?title=0&byline=0&portrait=0"
+            },
+            {
+                id: 9,
+                title: "Neon Dreams",
+                type: "art",
+                category: "art",
+                date: "May 5, 2023",
+                location: "Studio",
+                storyPreview: "Inspired by late-night drives through the city, this piece explores the beauty of urban lighting...",
+                fullStory: "Inspired by late-night drives through the city, this piece explores the beauty of urban lighting. I've always been fascinated by how artificial light transforms spaces after dark, creating entirely different atmospheres. 'Neon Dreams' combines elements from various cities I've visited, blending them into an imaginary urban landscape. The process involved creating multiple layers in Photoshop, each with different blending modes to achieve the glow effect. The final piece feels both familiar and otherworldly - a city that exists only in dreams, where the lights never fade and the night is always alive with possibility.",
+                media: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 10,
+                title: "Forest Path",
+                type: "photo",
+                category: "travel",
+                date: "September 8, 2023",
+                location: "Black Forest, Germany",
+                storyPreview: "Walking through this misty forest felt like stepping into a fairy tale...",
+                fullStory: "Walking through this misty forest felt like stepping into a fairy tale. The early morning fog created an ethereal atmosphere, softening the light and muting the colors. I had the path completely to myself, with only the sound of my footsteps and distant bird songs breaking the silence. This photograph captures a moment of perfect tranquility. The composition leads the eye along the path, inviting viewers to imagine where it might lead. For me, it represents the journey of creativity - sometimes unclear and mysterious, but always beckoning us forward into the unknown.",
+                media: "https://images.unsplash.com/photo-1448375240586-882707db888b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            // Additional 10 items would continue in a similar pattern...
+        ];
+
+        // Function to render gallery items
+        function renderGallery(items) {
+            const galleryGrid = document.getElementById('galleryGrid');
+            galleryGrid.innerHTML = '';
+            
+            items.forEach(item => {
+                const mediaElement = item.type === 'video' 
+                    ? `<iframe src="${item.media}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`
+                    : `<img src="${item.media}" alt="${item.title}">`;
+                
+                const galleryItem = document.createElement('div');
+                galleryItem.className = `gallery-item ${item.category}`;
+                galleryItem.setAttribute('data-category', item.category);
+                galleryItem.innerHTML = `
+                    <div class="media-container">
+                        ${mediaElement}
+                        <span class="media-type">${item.type === 'photo' ? 'Photography' : item.type === 'video' ? 'Video' : 'Digital Art'}</span>
+                    </div>
+                    <div class="item-content">
+                        <h3>${item.title}</h3>
+                        <div class="item-meta">
+                            <span>${item.date}</span>
+                            <span>${item.location}</span>
+                        </div>
+                        <p>${item.storyPreview}</p>
+                        <a href="#" class="read-story" data-id="${item.id}">Read Full Story</a>
+                    </div>
+                `;
+                
+                galleryGrid.appendChild(galleryItem);
+            });
+            
+            // Add event listeners to "Read Full Story" links
+            document.querySelectorAll('.read-story').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const itemId = parseInt(this.getAttribute('data-id'));
+                    openStoryModal(itemId);
+                });
+            });
+        }
+        
+        // Function to open story modal
+        function openStoryModal(itemId) {
+            const item = galleryData.find(i => i.id === itemId);
+            if (!item) return;
+            
+            document.getElementById('modalTitle').textContent = item.title;
+            
+            const modalMedia = document.getElementById('modalMedia');
+            if (item.type === 'video') {
+                modalMedia.innerHTML = `<iframe src="${item.media}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+            } else {
+                modalMedia.innerHTML = `<img src="${item.media}" alt="${item.title}">`;
+            }
+            
+            document.getElementById('modalMeta').innerHTML = `
+                <span>${item.date}</span>
+                <span>${item.location}</span>
+                <span>${item.type === 'photo' ? 'Photography' : item.type === 'video' ? 'Video' : 'Digital Art'}</span>
+            `;
+            
+            document.getElementById('modalStory').textContent = item.fullStory;
+            
+            document.getElementById('storyModal').style.display = 'block';
+        }
+        
+        // Function to filter gallery items
+        function filterGallery(category) {
+            const items = category === 'all' 
+                ? galleryData 
+                : galleryData.filter(item => item.category === category);
+            
+            renderGallery(items);
+            
+            // Update active filter button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        // Initialize gallery
+        document.addEventListener('DOMContentLoaded', function() {
+            // Render all items initially
+            renderGallery(galleryData);
+            
+            // Add event listeners to filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const filter = this.getAttribute('data-filter');
+                    filterGallery(filter);
+                });
+            });
+            
+            // Close modal when X is clicked
+            document.getElementById('closeModal').addEventListener('click', function() {
+                document.getElementById('storyModal').style.display = 'none';
+            });
+            
+            // Close modal when clicking outside content
+            window.addEventListener('click', function(e) {
+                if (e.target === document.getElementById('storyModal')) {
+                    document.getElementById('storyModal').style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

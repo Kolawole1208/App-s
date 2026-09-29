@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital Rating Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: #f4f6f9;
+    }
+    header {
+      background: #00539C;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+    .dashboard {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      height: 100vh;
+    }
+    .sidebar {
+      background: #1c1c1c;
+      color: #fff;
+      padding: 20px;
+    }
+    .sidebar h2 {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar ul li {
+      margin: 15px 0;
+      cursor: pointer;
+    }
+    .content {
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+    .card h3 {
+      margin: 10px 0;
+      font-size: 1em;
+      color: #555;
+    }
+    .card p {
+      font-size: 1.4em;
+      font-weight: bold;
+      color: #00539C;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+    table th, table td {
+      padding: 15px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+    table th {
+      background: #00539C;
+      color: #fff;
+    }
+    .filter-box {
+      margin: 20px 0;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .filter-box select {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      flex: 1;
+      min-width: 200px;
+    }
+    .filter-box button {
+      padding: 10px 20px;
+      background: #00539C;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+    }
+    .filter-box button:hover {
+      background: #003d73;
+    }
+  </style>
+</head>
+<body>
+  <header>🇳igeria Hospital Rating Systems</header>
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h2>Menu</h2>
+      <ul>
+        <li>Overview</li>
+        <li>Mortality</li>
+        <li>Safety</li>
+        <li>Readmissions</li>
+        <li>Patient Experience</li>
+        <li>Care Timeliness</li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+      <!-- Filter/Search -->
+      <div class="filter-box">
+        <select id="stateSelect" onchange="updateHospitalDropdown()">
+          <option value="">Select State</option>
+          <option value="Lagos">Lagos</option>
+          <option value="Abuja">Abuja</option>
+          <option value="Kano">Kano</option>
+        </select>
+
+        <select id="hospitalSelect">
+          <option value="">Select Hospital</option>
+        </select>
+
+        <button onclick="filterHospital()">Search</button>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="cards">
+        <div class="card">
+          <h3>Mortality</h3>
+          <p id="mortality">-</p>
+        </div>
+        <div class="card">
+          <h3>Safety</h3>
+          <p id="safety">-</p>
+        </div>
+        <div class="card">
+          <h3>Readmissions</h3>
+          <p id="readmissions">-</p>
+        </div>
+        <div class="card">
+          <h3>Patient Experience</h3>
+          <p id="experience">-</p>
+        </div>
+        <div class="card">
+          <h3>Care Timeliness</h3>
+          <p id="timeliness">-</p>
+        </div>
+      </div>
+
+      <!-- Hospital-wise Chart -->
+      <h2>Hospital-wise Comparison</h2>
+      <canvas id="hospitalChart" height="100"></canvas>
+
+      <!-- Table -->
+      <h2>Hospital Comparison Table</h2>
+      <table>
+        <tr>
+          <th>Hospital</th>
+          <th>Mortality</th>
+          <th>Safety</th>
+          <th>Readmissions</th>
+          <th>Patient Experience</th>
+          <th>Care Timeliness</th>
+        </tr>
+        <tr>
+          <td>Lagos General</td>
+          <td>2.1%</td>
+          <td>90%</td>
+          <td>11%</td>
+          <td>80%</td>
+          <td>85%</td>
+        </tr>
+        <tr>
+          <td>Abuja Specialist</td>
+          <td>2.5%</td>
+          <td>87%</td>
+          <td>13%</td>
+          <td>76%</td>
+          <td>81%</td>
+        </tr>
+        <tr>
+          <td>Kano Teaching</td>
+          <td>2.2%</td>
+          <td>88%</td>
+          <td>12%</td>
+          <td>79%</td>
+          <td>83%</td>
+        </tr>
+      </table>
+
+      <!-- State-wise chart -->
+      <h2>State-wise Average Ratings</h2>
+      <canvas id="stateChart" height="100"></canvas>
+    </div>
+  </div>
+
+  <script>
+    // Hospital Data grouped by state
+    const hospitalData = {
+      "Lagos": {
+        "Lagos General": { mortality: "2.1%", safety: "90%", readmissions: "11%", experience: "80%", timeliness: "85%" }
+      },
+      "Abuja": {
+        "Abuja Specialist": { mortality: "2.5%", safety: "87%", readmissions: "13%", experience: "76%", timeliness: "81%" }
+      },
+      "Kano": {
+        "Kano Teaching": { mortality: "2.2%", safety: "88%", readmissions: "12%", experience: "79%", timeliness: "83%" }
+      }
+    };
+
+    // Update hospitals when state is selected
+    function updateHospitalDropdown() {
+      const state = document.getElementById("stateSelect").value;
+      const hospitalSelect = document.getElementById("hospitalSelect");
+      hospitalSelect.innerHTML = "<option value=''>Select Hospital</option>";
+
+      if (hospitalData[state]) {
+        Object.keys(hospitalData[state]).forEach(hospital => {
+          let option = document.createElement("option");
+          option.value = hospital;
+          option.textContent = hospital;
+          hospitalSelect.appendChild(option);
+        });
+      }
+    }
+
+    // Filter/Search function
+    function filterHospital() {
+      const state = document.getElementById("stateSelect").value;
+      const hospitalName = document.getElementById("hospitalSelect").value;
+
+      if (hospitalData[state] && hospitalData[state][hospitalName]) {
+        let hospital = hospitalData[state][hospitalName];
+        document.getElementById("mortality").innerText = hospital.mortality;
+        document.getElementById("safety").innerText = hospital.safety;
+        document.getElementById("readmissions").innerText = hospital.readmissions;
+        document.getElementById("experience").innerText = hospital.experience;
+        document.getElementById("timeliness").innerText = hospital.timeliness;
+      } else {
+        alert("Please select a state and hospital.");
+      }
+    }
+
+    // --- Hospital-wise Chart ---
+    const ctx = document.getElementById('hospitalChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Lagos General', 'Abuja Specialist', 'Kano Teaching'],
+        datasets: [
+          { label: 'Mortality (%)', data: [2.1, 2.5, 2.2], backgroundColor: '#ff4d4d' },
+          { label: 'Safety (%)', data: [90, 87, 88], backgroundColor: '#4CAF50' },
+          { label: 'Readmissions (%)', data: [11, 13, 12], backgroundColor: '#ffa500' },
+          { label: 'Patient Experience (%)', data: [80, 76, 79], backgroundColor: '#007bff' },
+          { label: 'Care Timeliness (%)', data: [85, 81, 83], backgroundColor: '#8e44ad' }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom' }
+        }
+      }
+    });
+
+    // --- Calculate State Averages ---
+    function calculateStateAverages(data) {
+      const result = {};
+      for (let state in data) {
+        let hospitals = Object.values(data[state]);
+        let sums = { mortality: 0, safety: 0, readmissions: 0, experience: 0, timeliness: 0 };
+
+        hospitals.forEach(h => {
+          sums.mortality += parseFloat(h.mortality);
+          sums.safety += parseFloat(h.safety);
+          sums.readmissions += parseFloat(h.readmissions);
+          sums.experience += parseFloat(h.experience);
+          sums.timeliness += parseFloat(h.timeliness);
+        });
+
+        let count = hospitals.length;
+        result[state] = {
+          mortality: (sums.mortality / count).toFixed(1),
+          safety: (sums.safety / count).toFixed(1),
+          readmissions: (sums.readmissions / count).toFixed(1),
+          experience: (sums.experience / count).toFixed(1),
+          timeliness: (sums.timeliness / count).toFixed(1)
+        };
+      }
+      return result;
+    }
+
+    const stateAverages = calculateStateAverages(hospitalData);
+
+    // --- State Chart ---
+    const ctxState = document.getElementById('stateChart').getContext('2d');
+    new Chart(ctxState, {
+      type: 'bar',
+      data: {
+        labels: Object.keys(stateAverages),
+        datasets: [
+          { label: 'Mortality (%)', data: Object.values(stateAverages).map(s => s.mortality), backgroundColor: '#ff4d4d' },
+          { label: 'Safety (%)', data: Object.values(stateAverages).map(s => s.safety), backgroundColor: '#4CAF50' },
+          { label: 'Readmissions (%)', data: Object.values(stateAverages).map(s => s.readmissions), backgroundColor: '#ffa500' },
+          { label: 'Patient Experience (%)', data: Object.values(stateAverages).map(s => s.experience), backgroundColor: '#007bff' },
+          { label: 'Care Timeliness (%)', data: Object.values(stateAverages).map(s => s.timeliness), backgroundColor: '#8e44ad' }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom' }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

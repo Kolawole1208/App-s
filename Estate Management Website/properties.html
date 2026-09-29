@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hospital Management System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* small scrollbar for table */
+    .thin-scroll::-webkit-scrollbar{height:8px}
+    .thin-scroll::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:8px}
+  </style>
+</head>
+<body class="antialiased bg-gray-100 text-gray-800">
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-72 bg-white border-r shadow-sm">
+      <div class="p-6">
+        <h1 class="text-2xl font-bold text-slate-700">Breath_Smart</h1>
+        <p class="text-sm text-slate-500 mt-1">Regional Hospital</p>
+      </div>
+      <nav class="px-4 py-2">
+        <a class="flex items-center gap-3 px-4 py-2 rounded bg-sky-50 text-sky-600" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10l9-7 9 7v8a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4H9v4a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8z"/>
+          </svg>
+          <span class="font-medium">Dashboard</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-50 mt-1" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+          <span class="font-medium text-slate-700">Patients</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-50 mt-1" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+          </svg>
+          <span class="font-medium text-slate-700">Doctors</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-50 mt-1" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+          </svg>
+          <span class="font-medium text-slate-700">Nurses</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-2 rounded hover:bg-gray-50 mt-1" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+          </svg>
+          <span class="font-medium text-slate-700">Appointments</span>
+        </a>
+      </nav>
+      <div class="mt-auto p-4 text-sm text-slate-500">
+        <div>Logged in as <span class="font-semibold text-slate-700">Hospital Admin</span></div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 p-6">
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-sm font-medium text-gray-500">Total Doctors</h3>
+              <p class="text-2xl font-semibold text-gray-900">24</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-green-100 text-green-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-sm font-medium text-gray-500">Total Patients</h3>
+              <p class="text-2xl font-semibold text-gray-900">156</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-pink-100 text-pink-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-sm font-medium text-gray-500">Total Nurses</h3>
+              <p class="text-2xl font-semibold text-gray-900">38</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-sm font-medium text-gray-500">Appointments</h3>
+              <p class="text-2xl font-semibold text-gray-900">27</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Topbar -->
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="text-2xl font-bold">Patient Management</h2>
+          <p class="text-sm text-slate-500">Manage patients — add, edit, delete, and track status</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <input id="searchInput" type="search" placeholder="Search by patient name or ID" class="px-3 py-2 border rounded-md focus:outline-none focus:ring" />
+          <button id="openAddBtn" class="bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-500">Add Patient</button>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="flex items-center gap-4 mb-4">
+        <select id="statusFilter" class="px-3 py-2 border rounded-md">
+          <option value="all">All statuses</option>
+          <option value="Admitted">Admitted</option>
+          <option value="Discharged">Discharged</option>
+          <option value="Outpatient">Outpatient</option>
+          <option value="Emergency">Emergency</option>
+        </select>
+        <select id="sortSelect" class="px-3 py-2 border rounded-md">
+          <option value="newest">Newest</option>
+          <option value="name-asc">Name: A → Z</option>
+          <option value="name-desc">Name: Z → A</option>
+        </select>
+      </div>
+
+      <!-- Table / Cards -->
+      <div class="bg-white rounded shadow p-4">
+        <div class="overflow-x-auto thin-scroll">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">#</th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Photo</th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Patient Name</th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Age</th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Condition</th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Status</th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="patientsTbody" class="bg-white divide-y divide-gray-100"></tbody>
+          </table>
+        </div>
+        <div id="emptyState" class="p-8 text-center text-slate-500 hidden">No patients yet — click "Add Patient" to create one.</div>
+      </div>
+
+      <!-- Modal: Add / Edit -->
+      <div id="modal" class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg w-full max-w-2xl p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h3 id="modalTitle" class="text-lg font-semibold">Add Patient</h3>
+            <button id="closeModal" class="text-slate-400 hover:text-slate-600">✕</button>
+          </div>
+          <form id="patientForm" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <input type="hidden" id="patientId" />
+            <label class="text-sm">Full Name
+              <input id="nameInput" class="w-full mt-1 px-3 py-2 border rounded" required />
+            </label>
+            <label class="text-sm">Age
+              <input id="ageInput" type="number" min="0" max="120" class="w-full mt-1 px-3 py-2 border rounded" required />
+            </label>
+            <label class="text-sm">Gender
+              <select id="genderInput" class="w-full mt-1 px-3 py-2 border rounded">
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+              </select>
+            </label>
+            <label class="text-sm">Contact
+              <input id="contactInput" type="tel" class="w-full mt-1 px-3 py-2 border rounded" />
+            </label>
+            <label class="text-sm col-span-2">Medical Condition
+              <input id="conditionInput" class="w-full mt-1 px-3 py-2 border rounded" required />
+            </label>
+            <label class="text-sm col-span-2">Status
+              <select id="statusInput" class="w-full mt-1 px-3 py-2 border rounded">
+                <option>Admitted</option>
+                <option>Discharged</option>
+                <option>Outpatient</option>
+                <option>Emergency</option>
+              </select>
+            </label>
+            <label class="text-sm col-span-2">Photo
+              <input id="imageInput" type="file" accept="image/*" class="w-full mt-1" />
+            </label>
+            <div class="flex items-center gap-3 mt-2 col-span-2">
+              <img id="previewImg" src="" alt="preview" class="h-20 w-20 object-cover rounded-full border hidden" />
+              <div id="previewPlaceholder" class="text-sm text-slate-500">No photo selected</div>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 mt-4 col-span-2">
+              <button type="button" id="cancelBtn" class="px-4 py-2 border rounded">Cancel</button>
+              <button type="submit" class="px-4 py-2 bg-sky-600 text-white rounded">Save Patient</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // --- Data handling (localStorage) ---
+    const STORAGE_KEY = 'hospital_patients_v1';
+
+    function loadPatients(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      }catch(e){
+        console.error('Failed to parse patients', e);
+        return [];
+      }
+    }
+
+    function savePatients(arr){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+    }
+
+    // --- Utility ---
+    function uid(){ return 'pt_' + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+    function escapeHtml(str){
+      return String(str||'').replace(/[&<>"]+/g, function(s){
+        return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[s]);
+      });
+    }
+
+    // --- Rendering ---
+    const tbody = document.getElementById('patientsTbody');
+    const emptyState = document.getElementById('emptyState');
+
+    function renderPatients(){
+      const list = loadPatients();
+      const filter = document.getElementById('statusFilter').value;
+      const search = document.getElementById('searchInput').value.trim().toLowerCase();
+      const sort = document.getElementById('sortSelect').value;
+
+      let filtered = list.filter(p => {
+        if(filter !== 'all' && p.status !== filter) return false;
+        if(search){
+          return (p.name||'').toLowerCase().includes(search) || 
+                 (p.condition||'').toLowerCase().includes(search) ||
+                 (p.contact||'').includes(search);
+        }
+        return true;
+      });
+
+      if(sort === 'name-asc') filtered.sort((a,b)=>a.name.localeCompare(b.name));
+      else if(sort === 'name-desc') filtered.sort((a,b)=>b.name.localeCompare(a.name));
+      else filtered.sort((a,b)=>b.createdAt - a.createdAt);
+
+      tbody.innerHTML = '';
+
+      if(filtered.length === 0){ emptyState.classList.remove('hidden'); return; }
+      emptyState.classList.add('hidden');
+
+      filtered.forEach((p, idx) =>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="px-4 py-3 text-sm">${idx+1}</td>
+          <td class="px-4 py-3">
+            <img src="${p.image||'https://via.placeholder.com/80x80?text=No+Image'}" class="h-12 w-12 object-cover rounded-full" alt="patient" />
+          </td>
+          <td class="px-4 py-3 text-sm font-medium">${escapeHtml(p.name)}</td>
+          <td class="px-4 py-3 text-sm">${p.age}</td>
+          <td class="px-4 py-3 text-sm">${escapeHtml(p.condition)}</td>
+          <td class="px-4 py-3">${statusBadge(p.status)}</td>
+          <td class="px-4 py-3 text-sm">
+            <button data-id="${p.id}" class="editBtn px-2 py-1 border rounded mr-2">Edit</button>
+            <button data-id="${p.id}" class="deleteBtn px-2 py-1 border rounded">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // attach listeners
+      document.querySelectorAll('.editBtn').forEach(b=>b.addEventListener('click', ()=> openEdit(b.dataset.id)));
+      document.querySelectorAll('.deleteBtn').forEach(b=>b.addEventListener('click', ()=> removePatient(b.dataset.id)));
+    }
+
+    function statusBadge(status){
+      const map = {
+        'Admitted': '<span class="px-2 py-1 rounded text-sm bg-blue-100 text-blue-800">Admitted</span>',
+        'Discharged': '<span class="px-2 py-1 rounded text-sm bg-green-100 text-green-800">Discharged</span>',
+        'Outpatient': '<span class="px-2 py-1 rounded text-sm bg-yellow-100 text-yellow-800">Outpatient</span>',
+        'Emergency': '<span class="px-2 py-1 rounded text-sm bg-red-100 text-red-800">Emergency</span>'
+      };
+      return map[status] || `<span class="px-2 py-1 rounded text-sm bg-gray-100">${escapeHtml(status||'')}</span>`;
+    }
+
+    // --- CRUD ---
+    const modal = document.getElementById('modal');
+    const openAddBtn = document.getElementById('openAddBtn');
+    const closeModal = document.getElementById('closeModal');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const patientForm = document.getElementById('patientForm');
+    const patientIdInput = document.getElementById('patientId');
+    const nameInput = document.getElementById('nameInput');
+    const ageInput = document.getElementById('ageInput');
+    const genderInput = document.getElementById('genderInput');
+    const contactInput = document.getElementById('contactInput');
+    const conditionInput = document.getElementById('conditionInput');
+    const statusInput = document.getElementById('statusInput');
+    const imageInput = document.getElementById('imageInput');
+    const previewImg = document.getElementById('previewImg');
+    const previewPlaceholder = document.getElementById('previewPlaceholder');
+
+    openAddBtn.addEventListener('click', ()=> openAdd());
+    closeModal.addEventListener('click', closeModalFn);
+    cancelBtn.addEventListener('click', closeModalFn);
+
+    function openAdd(){
+      patientForm.reset(); 
+      patientIdInput.value=''; 
+      previewImg.src=''; 
+      previewImg.classList.add('hidden'); 
+      previewPlaceholder.classList.remove('hidden');
+      document.getElementById('modalTitle').textContent = 'Add Patient';
+      showModal();
+    }
+
+    function openEdit(id){
+      const list = loadPatients();
+      const p = list.find(x=>x.id===id); 
+      if(!p) return alert('Patient not found');
+      
+      patientIdInput.value = p.id; 
+      nameInput.value = p.name; 
+      ageInput.value = p.age; 
+      genderInput.value = p.gender;
+      contactInput.value = p.contact; 
+      conditionInput.value = p.condition; 
+      statusInput.value = p.status;
+      
+      if(p.image && p.image !== 'https://via.placeholder.com/80x80?text=No+Image'){ 
+        previewImg.src = p.image; 
+        previewImg.classList.remove('hidden'); 
+        previewPlaceholder.classList.add('hidden'); 
+      } else { 
+        previewImg.classList.add('hidden'); 
+        previewPlaceholder.classList.remove('hidden'); 
+      }
+      
+      document.getElementById('modalTitle').textContent = 'Edit Patient';
+      showModal();
+    }
+
+    function removePatient(id){
+      if(!confirm('Delete this patient record?')) return;
+      const list = loadPatients().filter(p=>p.id!==id);
+      savePatients(list); 
+      renderPatients();
+    }
+
+    patientForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const id = patientIdInput.value || uid();
+      const name = nameInput.value.trim();
+      const age = Number(ageInput.value) || 0;
+      const gender = genderInput.value;
+      const contact = contactInput.value.trim();
+      const condition = conditionInput.value.trim();
+      const status = statusInput.value;
+
+      // if a file selected, convert to dataURL
+      let imageData = previewImg.src || 'https://via.placeholder.com/80x80?text=No+Image';
+      if(imageInput.files && imageInput.files[0]){
+        imageData = await fileToDataUrl(imageInput.files[0]);
+      }
+
+      const list = loadPatients();
+      const existingIndex = list.findIndex(p=>p.id===id);
+      const record = { 
+        id, name, age, gender, contact, condition, status, 
+        image: imageData, createdAt: Date.now() 
+      };
+      
+      if(existingIndex >= 0) list[existingIndex] = {...list[existingIndex], ...record};
+      else list.unshift(record);
+      
+      savePatients(list);
+      closeModalFn(); 
+      renderPatients();
+    });
+
+    imageInput.addEventListener('change', ()=>{
+      if(imageInput.files && imageInput.files[0]){
+        const file = imageInput.files[0];
+        const reader = new FileReader();
+        reader.onload = (ev)=>{
+          previewImg.src = ev.target.result; 
+          previewImg.classList.remove('hidden'); 
+          previewPlaceholder.classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function fileToDataUrl(file){
+      return new Promise((res, rej)=>{
+        const reader = new FileReader();
+        reader.onload = ()=> res(reader.result);
+        reader.onerror = rej; 
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function showModal(){ modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    function closeModalFn(){ modal.classList.add('hidden'); modal.classList.remove('flex'); imageInput.value = ''; }
+
+    // --- Search / Filter / Sort listeners ---
+    document.getElementById('statusFilter').addEventListener('change', renderPatients);
+    document.getElementById('sortSelect').addEventListener('change', renderPatients);
+    document.getElementById('searchInput').addEventListener('input', debounce(renderPatients, 250));
+
+    function debounce(fn, wait){ let t; return function(...a){ clearTimeout(t); t = setTimeout(()=>fn.apply(this,a), wait); }; }
+
+    // --- Initial demo data (only if empty) ---
+    (function seedIfEmpty(){
+      const cur = loadPatients();
+      if(cur.length === 0){
+        const demo = [
+          { 
+            id: uid(), 
+            name: 'John Smith', 
+            age: 45, 
+            gender: 'Male', 
+            contact: '+2348012345678', 
+            condition: 'Hypertension', 
+            status: 'Admitted', 
+            image: '', 
+            createdAt: Date.now()-1000000 
+          },
+          { 
+            id: uid(), 
+            name: 'Mary Johnson', 
+            age: 32, 
+            gender: 'Female', 
+            contact: '+2348098765432', 
+            condition: 'Pregnancy Checkup', 
+            status: 'Outpatient', 
+            image: '', 
+            createdAt: Date.now()-500000 
+          }
+        ];
+        savePatients(demo);
+      }
+    })();
+
+    // first render
+    renderPatients();
+
+    // --- Expose API for integration ---
+    window.getHospitalPatients = function(){ return loadPatients(); };
+
+  </script>
+</body>
+</html>

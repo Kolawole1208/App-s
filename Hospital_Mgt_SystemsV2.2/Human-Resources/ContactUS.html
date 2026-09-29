@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Reliance Infosystems</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #3b82f6;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --success: #10b981;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        body {
+            background-color: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px 0;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .logo span {
+            display: block;
+            font-size: 18px;
+            font-weight: normal;
+            margin-top: 5px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            color: var(--gray);
+        }
+        
+        /* Contact Section */
+        .contact {
+            padding: 60px 0;
+        }
+        
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .contact-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        
+        .form-title {
+            font-size: 1.8rem;
+            color: var(--secondary);
+            margin-bottom: 25px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            flex: 1;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group.required label:after {
+            content: " *";
+            color: var(--primary);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .form-divider {
+            height: 1px;
+            background: #eee;
+            margin: 25px 0;
+        }
+        
+        .form-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            flex: 1;
+        }
+        
+        .submit-btn:hover {
+            background: var(--secondary);
+        }
+        
+        .clear-btn {
+            background: #f1f5f9;
+            color: var(--gray);
+            border: 1px solid #ddd;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .clear-btn:hover {
+            background: #e2e8f0;
+        }
+        
+        .contact-info {
+            background: var(--light);
+            padding: 30px;
+            border-radius: 10px;
+        }
+        
+        .info-title {
+            font-size: 1.8rem;
+            color: var(--secondary);
+            margin-bottom: 25px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .info-text {
+            margin-bottom: 25px;
+            color: var(--gray);
+        }
+        
+        .contact-details {
+            margin-bottom: 30px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        
+        .contact-item a {
+            color: var(--dark);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .contact-item a:hover {
+            color: var(--primary);
+        }
+        
+        .book-session-btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+        
+        .book-session-btn:hover {
+            background: var(--secondary);
+        }
+        
+        /* Services Section */
+        .services {
+            background: white;
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            color: var(--secondary);
+            margin-bottom: 50px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .service-card {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .service-card h3 {
+            color: var(--secondary);
+            margin-bottom: 15px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .service-card p {
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+        
+        .service-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .service-link i {
+            margin-left: 5px;
+            transition: var(--transition);
+        }
+        
+        .service-link:hover i {
+            transform: translateX(5px);
+        }
+        
+        /* Subscribe Section */
+        .subscribe {
+            background: var(--light);
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .subscribe-form {
+            max-width: 500px;
+            margin: 30px auto;
+            display: flex;
+        }
+        
+        .subscribe-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 1px solid #ddd;
+            border-radius: 50px 0 0 50px;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .subscribe-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 0 50px 50px 0;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .subscribe-button:hover {
+            background: var(--secondary);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h3 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .tag {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        
+        .footer-bottom a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-bottom a:hover {
+            color: white;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .contact-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-links {
+                margin-top: 20px;
+                justify-content: center;
+            }
+            
+            .nav-links li {
+                margin: 0 10px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .subscribe-form {
+                flex-direction: column;
+            }
+            
+            .subscribe-input {
+                border-radius: 50px;
+                margin-bottom: 10px;
+            }
+            
+            .subscribe-button {
+                border-radius: 50px;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">AuthoHR<span>Special websites</span></div>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>CONTACT US</h1>
+            <p>Let's help you connect your strategy to technology and experience exponential growth</p>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section class="contact">
+        <div class="container contact-content">
+            <div class="contact-form">
+                <h2 class="form-title">Get In Touch</h2>
+                <form id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label for="firstname">First Name</label>
+                            <input type="text" id="firstname" required placeholder="First">
+                        </div>
+                        <div class="form-group required">
+                            <label for="lastname">Last Name</label>
+                            <input type="text" id="lastname" required placeholder="Last">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" required placeholder="Email">
+                        </div>
+                        <div class="form-group required">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" required placeholder="Phone">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label for="company">Company Name</label>
+                            <input type="text" id="company" required placeholder="Company">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label for="org-size">Organization Size</label>
+                            <select id="org-size" required>
+                                <option value="">Select size</option>
+                                <option value="1-10">1-10 employees</option>
+                                <option value="11-50">11-50 employees</option>
+                                <option value="51-200">51-200 employees</option>
+                                <option value="201-500">201-500 employees</option>
+                                <option value="501+">501+ employees</option>
+                            </select>
+                        </div>
+                        <div class="form-group required">
+                            <label for="job-title">Job Title</label>
+                            <input type="text" id="job-title" required placeholder="Title">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label for="country">Country</label>
+                            <select id="country" required>
+                                <option value="">Select country</option>
+                                <option value="nigeria">Nigeria</option>
+                                <option value="ghana">Ghana</option>
+                                <option value="south-africa">South Africa</option>
+                                <option value="kenya">Kenya</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-divider"></div>
+                    
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label for="interest">Why are you interested in digital transformation?</label>
+                            <textarea id="interest" rows="4" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="submit" class="submit-btn">SUBMIT</button>
+                        <button type="reset" class="clear-btn">CLEAR</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="contact-info">
+                <h2 class="info-title">Speak with Us Now</h2>
+                <p class="info-text">Want to speak to someone on our team? Our experts are on standby, ready to provide the necessary assistance that you need and help you find solutions tailored to your specific requirements.</p>
+                
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <a href="mailto:connect@reliance.systems">visitabel4real@yahoo.com</a>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <a href="tel:+2349073073873">+234 7066332626</a>
+                    </div>
+                </div>
+                
+                <a href="#" class="book-session-btn">Book a session</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Services Section -->
+    <section class="services">
+        <div class="container">
+            <h2 class="section-title">Our Services</h2>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>Envisioning Session</h3>
+                    <p>Our envisioning sessions are designed to help organizations clarify their vision, identify key challenges, and develop actionable strategies to achieve their goals.</p>
+                    <a href="#" class="service-link">Book a session <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="service-card">
+                    <h3>Digital Advisory Session</h3>
+                    <p>Our team of digital experts helps businesses leverage technology to improve their operations, enhance their customer experience, and achieve their digital goals.</p>
+                    <a href="#" class="service-link">Book a session <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="service-card">
+                    <h3>Managed IT Services</h3>
+                    <p>Comprehensive IT management solutions to keep your business running smoothly and securely while reducing operational costs.</p>
+                    <a href="#" class="service-link">Learn more <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Subscribe Section -->
+    <section class="subscribe">
+        <div class="container">
+            <h2 class="section-title">Stay Updated</h2>
+            <p>Subscribe to our newsletter to receive the latest insights and updates on digital transformation.</p>
+            
+            <form class="subscribe-form">
+                <input type="email" class="subscribe-input" placeholder="Enter your email address">
+                <button type="submit" class="subscribe-button">Subscribe to notifications</button>
+            </form>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>AuthoHR</h3>
+                    <p>Helping businesses transform through digital innovation and technology adoption.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Our Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Managed IT Services</a></li>
+                        <li><a href="#">Digital Advisory</a></li>
+                        <li><a href="#">Solutions Assessment</a></li>
+                        <li><a href="#">Software Vendor Management</a></li>
+                        <li><a href="#">Technology for Non-profit</a></li>
+                        <li><a href="#">Start Your Growth</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Popular Tags</h3>
+                    <div class="footer-tags">
+                        <span class="tag">Azure</span>
+                        <span class="tag">Microsoft 365</span>
+                        <span class="tag">Digital Transformation</span>
+                        <span class="tag">Cloud</span>
+                        <span class="tag">Cybersecurity</span>
+                        <span class="tag">Artificial Intelligence</span>
+                        <span class="tag">Machine Learning</span>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Get in Touch</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Send Us a Message</a></li>
+                        <li><a href="#">Contact Support</a></li>
+                        <li><a href="#">Request a Consultation</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2025 – All rights reserved. Kolawole Abel | <a href="#">Privacy Policy</a> | <a href="#">Information Security Policy</a></p>
+                <p>Contact us to start your digital transformation journey - visitabel4real@yahoo.com.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Form validation and submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactForm = document.getElementById('contactForm');
+            
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Basic validation
+                let isValid = true;
+                const requiredFields = contactForm.querySelectorAll('[required]');
+                
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        isValid = false;
+                        field.style.borderColor = 'red';
+                    } else {
+                        field.style.borderColor = '#ddd';
+                    }
+                });
+                
+                if (isValid) {
+                    alert('Thank you for your message! We will contact you soon.');
+                    contactForm.reset();
+                } else {
+                    alert('Please fill in all required fields.');
+                }
+            });
+            
+            // Clear form button
+            const clearBtn = contactForm.querySelector('.clear-btn');
+            clearBtn.addEventListener('click', function() {
+                const fields = contactForm.querySelectorAll('input, select, textarea');
+                fields.forEach(field => {
+                    field.style.borderColor = '#ddd';
+                });
+            });
+            
+            // Book session buttons
+            const bookSessionBtns = document.querySelectorAll('.book-session-btn, .service-link');
+            bookSessionBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    alert('Booking functionality would be implemented here.');
+                });
+            });
+            
+            // Subscription form
+            const subscribeForm = document.querySelector('.subscribe-form');
+            subscribeForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = this.querySelector('input[type="email"]').value;
+                if (email) {
+                    alert('Thank you for subscribing with: ' + email);
+                    this.reset();
+                } else {
+                    alert('Please enter a valid email address');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

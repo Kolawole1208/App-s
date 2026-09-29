@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaPure Water Factory - Order Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #3498db;
+            --secondary: #2980b9;
+            --accent: #1abc9c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 50px;
+        }
+
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 20px;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            color: var(--dark);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .products {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-card.selected {
+            border: 2px solid var(--accent);
+            background: rgba(26, 188, 156, 0.1);
+        }
+
+        .product-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .product-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .product-price {
+            color: var(--secondary);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .product-quantity {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        .cart-summary {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            align-self: start;
+        }
+
+        .cart-items {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin: 20px 0;
+            padding-top: 10px;
+            border-top: 2px solid #eee;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            background: #16a085;
+        }
+
+        .order-history {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background: var(--light);
+        }
+
+        .order-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-delivered {
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--success);
+        }
+
+        .status-pending {
+            background: rgba(243, 156, 18, 0.2);
+            color: var(--warning);
+        }
+
+        .status-processing {
+            background: rgba(52, 152, 219, 0.2);
+            color: var(--primary);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-tint"></i>
+                    <h1>AquaPure Water Factory</h1>
+                </div>
+                <div class="user-info">
+                    <img src="https://ui-avatars.com/api/?name=John+Doe&background=0D8ABC&color=fff" alt="User">
+                    <span>John Doe</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <div class="sidebar">
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-shopping-cart"></i> My Orders</a></li>
+                    <li><a href="#"><i class="fas fa-history"></i> Order History</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i> My Account</a></li>
+                    <li><a href="#"><i class="fas fa-truck"></i> Delivery Tracking</a></li>
+                    <li><a href="#"><i class="fas fa-question-circle"></i> Help & Support</a></li>
+                    <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </div>
+
+            <div class="main-content">
+                <div class="products">
+                    <div class="section-title">
+                        <h2>Select Water Products</h2>
+                        <div class="search-box">
+                            <input type="text" placeholder="Search products...">
+                        </div>
+                    </div>
+
+                    <div class="product-grid">
+                        <!-- Bottle Water -->
+                        <div class="product-card" data-product="bottle-water">
+                            <div class="product-icon">
+                                <i class="fas fa-wine-bottle"></i>
+                            </div>
+                            <div class="product-title">Bottle Water</div>
+                            <div class="product-price">$1.50</div>
+                            <div class="product-quantity">
+                                <button class="quantity-btn minus">-</button>
+                                <input type="text" class="quantity-input" value="0" readonly>
+                                <button class="quantity-btn plus">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Sachet Water -->
+                        <div class="product-card" data-product="sachet-water">
+                            <div class="product-icon">
+                                <i class="fas fa-cube"></i>
+                            </div>
+                            <div class="product-title">Sachet Water</div>
+                            <div class="product-price">$0.20</div>
+                            <div class="product-quantity">
+                                <button class="quantity-btn minus">-</button>
+                                <input type="text" class="quantity-input" value="0" readonly>
+                                <button class="quantity-btn plus">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Event Water (Storex) -->
+                        <div class="product-card" data-product="event-water">
+                            <div class="product-icon">
+                                <i class="fas fa-glass-whiskey"></i>
+                            </div>
+                            <div class="product-title">Event Water (Storex)</div>
+                            <div class="product-price">$15.00</div>
+                            <div class="product-quantity">
+                                <button class="quantity-btn minus">-</button>
+                                <input type="text" class="quantity-input" value="0" readonly>
+                                <button class="quantity-btn plus">+</button>
+                            </div>
+                        </div>
+
+                        <!-- 5L Water -->
+                        <div class="product-card" data-product="5l-water">
+                            <div class="product-icon">
+                                <i class="fas fa-wine-bottle"></i>
+                            </div>
+                            <div class="product-title">5L Bottle</div>
+                            <div class="product-price">$3.00</div>
+                            <div class="product-quantity">
+                                <button class="quantity-btn minus">-</button>
+                                <input type="text" class="quantity-input" value="0" readonly>
+                                <button class="quantity-btn plus">+</button>
+                            </div>
+                        </div>
+
+                        <!-- 10L Water -->
+                        <div class="product-card" data-product="10l-water">
+                            <div class="product-icon">
+                                <i class="fas fa-wine-bottle"></i>
+                            </div>
+                            <div class="product-title">10L Bottle</div>
+                            <div class="product-price">$5.00</div>
+                            <div class="product-quantity">
+                                <button class="quantity-btn minus">-</button>
+                                <input type="text" class="quantity-input" value="0" readonly>
+                                <button class="quantity-btn plus">+</button>
+                            </div>
+                        </div>
+
+                        <!-- 300L Water -->
+                        <div class="product-card" data-product="300l-water">
+                            <div class="product-icon">
+                                <i class="fas fa-dumpster"></i>
+                            </div>
+                            <div class="product-title">300L Dispenser</div>
+                            <div class="product-price">$25.00</div>
+                            <div class="product-quantity">
+                                <button class="quantity-btn minus">-</button>
+                                <input type="text" class="quantity-input" value="0" readonly>
+                                <button class="quantity-btn plus">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cart-summary">
+                    <div class="section-title">
+                        <h2>Order Summary</h2>
+                    </div>
+                    <div class="cart-items">
+                        <!-- Cart items will be dynamically added here -->
+                        <div class="empty-cart-message">
+                            <p>Your cart is empty. Select products to add to your order.</p>
+                        </div>
+                    </div>
+                    <div class="cart-total">
+                        <span>Total:</span>
+                        <span class="total-amount">$0.00</span>
+                    </div>
+                    <button class="checkout-btn">Proceed to Checkout</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-history">
+            <div class="section-title">
+                <h2>Recent Orders</h2>
+            </div>
+            <div class="order-item">
+                <div class="order-info">
+                    <div class="order-id">Order #AQUA-2023-0012</div>
+                    <div class="order-date">June 15, 2023</div>
+                    <div class="order-items">2x 10L Bottle, 5x Bottle Water</div>
+                </div>
+                <div class="order-status status-delivered">Delivered</div>
+            </div>
+            <div class="order-item">
+                <div class="order-info">
+                    <div class="order-id">Order #AQUA-2023-0011</div>
+                    <div class="order-date">June 10, 2023</div>
+                    <div class="order-items">1x 300L Dispenser, 10x Sachet Water</div>
+                </div>
+                <div class="order-status status-pending">Pending</div>
+            </div>
+            <div class="order-item">
+                <div class="order-info">
+                    <div class="order-id">Order #AQUA-2023-0010</div>
+                    <div class="order-date">June 5, 2023</div>
+                    <div class="order-items">1x Event Water, 3x 5L Bottle</div>
+                </div>
+                <div class="order-status status-processing">Processing</div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2023 AquaPure Water Factory. All rights reserved. | Clean Water for Healthy Living</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Product data
+            const products = {
+                'bottle-water': { name: 'Bottle Water', price: 1.50 },
+                'sachet-water': { name: 'Sachet Water', price: 0.20 },
+                'event-water': { name: 'Event Water (Storex)', price: 15.00 },
+                '5l-water': { name: '5L Bottle', price: 3.00 },
+                '10l-water': { name: '10L Bottle', price: 5.00 },
+                '300l-water': { name: '300L Dispenser', price: 25.00 }
+            };
+
+            // Cart state
+            let cart = {};
+            let totalAmount = 0;
+
+            // Initialize product cards
+            const productCards = document.querySelectorAll('.product-card');
+            
+            productCards.forEach(card => {
+                const productId = card.dataset.product;
+                const minusBtn = card.querySelector('.minus');
+                const plusBtn = card.querySelector('.plus');
+                const quantityInput = card.querySelector('.quantity-input');
+                
+                // Set initial quantity to 0
+                quantityInput.value = 0;
+                
+                // Add event listeners for quantity buttons
+                minusBtn.addEventListener('click', () => {
+                    let quantity = parseInt(quantityInput.value);
+                    if (quantity > 0) {
+                        quantity--;
+                        quantityInput.value = quantity;
+                        updateCart(productId, quantity);
+                    }
+                });
+                
+                plusBtn.addEventListener('click', () => {
+                    let quantity = parseInt(quantityInput.value);
+                    quantity++;
+                    quantityInput.value = quantity;
+                    updateCart(productId, quantity);
+                });
+            });
+
+            // Update cart function
+            function updateCart(productId, quantity) {
+                if (quantity === 0) {
+                    // Remove from cart
+                    if (cart[productId]) {
+                        delete cart[productId];
+                    }
+                } else {
+                    // Add or update in cart
+                    cart[productId] = {
+                        name: products[productId].name,
+                        price: products[productId].price,
+                        quantity: quantity
+                    };
+                }
+                
+                renderCart();
+            }
+
+            // Render cart function
+            function renderCart() {
+                const cartItems = document.querySelector('.cart-items');
+                const totalAmountElement = document.querySelector('.total-amount');
+                
+                // Clear cart items
+                cartItems.innerHTML = '';
+                
+                // Reset total
+                totalAmount = 0;
+                
+                // Check if cart is empty
+                if (Object.keys(cart).length === 0) {
+                    cartItems.innerHTML = '<div class="empty-cart-message"><p>Your cart is empty. Select products to add to your order.</p></div>';
+                    totalAmountElement.textContent = '$0.00';
+                    return;
+                }
+                
+                // Add each item to cart
+                for (const productId in cart) {
+                    const item = cart[productId];
+                    const itemTotal = item.price * item.quantity;
+                    totalAmount += itemTotal;
+                    
+                    const cartItemElement = document.createElement('div');
+                    cartItemElement.className = 'cart-item';
+                    cartItemElement.innerHTML = `
+                        <div class="item-info">
+                            <div class="item-name">${item.name}</div>
+                            <div class="item-quantity">${item.quantity} x $${item.price.toFixed(2)}</div>
+                        </div>
+                        <div class="item-total">$${itemTotal.toFixed(2)}</div>
+                    `;
+                    
+                    cartItems.appendChild(cartItemElement);
+                }
+                
+                // Update total amount
+                totalAmountElement.textContent = `$${totalAmount.toFixed(2)}`;
+            }
+
+            // Checkout button event
+            document.querySelector('.checkout-btn').addEventListener('click', function() {
+                if (Object.keys(cart).length === 0) {
+                    alert('Your cart is empty. Please add products before checking out.');
+                    return;
+                }
+                
+                alert(`Order placed successfully! Total: $${totalAmount.toFixed(2)}\n\nThank you for your order. You will receive a confirmation email shortly.`);
+                
+                // Reset cart
+                cart = {};
+                renderCart();
+                
+                // Reset all quantity inputs
+                document.querySelectorAll('.quantity-input').forEach(input => {
+                    input.value = 0;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

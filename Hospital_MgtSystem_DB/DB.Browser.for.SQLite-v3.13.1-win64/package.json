@@ -1,0 +1,27 @@
+{
+  "name": "pharmacy-management-system",
+  "version": "1.0.0",
+  "description": "A pharmacy management system for tracking drugs and transactions",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "express": "^4.21.2",
+    "path": "^0.12.7",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "keywords": [
+    "pharmacy",
+    "management",
+    "drugs",
+    "inventory"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

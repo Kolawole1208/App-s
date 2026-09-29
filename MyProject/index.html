@@ -1,0 +1,163 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>School Management System</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background-color: #f9f9f9;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      color: #333;
+    }
+
+    header {
+      background-color: #2c3e50;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2em;
+      color: #fff;
+    }
+
+    .top-nav {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      background-color: #34495e;
+      padding: 10px 0;
+    }
+
+    .top-nav a {
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      text-decoration: none;
+      margin: 5px;
+      min-width: 120px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .top-nav a:nth-child(1) { background-color: #3498db; }
+    .top-nav a:nth-child(2) { background-color: #2ecc71; }
+    .top-nav a:nth-child(3) { background-color: #9b59b6; }
+    .top-nav a:nth-child(4) { background-color: #e67e22; }
+    .top-nav a:nth-child(5) { background-color: #e74c3c; }
+    .top-nav a:nth-child(6) { background-color: #1abc9c; }
+
+    .top-nav a:hover {
+      opacity: 0.8;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 20px;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .container h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 1.8em;
+      color: #2c3e50;
+    }
+
+    a.content-link {
+      display: inline-block;
+      width: 100%;
+      padding: 10px 15px;
+      text-decoration: none;
+      background-color: #ecf0f1;
+      color: #2c3e50;
+      border-radius: 4px;
+      font-size: 1.1em;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    a.content-link:hover {
+      background-color: #bdc3c7;
+      transform: translateY(-2px);
+    }
+
+    footer {
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      text-align: center;
+      padding: 20px;
+    }
+
+    @media(max-width: 640px) {
+      header h1 { font-size: 1.5em; }
+      .top-nav {
+        flex-direction: column;
+        align-items: center;
+      }
+      .top-nav a {
+        margin: 8px 0;
+        width: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>School Management System</h1>
+  </header>
+<header>
+  <div class="top-nav">
+    <a href="add_student.html">Add Student</a>
+    <a href="help-center.html">Help Center</a>
+    <a href="Community.html">Community</a>
+    <a href="login.html">Login</a>
+    <a href="Register.html">Sign Up</a>
+    <a href="/students">View Students</a>
+  </div>
+</header>
+
+  <main>
+    <div class="container">
+      <h2>Welcome</h2>
+      <p>This is the home page of the School Management System. Navigate through the options above.</p>
+    </div>
+  </main>
+
+ <!-- Moving text section -->
+  <div class="marquee">
+    <div class="marquee-text">
+      Welcome to the School Management System — Empowering students, teachers, and administrators!
+    </div>
+
+  <footer>
+    <p> BREATH @2025</p>
+  </footer>
+
+</body>
+</html>

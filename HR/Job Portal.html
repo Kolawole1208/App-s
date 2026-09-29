@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Portal Dashboard</title>
+
+<!-- Icons & Font -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+<style>
+  :root{
+    /* Brand */
+    --brand: #6366f1;           /* indigo */
+    --brand-600:#4f46e5;
+    --brand-soft:#eef2ff;
+    --brand-ink:#3730a3;
+
+    /* Neutrals */
+    --bg:#f3f6fb;
+    --panel:#ffffff;
+    --ink:#0f172a;
+    --muted:#64748b;
+    --border:#e6eaf2;
+    --shadow: 0 8px 24px rgba(15,23,42,.06);
+    --radius: 14px;
+
+    --sidebar: 280px;
+    --topbar: 72px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  }
+
+  /* Layout */
+  .app{
+    display:grid; grid-template-columns: var(--sidebar) 1fr;
+    min-height:100vh;
+  }
+
+  /* Sidebar */
+  .sidebar{
+    position:sticky; top:0; height:100vh;
+    background:#0b1320; color:#e6e9f5; padding:18px 14px;
+    box-shadow: inset -1px 0 0 rgba(255,255,255,.06);
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    background: rgba(255,255,255,.04);
+    border-radius:12px; padding:10px 12px; margin:6px 6px 18px;
+  }
+  .logo{
+    width:40px;height:40px;border-radius:10px;display:grid;place-items:center;
+    background: linear-gradient(135deg,var(--brand),var(--brand-600)); color:#fff;
+    box-shadow: 0 6px 18px rgba(79,70,229,.35);
+  }
+  .org{display:flex;flex-direction:column;line-height:1.1}
+  .org .name{font-weight:800}
+  .org .sub{font-size:12px;opacity:.8}
+
+  .nav h6{
+    font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+    color:#93a0c5; margin:16px 10px 8px;
+  }
+  .nav a{
+    display:flex;align-items:center;gap:12px;
+    text-decoration:none;color:#ecf1ff;
+    padding:11px 12px;border-radius:10px;margin:4px 6px;
+    font-size:14px;font-weight:600;transition:.2s ease;
+  }
+  .nav a i{width:20px}
+  .nav a:hover{background:rgba(255,255,255,.07)}
+  .nav a.active{background:rgba(99,102,241,.22); outline:1px solid rgba(255,255,255,.12)}
+
+  /* Main */
+  .main{ padding: 18px 22px 28px; }
+  .topbar{
+    height:var(--topbar); background:var(--panel); border:1px solid var(--border);
+    border-radius:var(--radius); display:flex; align-items:center; justify-content:space-between;
+    padding:12px 16px; box-shadow:var(--shadow);
+  }
+  .title{ font-weight:800; letter-spacing:.2px; }
+  .crumb{ color:var(--muted); font-weight:500; font-size:13px; }
+  .actions{display:flex; align-items:center; gap:10px;}
+  .btn{
+    border:1px solid var(--border); background:#fff; color:var(--ink);
+    padding:10px 14px; border-radius:10px; font-weight:700; font-size:14px;
+    display:flex; align-items:center; gap:10px; transition:.2s ease; cursor:pointer;
+    box-shadow: 0 1px 0 #fff inset;
+  }
+  .btn:hover{ transform: translateY(-1px); }
+  .btn.brand{ background:var(--brand); color:#fff; border-color:transparent; }
+  .btn.icon{ width:42px; height:42px; justify-content:center; padding:0; }
+  .select{
+    border:1px solid var(--border); background:#fff; color:var(--ink);
+    padding:10px 12px; border-radius:10px; font-weight:700;
+  }
+
+  /* KPI Row */
+  .kpis{
+    display:grid; grid-template-columns: repeat(4, 1fr);
+    gap:18px; margin: 20px 0 14px;
+  }
+  .kpi{
+    background:linear-gradient(135deg,var(--brand),var(--brand-600));
+    color:#fff; border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:16px 18px; display:flex; align-items:center; justify-content:space-between;
+  }
+  .kpi .meta{ opacity:.95; font-weight:600; }
+  .kpi .value{ font-size:28px; font-weight:800; }
+  .kpi .icon{
+    width:46px;height:46px;border-radius:12px;display:grid;place-items:center;
+    background:rgba(255,255,255,.16);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.22); font-size:20px;
+  }
+
+  /* Panels */
+  .grid{
+    display:grid; grid-template-columns: 1.2fr .8fr;
+    gap:18px; margin-top:18px;
+  }
+  .panel{
+    background:var(--panel); border:1px solid var(--border);
+    border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:18px;
+  }
+  .panel h3{ margin:2px 0 12px; font-size:18px; }
+
+  /* Table */
+  .table{
+    width:100%; border-collapse:separate; border-spacing:0;
+    font-size:14px;
+  }
+  .table th, .table td{
+    text-align:left; padding:12px 10px; border-bottom:1px solid var(--border);
+  }
+  .table th{
+    color:#475569; text-transform:uppercase; font-size:12px; letter-spacing:.06em;
+    background: #f7f9ff;
+  }
+  .badge{
+    font-weight:700; font-size:12px; padding:6px 10px; border-radius:999px; display:inline-flex; gap:8px; align-items:center;
+  }
+  .bd-open{ background: var(--brand-soft); color: var(--brand-ink); }
+  .bd-hot{ background:#fff7ed; color:#ea580c; }
+  .bd-paused{ background:#f1f5f9; color:#64748b; }
+
+  .chip{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:6px 10px; border-radius:999px; font-weight:700; font-size:12px;
+    background:#eef2ff; color:#3730a3;
+  }
+
+  /* Pipeline */
+  .pipe{
+    display:grid; grid-template-columns: repeat(4, 1fr);
+    gap:12px; margin-top:6px;
+  }
+  .stage{
+    background:#f8faff; border:1px dashed #e6eaf2; border-radius:12px; padding:12px;
+  }
+  .stage h4{ margin:0 0 10px; font-size:14px; font-weight:800; color:#334155; }
+  .kan-card{
+    background:#fff; border:1px solid var(--border); border-radius:12px;
+    padding:12px; margin-bottom:10px; box-shadow:0 6px 18px rgba(15,23,42,.05);
+  }
+  .kan-card .row{ display:flex; align-items:center; justify-content:space-between; }
+  .kan-card .role{ font-weight:800; font-size:13px; }
+  .kan-card .meta{ font-size:12px; color:var(--muted); }
+
+  /* Applicants mini-list */
+  .mini{
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .applicant{
+    display:flex; align-items:center; justify-content:space-between;
+    border:1px solid var(--border); background:#fff; border-radius:12px; padding:10px 12px;
+  }
+  .ap-left{ display:flex; align-items:center; gap:10px; }
+  .avatar{
+    width:36px; height:36px; border-radius:50%; overflow:hidden; flex:none;
+    box-shadow:0 2px 8px rgba(2,6,23,.15);
+  }
+  .avatar img{ width:100%; height:100%; object-fit:cover; }
+  .ap-name{ font-weight:800; font-size:14px; }
+  .ap-role{ font-size:12px; color:var(--muted); }
+  .ap-score{ font-weight:800; }
+
+  /* Quick actions */
+  .quick{
+    display:grid; grid-template-columns: repeat(2, 1fr);
+    gap:12px; margin-top:8px;
+  }
+  .qa{
+    background:#fff; border:1px solid var(--border); border-radius:12px;
+    padding:16px; display:flex; align-items:center; gap:12px; transition:.2s ease;
+  }
+  .qa:hover{ transform: translateY(-2px); box-shadow:0 10px 24px rgba(15,23,42,.08); }
+  .qa .qa-icon{
+    width:44px;height:44px;border-radius:12px;display:grid;place-items:center;
+    background:var(--brand-soft); color:var(--brand-ink);
+  }
+  .qa .qa-title{ font-weight:800 }
+
+  /* Responsive */
+  @media (max-width:1200px){
+    .kpis{ grid-template-columns: repeat(2,1fr); }
+    .grid{ grid-template-columns: 1fr; }
+  }
+  @media (max-width:900px){
+    .app{ grid-template-columns: 88px 1fr; }
+    .org{ display:none; }
+    .nav h6{ display:none; }
+    .nav a{ justify-content:center; }
+    .nav a span{ display:none; }
+  }
+  @media (max-width:720px){
+    .sidebar{ display:none; }
+    .app{ grid-template-columns: 1fr; }
+    .kpis{ grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" aria-label="Job Portal Navigation">
+      <div class="brand">
+        <div class="logo"><i class="fa-solid fa-briefcase"></i></div>
+        <div class="org">
+          <span class="name">HireBoard</span>
+          <span class="sub">Job Portal Admin</span>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <h6>main</h6>
+        <a class="active" href="#"><i class="fa-solid fa-gauge"></i><span>Dashboard</span></a>
+
+        <h6>jobs</h6>
+        <a href="#"><i class="fa-solid fa-rectangle-list"></i><span>Job Listings</span></a>
+        <a href="#"><i class="fa-solid fa-user-tie"></i><span>Applicants</span></a>
+        <a href="#"><i class="fa-solid fa-building"></i><span>Companies</span></a>
+        <a href="#"><i class="fa-solid fa-video"></i><span>Interviews</span></a>
+        <a href="#"><i class="fa-solid fa-clipboard-question"></i><span>Assessments</span></a>
+
+        <h6>insights</h6>
+        <a href="#"><i class="fa-solid fa-chart-line"></i><span>Analytics</span></a>
+        <a href="#"><i class="fa-solid fa-envelope-open-text"></i><span>Messages</span></a>
+
+        <h6>system</h6>
+        <a href="#"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+        <a href="#"><i class="fa-solid fa-shield"></i><span>Security</span></a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <!-- Topbar -->
+      <div class="topbar" role="banner">
+        <div>
+          <div class="title">Recruitment Dashboard</div>
+          <div class="crumb">Home / Jobs</div>
+        </div>
+        <div class="actions">
+          <button class="btn brand"><i class="fa-solid fa-plus"></i> Post New Job</button>
+          <select class="select" aria-label="Filter portal">
+            <option>All Portals</option>
+            <option>Career Site</option>
+            <option>LinkedIn</option>
+            <option>Indeed</option>
+          </select>
+          <button class="btn"><i class="fa-regular fa-user"></i> Account</button>
+          <button class="btn icon" aria-label="Notifications"><i class="fa-regular fa-bell"></i></button>
+        </div>
+      </div>
+
+      <!-- KPI Cards -->
+      <section class="kpis" aria-label="Key metrics">
+        <div class="kpi">
+          <div>
+            <div class="meta">Active Jobs</div>
+            <div class="value">28</div>
+          </div>
+          <div class="icon"><i class="fa-solid fa-rectangle-list"></i></div>
+        </div>
+        <div class="kpi">
+          <div>
+            <div class="meta">New Applications</div>
+            <div class="value">146</div>
+          </div>
+          <div class="icon"><i class="fa-solid fa-file-signature"></i></div>
+        </div>
+        <div class="kpi">
+          <div>
+            <div class="meta">Interviews Today</div>
+            <div class="value">12</div>
+          </div>
+          <div class="icon"><i class="fa-solid fa-video"></i></div>
+        </div>
+        <div class="kpi">
+          <div>
+            <div class="meta">Hires this Month</div>
+            <div class="value">9</div>
+          </div>
+          <div class="icon"><i class="fa-solid fa-user-check"></i></div>
+        </div>
+      </section>
+
+      <!-- Main Grid -->
+      <div class="grid">
+        <!-- Left: Recent Jobs table -->
+        <section class="panel">
+          <h3>Recent Job Listings</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Job</th>
+                <th>Type</th>
+                <th>Applicants</th>
+                <th>Status</th>
+                <th>Posted</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Senior Frontend Engineer</strong> • Lagos / Remote</td>
+                <td>Full-time</td>
+                <td><span class="chip"><i class="fa-solid fa-users"></i> 42</span></td>
+                <td><span class="badge bd-hot"><i class="fa-solid fa-fire"></i> Urgent</span></td>
+                <td>2d ago</td>
+              </tr>
+              <tr>
+                <td><strong>HR Business Partner</strong> • Abuja</td>
+                <td>Full-time</td>
+                <td><span class="chip"><i class="fa-solid fa-users"></i> 23</span></td>
+                <td><span class="badge bd-open"><i class="fa-solid fa-circle-check"></i> Open</span></td>
+                <td>4d ago</td>
+              </tr>
+              <tr>
+                <td><strong>Data Analyst (Contract)</strong> • Hybrid</td>
+                <td>Contract</td>
+                <td><span class="chip"><i class="fa-solid fa-users"></i> 31</span></td>
+                <td><span class="badge bd-open"><i class="fa-solid fa-circle-check"></i> Open</span></td>
+                <td>1w ago</td>
+              </tr>
+              <tr>
+                <td><strong>UX/UI Designer</strong> • Remote</td>
+                <td>Part-time</td>
+                <td><span class="chip"><i class="fa-solid fa-users"></i> 18</span></td>
+                <td><span class="badge bd-paused"><i class="fa-solid fa-circle-pause"></i> Paused</span></td>
+                <td>2w ago</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Right: Pipeline + Quick Actions -->
+        <section class="panel">
+          <h3>Application Pipeline</h3>
+          <div class="pipe">
+            <div class="stage">
+              <h4>Applied (86)</h4>
+              <div class="kan-card">
+                <div class="row"><span class="role">Frontend Eng.</span><span class="meta">12 applicants</span></div>
+                <div class="meta">Top Skill: React</div>
+              </div>
+              <div class="kan-card">
+                <div class="row"><span class="role">Data Analyst</span><span class="meta">8 applicants</span></div>
+                <div class="meta">Top Skill: SQL</div>
+              </div>
+            </div>
+
+            <div class="stage">
+              <h4>Screening (32)</h4>
+              <div class="kan-card">
+                <div class="row"><span class="role">HRBP</span><span class="meta">6</span></div>
+                <div class="meta">Avg score: 78%</div>
+              </div>
+              <div class="kan-card">
+                <div class="row"><span class="role">DevOps</span><span class="meta">4</span></div>
+                <div class="meta">Avg score: 71%</div>
+              </div>
+            </div>
+
+            <div class="stage">
+              <h4>Interview (14)</h4>
+              <div class="kan-card">
+                <div class="row"><span class="role">Frontend Eng.</span><span class="meta">Today • 4</span></div>
+                <div class="meta">Panel: Tech</div>
+              </div>
+              <div class="kan-card">
+                <div class="row"><span class="role">UX Designer</span><span class="meta">Tomorrow • 3</span></div>
+                <div class="meta">Panel: Product</div>
+              </div>
+            </div>
+
+            <div class="stage">
+              <h4>Offer (5)</h4>
+              <div class="kan-card">
+                <div class="row"><span class="role">Data Analyst</span><span class="meta">2 offers</span></div>
+                <div class="meta">ETA: 3 days</div>
+              </div>
+              <div class="kan-card">
+                <div class="row"><span class="role">HRBP</span><span class="meta">1 offer</span></div>
+                <div class="meta">ETA: 1 day</div>
+              </div>
+            </div>
+          </div>
+
+          <h3 style="margin-top:16px">Recent Top Applicants</h3>
+          <div class="mini">
+            <div class="applicant">
+              <div class="ap-left">
+                <div class="avatar"><img src="https://randomuser.me/api/portraits/men/45.jpg" alt=""></div>
+                <div>
+                  <div class="ap-name">Michael Johnson</div>
+                  <div class="ap-role">Frontend Engineer</div>
+                </div>
+              </div>
+              <div class="ap-score chip"><i class="fa-solid fa-star"></i> 92%</div>
+            </div>
+
+            <div class="applicant">
+              <div class="ap-left">
+                <div class="avatar"><img src="https://randomuser.me/api/portraits/women/32.jpg" alt=""></div>
+                <div>
+                  <div class="ap-name">Sarah Williams</div>
+                  <div class="ap-role">HR Business Partner</div>
+                </div>
+              </div>
+              <div class="ap-score chip"><i class="fa-solid fa-star"></i> 88%</div>
+            </div>
+
+            <div class="applicant">
+              <div class="ap-left">
+                <div class="avatar"><img src="https://randomuser.me/api/portraits/men/67.jpg" alt=""></div>
+                <div>
+                  <div class="ap-name">David Chen</div>
+                  <div class="ap-role">Data Analyst</div>
+                </div>
+              </div>
+              <div class="ap-score chip"><i class="fa-solid fa-star"></i> 84%</div>
+            </div>
+          </div>
+
+          <h3 style="margin-top:16px">Quick Actions</h3>
+          <div class="quick">
+            <a href="#" class="qa">
+              <div class="qa-icon"><i class="fa-solid fa-plus"></i></div>
+              <div>
+                <div class="qa-title">Create Job</div>
+                <div class="muted" style="font-size:12px">Post a new opening</div>
+              </div>
+            </a>
+            <a href="#" class="qa">
+              <div class="qa-icon"><i class="fa-solid fa-upload"></i></div>
+              <div>
+                <div class="qa-title">Import Candidates</div>
+                <div class="muted" style="font-size:12px">CSV or ATS</div>
+              </div>
+            </a>
+            <a href="#" class="qa">
+              <div class="qa-icon"><i class="fa-solid fa-paper-plane"></i></div>
+              <div>
+                <div class="qa-title">Send Invites</div>
+                <div class="muted" style="font-size:12px">Interview scheduling</div>
+              </div>
+            </a>
+            <a href="#" class="qa">
+              <div class="qa-icon"><i class="fa-solid fa-download"></i></div>
+              <div>
+                <div class="qa-title">Export Report</div>
+                <div class="muted" style="font-size:12px">Weekly summary</div>
+              </div>
+            </a>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Small UI polish for clicks
+    document.querySelectorAll('.qa, .btn').forEach(el=>{
+      el.addEventListener('mousedown', ()=> el.style.transform='scale(.99)');
+      el.addEventListener('mouseup', ()=> el.style.transform='');
+      el.addEventListener('mouseleave', ()=> el.style.transform='');
+    });
+  </script>
+</body>
+</html>

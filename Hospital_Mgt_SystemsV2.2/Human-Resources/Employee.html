@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --gray: #95a5a6;
+            --text: #333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: lightblue;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            background: var(--primary);
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            width: 250px;
+            height: 100%;
+            overflow-y: auto;
+        }
+        
+        .logo {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .logo h1 {
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .menu {
+            list-style: none;
+        }
+        
+        .menu-item {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--secondary);
+        }
+        
+        /* Main Content */
+        .main-content {
+            grid-column: 2;
+            padding: 20px 30px;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        /* Dashboard Widgets */
+        .widgets {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .widget {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-widget {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .bg-blue {
+            background: rgba(52, 152, 219, 0.2);
+            color: var(--secondary);
+        }
+        
+        .bg-green {
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--success);
+        }
+        
+        .bg-orange {
+            background: rgba(243, 156, 18, 0.2);
+            color: var(--warning);
+        }
+        
+        .bg-red {
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--accent);
+        }
+        
+        .stat-info h3 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .stat-info p {
+            color: var(--gray);
+        }
+        
+        /* Employee Details Section */
+        .employee-details {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section-header h2 {
+            font-size: 22px;
+            color: var(--primary);
+        }
+        
+        .edit-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+        
+        .edit-btn:hover {
+            background: #2980b9;
+        }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .detail-item {
+            margin-bottom: 15px;
+        }
+        
+        .detail-item label {
+            display: block;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .detail-item .value {
+            font-size: 16px;
+            color: var(--text);
+            padding: 8px 12px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .detail-item input, .detail-item select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        
+        .save-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .cancel-btn {
+            background: var(--gray);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Charts and Tables */
+        .charts {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-container, .tasks-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chart-header, .tasks-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .tasks-list {
+            list-style: none;
+        }
+        
+        .task-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .task-item:last-child {
+            border-bottom: none;
+        }
+        
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 2px solid #ddd;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .completed .task-checkbox {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+        
+        .completed .task-text {
+            text-decoration: line-through;
+            color: var(--gray);
+        }
+        
+        /* Team Section */
+        .team-members {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .member-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            background: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 30px;
+        }
+        
+        .member-role {
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+        
+        .member-contacts {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .contact-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f5f5;
+            color: var(--dark);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-btn:hover {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        @media (max-width: 992px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .main-content {
+                grid-column: 1;
+            }
+            
+            .charts {
+                grid-template-columns: 1fr;
+            }
+            
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Hidden class for toggling */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1><i class="fas fa-chart-line"></i> <span>Staff</span>Portal</h1>
+            </div>
+            
+            <ul class="menu">
+                <li class="menu-item active"><i class="fas fa-home"></i> Dashboard</li>
+                <li class="menu-item" id="planner-board"><i class="fas fa-tasks"></i> Planner Board</li>
+                <li class="menu-item" id="outlook"><i class="fas fa-calendar"></i> Outlook</li>
+                <li class="menu-item" id="team-meeting"><i class="fas fa-users"></i> Team Meeting</li>
+                <li class="menu-item" id="sharepoint"><i class="fas fa-file-invoice"></i> SharePoint</li>
+                <li class="menu-item" id="#"><i class="fas fa-chart-line"></i> Appraisal</li>
+                <li class="menu-item"><a href="LearnHub.html" style="color: white;text-decoration: none;"><i class="fas fa-book"></i> LearnHub</a></li>
+                <li class="menu-item"><a href="Setting.html" style="color: white; text-decoration: none;"><i class="fas fa-cog"></i> Settings</a></li>
+                <li class="menu-item"><i class="fas fa-question-circle"></i> Help</li>
+            </ul>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <h2>Employee Dashboard</h2>
+                <div class="user-info">
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="user-avatar">JD</div>
+                    <div>
+                        <h4>Abel Blessing</h4>
+                        <p>HR Manager</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Employee Details Section -->
+            <div class="employee-details">
+                <div class="section-header">
+                    <h2>Employee Details</h2>
+                    <button class="edit-btn" id="editDetailsBtn">
+                        <i class="fas fa-edit"></i> Edit Details
+                    </button>
+                </div>
+                
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <label>Employee ID</label>
+                        <div class="value" id="employeeId">EMP-2024-0875</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <label>Full Name</label>
+                        <div class="value" id="displayName">John Michael Shina</div>
+                        <input type="text" id="editName" class="hidden" value="John Michael Shina">
+                    </div>
+                    
+                    <div class="detail-item">
+                        <label>Phone Number</label>
+                        <div class="value" id="displayPhone">+234 15023-4567</div>
+                        <input type="tel" id="editPhone" class="hidden" value="+234 15023-4567">
+                    </div>
+                    
+                    <div class="detail-item">
+                        <label>Gender</label>
+                        <div class="value" id="displayGender">Male</div>
+                        <select id="editGender" class="hidden">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                            <option value="Prefer not to say">Prefer not to say</option>
+                        </select>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <label>Location</label>
+                        <div class="value" id="displayLocation">Lagos Office</div>
+                        <select id="editLocation" class="hidden">
+                            <option value="New York Office">FCT Office</option>
+                            <option value="Chicago Office">Edo Office</option>
+                            <option value="Los Angeles Office">Kogi Office</option>
+                            <option value="Remote">Remote</option>
+                        </select>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <label>Department</label>
+                        <div class="value" id="displayDepartment">Human Resources</div>
+                        <select id="editDepartment" class="hidden">
+                            <option value="Human Resources">Human Resources</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Sales">Sales</option>
+                            <option value="Finance">Finance</option>
+                        </select>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <label>Unit</label>
+                        <div class="value" id="displayUnit">Talent Acquisition</div>
+                        <select id="editUnit" class="hidden">
+                            <!-- Units will be populated based on department selection -->
+                        </select>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <label>Employment Status</label>
+                        <div class="value" id="displayStatus">Full-time</div>
+                        <select id="editStatus" class="hidden">
+                            <option value="Full-time">Full-time</option>
+                            <option value="Part-time">Part-time</option>
+                            <option value="Contract">Contract</option>
+                            <option value="Intern">Intern</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="action-buttons hidden" id="actionButtons">
+                    <button class="save-btn" id="saveDetailsBtn">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                    <button class="cancel-btn" id="cancelEditBtn">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Stats Widgets -->
+            <div class="widgets">
+                <div class="widget stat-widget">
+                    <div class="stat-icon bg-blue">
+                        <i class="fas fa-user-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>36.5</h3>
+                        <p>Average Hours</p>
+                    </div>
+                </div>
+                
+                <div class="widget stat-widget">
+                    <div class="stat-icon bg-green">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>92%</h3>
+                        <p>Tasks Completed</p>
+                    </div>
+                </div>
+                
+                <div class="widget stat-widget">
+                    <div class="stat-icon bg-orange">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>4.5</h3>
+                        <p>Days Until Time-off</p>
+                    </div>
+                </div>
+                
+                <div class="widget stat-widget">
+                    <div class="stat-icon bg-red">
+                        <i class="fas fa-inbox"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>17</h3>
+                        <p>Pending Requests</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts and Tasks -->
+            <div class="charts">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Weekly Hours</h3>
+                        <select>
+                            <option>This Week</option>
+                            <option>Last Week</option>
+                        </select>
+                    </div>
+                    <div style="height: 300px; background: #f9f9f9; display: flex; align-items: center; justify-content: center;">
+                        <p>Weekly hours chart would be displayed here</p>
+                    </div>
+                </div>
+                
+                <div class="tasks-container">
+                    <div class="tasks-header">
+                        <h3>My Tasks</h3>
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <ul class="tasks-list">
+                        <li class="task-item">
+                            <div class="task-checkbox"><i class="fas fa-check" style="display: none;"></i></div>
+                            <div class="task-text">Complete quarterly report</div>
+                        </li>
+                        <li class="task-item completed">
+                            <div class="task-checkbox"><i class="fas fa-check" style="display: block;"></i></div>
+                            <div class="task-text">Schedule team meeting</div>
+                        </li>
+                        <li class="task-item">
+                            <div class="task-checkbox"><i class="fas fa-check" style="display: none;"></i></div>
+                            <div class="task-text">Review applicant resumes</div>
+                        </li>
+                        <li class="task-item">
+                            <div class="task-checkbox"><i class="fas fa-check" style="display: none;"></i></div>
+                            <div class="task-text">Update employee handbook</div>
+                        </li>
+                        <li class="task-item completed">
+                            <div class="task-checkbox"><i class="fas fa-check" style="display: block;"></i></div>
+                            <div class="task-text">Submit expense reports</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Team Members -->
+            <h3 style="margin-bottom: 20px;">Team Members</h3>
+            <div class="team-members">
+                <div class="member-card">
+                    <div class="member-avatar">SA</div>
+                    <h4>Sarah Monday</h4>
+                    <p class="member-role">UX Designer</p>
+                    <div class="member-contacts">
+                        <a href="#" class="contact-btn"><i class="fas fa-envelope"></i></a>
+                        <a href="#" class="contact-btn"><i class="fas fa-phone"></i></a>
+                        <a href="#" class="contact-btn"><i class="fas fa-video"></i></a>
+                    </div>
+                </div>
+                
+                <div class="member-card">
+                    <div class="member-avatar">MJ</div>
+                    <h4>Michael Johnson</h4>
+                    <p class="member-role">Frontend Developer</p>
+                    <div class="member-contacts">
+                        <a href="#" class="contact-btn"><i class="fas fa-envelope"></i></a>
+                        <a href="#" class="contact-btn"><i class="fas fa-phone"></i></a>
+                        <a href="#" class="contact-btn"><i class="fas fa-video"></i></a>
+                    </div>
+                </div>
+                
+                <div class="member-card">
+                    <div class="member-avatar">EW</div>
+                    <h4>Emma OlaOluwa</h4>
+                    <p class="member-role">Project Manager</p>
+                    <div class="member-contacts">
+                        <a href="#" class="contact-btn"><i class="fas fa-envelope"></i></a>
+                        <a href="#" class="contact-btn"><i class="fas fa-phone"></i></a>
+                        <a href="#" class="contact-btn"><i class="fas fa-video"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Department-Unit mapping
+        const departmentUnits = {
+            "Human Resources": ["Talent Acquisition", "Compensation & Benefits", "Employee Relations", "HR Operations"],
+            "Engineering": ["Frontend Development", "Backend Development", "Quality Assurance", "DevOps"],
+            "Marketing": ["Digital Marketing", "Content Creation", "Social Media", "Market Research"],
+            "Sales": ["Inside Sales", "Field Sales", "Account Management", "Business Development"],
+            "Finance": ["Accounting", "Financial Planning", "Auditing", "Tax"]
+        };
+        
+        // DOM Elements
+        const editDetailsBtn = document.getElementById('editDetailsBtn');
+        const saveDetailsBtn = document.getElementById('saveDetailsBtn');
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
+        const actionButtons = document.getElementById('actionButtons');
+        const editDepartment = document.getElementById('editDepartment');
+        const editUnit = document.getElementById('editUnit');
+        
+        // Toggle edit mode
+        function toggleEditMode(editing) {
+            // Toggle display values and input fields
+            document.querySelectorAll('.value').forEach(el => {
+                el.classList.toggle('hidden', editing);
+            });
+            
+            document.querySelectorAll('input, select').forEach(el => {
+                if (el.id.startsWith('edit')) {
+                    el.classList.toggle('hidden', !editing);
+                }
+            });
+            
+            // Toggle action buttons
+            actionButtons.classList.toggle('hidden', !editing);
+            
+            // Toggle edit button
+            editDetailsBtn.classList.toggle('hidden', editing);
+            
+            // Update unit options if editing
+            if (editing) {
+                updateUnitOptions();
+            }
+        }
+        
+        // Update unit options based on selected department
+        function updateUnitOptions() {
+            const department = editDepartment.value;
+            const units = departmentUnits[department] || [];
+            
+            // Clear existing options
+            editUnit.innerHTML = '';
+            
+            // Add new options
+            units.forEach(unit => {
+                const option = document.createElement('option');
+                option.value = unit;
+                option.textContent = unit;
+                editUnit.appendChild(option);
+            });
+            
+            // Set the selected unit to match the display value
+            const currentUnit = document.getElementById('displayUnit').textContent;
+            editUnit.value = currentUnit;
+        }
+        
+        // Save changes
+        function saveChanges() {
+            // Update display values with edited values
+            document.getElementById('displayName').textContent = document.getElementById('editName').value;
+            document.getElementById('displayPhone').textContent = document.getElementById('editPhone').value;
+            document.getElementById('displayGender').textContent = document.getElementById('editGender').value;
+            document.getElementById('displayLocation').textContent = document.getElementById('editLocation').value;
+            document.getElementById('displayDepartment').textContent = document.getElementById('editDepartment').value;
+            document.getElementById('displayUnit').textContent = document.getElementById('editUnit').value;
+            document.getElementById('displayStatus').textContent = document.getElementById('editStatus').value;
+            
+            // Exit edit mode
+            toggleEditMode(false);
+            
+            // Show success message
+            alert('Employee details updated successfully!');
+        }
+        
+        // Cancel editing
+        function cancelEditing() {
+            // Reset input values to current display values
+            document.getElementById('editName').value = document.getElementById('displayName').textContent;
+            document.getElementById('editPhone').value = document.getElementById('displayPhone').textContent;
+            document.getElementById('editGender').value = document.getElementById('displayGender').textContent;
+            document.getElementById('editLocation').value = document.getElementById('displayLocation').textContent;
+            document.getElementById('editDepartment').value = document.getElementById('displayDepartment').textContent;
+            document.getElementById('editStatus').value = document.getElementById('displayStatus').textContent;
+            
+            // Exit edit mode
+            toggleEditMode(false);
+        }
+        
+        // Event Listeners for Microsoft services navigation
+        document.getElementById('planner-board').addEventListener('click', function() {
+            window.open('https://tasks.office.com/', '_blank');
+        });
+        
+        document.getElementById('outlook').addEventListener('click', function() {
+            window.open('https://outlook.office.com/mail/', '_blank');
+        });
+        
+        document.getElementById('team-meeting').addEventListener('click', function() {
+            window.open('https://teams.microsoft.com/', '_blank');
+        });
+        
+        document.getElementById('sharepoint').addEventListener('click', function() {
+            window.open('https://www.microsoft.com/sharepoint', '_blank');
+        });
+        
+        // Event Listeners
+        editDetailsBtn.addEventListener('click', () => toggleEditMode(true));
+        saveDetailsBtn.addEventListener('click', saveChanges);
+        cancelEditBtn.addEventListener('click', cancelEditing);
+        editDepartment.addEventListener('change', updateUnitOptions);
+        
+        // Simple interactivity for task items
+        document.querySelectorAll('.task-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('completed');
+                const icon = this.querySelector('.task-checkbox i');
+                if (this.classList.contains('completed')) {
+                    icon.style.display = 'block';
+                } else {
+                    icon.style.display = 'none';
+                }
+            });
+        });
+        
+        // Initialize unit options
+        updateUnitOptions();
+    </script>
+</body>
+</html>

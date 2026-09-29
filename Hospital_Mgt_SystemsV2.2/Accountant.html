@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Accountant Dashboard - Hospital</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url("hospital-bg.jpg") no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    /* Add a semi-transparent overlay for readability */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255, 255, 255, 0.85); /* soft white overlay */
+      z-index: -1;
+    }
+
+    .topbar {
+      background-color: #4CAF50;
+      padding: 14px;
+      color: white;
+      font-size: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .topbar button {
+      background: white;
+      color: #4CAF50;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .topbar button:hover { background: #e8f5e9; }
+
+    .cards {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .card {
+      background-color: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 20px;
+      flex: 1 1 250px;
+      border-left: 5px solid #4CAF50;
+      border-radius: 8px;
+      transition: transform 0.2s ease;
+    }
+    .card:hover { transform: scale(1.02); }
+    .card h3 { margin: 0 0 10px; }
+    .card span { font-size: 24px; font-weight: bold; }
+
+    .tab-nav {
+      display: flex;
+      margin: 20px;
+      gap: 10px;
+    }
+    .tab {
+      padding: 12px 20px;
+      background-color: #eee;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .tab.active {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 20px;
+      background: white;
+      margin: 0 20px 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border-radius: 6px;
+    }
+    .tab-content.active { display: block; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th { background-color: #f0f0f0; }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+    .actions button {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .edit-btn { background-color: #ffc107; color: #000; }
+    .delete-btn { background-color: #f44336; color: #fff; }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .controls input[type="text"] {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      flex: 1;
+    }
+    .controls button {
+      padding: 8px 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .controls button:hover { background-color: #45a049; }
+
+    input, select {
+      padding: 10px;
+      margin: 6px 0 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 100%;
+    }
+
+    .chart {
+      margin-top: 20px;
+      padding: 20px;
+      background: #f1f8e9;
+      border-radius: 6px;
+      text-align: center;
+      font-style: italic;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navigation -->
+  <div class="topbar">
+    Accountant Dashboard
+    <div>
+      <button onclick="window.location.href='index.html'">🏠 Users</button>
+      <button onclick="window.location.href='Account.html'">Account</button>
+      <button onclick="window.location.href='Admin_Dashboard.html'">Admin</button>
+    </div>
+  </div>
+
+  <!-- Cards -->
+  <div class="cards">
+    <div class="card">
+      <h3>Total Revenue 💰</h3>
+      <span id="totalRevenue">₦1,200,000</span>
+    </div>
+    <div class="card">
+      <h3>Total Expenses 💸</h3>
+      <span id="totalExpenses">₦850,000</span>
+    </div>
+    <div class="card">
+      <h3>Pending Payments 📂</h3>
+      <span>₦120,000</span>
+    </div>
+  </div>
+
+  <!-- Tab Navigation -->
+  <div class="tab-nav">
+    <button class="tab active" onclick="showTab('transactions', event)">📋 View Transactions</button>
+    <button class="tab" onclick="showTab('addTransaction', event)">➕ Add Transaction</button>
+  </div>
+
+  <!-- Transactions Tab -->
+  <div id="transactions" class="tab-content active">
+    <div class="controls">
+      <input type="text" placeholder="Search by patient or type...">
+      <button onclick="window.print()">🖨️ Export to PDF</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Patient</th>
+          <th>Type</th>
+          <th>Amount (₦)</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>John Doe</td>
+          <td>Payment</td>
+          <td>20,000</td>
+          <td>2025-08-07</td>
+          <td class="actions">
+            <button class="edit-btn" onclick="editTransaction(this)">Edit</button>
+            <button class="delete-btn" onclick="deleteTransaction(this)">Delete</button>
+          </td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Jane Smith</td>
+          <td>Expense</td>
+          <td>10,000</td>
+          <td>2025-08-06</td>
+          <td class="actions">
+            <button class="edit-btn" onclick="editTransaction(this)">Edit</button>
+            <button class="delete-btn" onclick="deleteTransaction(this)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="chart"> 📊 Income vs Expenses Chart will be shown here. </div>
+  </div>
+
+  <!-- Add Transaction Form -->
+  <div id="addTransaction" class="tab-content">
+    <h3>Add New Transaction</h3>
+    <form id="transactionForm">
+      <label>Patient Name</label>
+      <input type="text" id="patientName" placeholder="Enter name" required>
+      <label>Transaction Type</label>
+      <select id="transactionType">
+        <option value="Payment">Payment</option>
+        <option value="Expense">Expense</option>
+      </select>
+      <label>Amount (₦)</label>
+      <input type="number" id="transactionAmount" placeholder="e.g. 5000" required>
+      <label>Date</label>
+      <input type="date" id="transactionDate" required>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    function showTab(tabId, evt) {
+      const tabs = document.querySelectorAll('.tab-content');
+      const tabButtons = document.querySelectorAll('.tab');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      evt.target.classList.add('active');
+    }
+
+    const form = document.getElementById('transactionForm');
+    const tableBody = document.querySelector('#transactions table tbody');
+    const revenueSpan = document.getElementById('totalRevenue');
+    const expensesSpan = document.getElementById('totalExpenses');
+
+    function parseCurrency(str) {
+      return parseInt(str.replace(/₦|,/g, '')) || 0;
+    }
+    function formatCurrency(num) {
+      return `₦${num.toLocaleString()}`;
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = document.getElementById('patientName').value;
+      const type = document.getElementById('transactionType').value;
+      const amount = parseInt(document.getElementById('transactionAmount').value);
+      const date = document.getElementById('transactionDate').value;
+      const newId = tableBody.rows.length + 1;
+
+      const newRow = tableBody.insertRow();
+      newRow.innerHTML = `
+        <td>${newId}</td>
+        <td>${name}</td>
+        <td>${type}</td>
+        <td>${amount.toLocaleString()}</td>
+        <td>${date}</td>
+        <td class="actions">
+          <button class="edit-btn" onclick="editTransaction(this)">Edit</button>
+          <button class="delete-btn" onclick="deleteTransaction(this)">Delete</button>
+        </td>
+      `;
+
+      if (type === "Payment") {
+        let current = parseCurrency(revenueSpan.textContent);
+        revenueSpan.textContent = formatCurrency(current + amount);
+      } else {
+        let current = parseCurrency(expensesSpan.textContent);
+        expensesSpan.textContent = formatCurrency(current + amount);
+      }
+
+      form.reset();
+      document.querySelector('.tab-nav .tab').click();
+    });
+
+    function deleteTransaction(btn) {
+      if (confirm('Are you sure you want to delete this transaction?')) {
+        const row = btn.parentElement.parentElement;
+        const type = row.cells[2].textContent;
+        const amount = parseInt(row.cells[3].textContent.replace(/,/g, ''));
+
+        if (type === "Payment") {
+          let current = parseCurrency(revenueSpan.textContent);
+          revenueSpan.textContent = formatCurrency(current - amount);
+        } else {
+          let current = parseCurrency(expensesSpan.textContent);
+          expensesSpan.textContent = formatCurrency(current - amount);
+        }
+        row.remove();
+      }
+    }
+
+    function editTransaction(btn) {
+      const row = btn.parentElement.parentElement;
+      const cells = row.querySelectorAll('td');
+
+      document.getElementById('patientName').value = cells[1].textContent;
+      document.getElementById('transactionType').value = cells[2].textContent;
+      document.getElementById('transactionAmount').value = cells[3].textContent.replace(/,/g, '');
+      document.getElementById('transactionDate').value = cells[4].textContent;
+
+      const type = cells[2].textContent;
+      const amount = parseInt(cells[3].textContent.replace(/,/g, ''));
+      if (type === "Payment") {
+        let current = parseCurrency(revenueSpan.textContent);
+        revenueSpan.textContent = formatCurrency(current - amount);
+      } else {
+        let current = parseCurrency(expensesSpan.textContent);
+        expensesSpan.textContent = formatCurrency(current - amount);
+      }
+
+      row.remove();
+      document.querySelectorAll('.tab')[1].click();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Risk Assessment</title>
+    <style>
+        :root {
+            --primary: #2c7fb8;
+            --primary-dark: #1d5a82;
+            --secondary: #7fcdbb;
+            --light: #f0f9ff;
+            --dark: #333;
+            --danger: #e74c3c;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --gray: #95a5a6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 20px 0;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background-color: var(--light);
+            padding: 15px 20px;
+            border-bottom: 1px solid #e1e8ed;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(44, 127, 184, 0.2);
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+        }
+        
+        .form-col {
+            flex: 1;
+            padding: 0 10px;
+            min-width: 200px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .result-container {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: var(--light);
+        }
+        
+        .risk-low {
+            border-left: 5px solid var(--success);
+        }
+        
+        .risk-medium {
+            border-left: 5px solid var(--warning);
+        }
+        
+        .risk-high {
+            border-left: 5px solid var(--danger);
+        }
+        
+        .risk-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .risk-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        
+        .risk-description {
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.5s ease-in-out;
+        }
+        
+        .info-text {
+            font-size: 14px;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+        
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #ddd, transparent);
+            margin: 20px 0;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .form-col {
+                flex: 100%;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Diabetes Risk Assessment</h1>
+            <p>Clinical tool for diabetes prediction and risk assessment</p>
+        </header>
+        
+        <div class="card">
+            <div class="card-header">Patient Assessment</div>
+            <div class="card-body">
+                <form id="diabetesForm">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="pregnancies">Pregnancies:</label>
+                                <input type="number" id="pregnancies" class="form-control" min="0" max="20" value="2">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="glucose">Glucose (mg/dL):</label>
+                                <input type="number" id="glucose" class="form-control" min="0" max="500" value="150">
+                                <div class="info-text">Normal range: 70-100 mg/dL (fasting)</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="bloodPressure">Blood Pressure (mm Hg):</label>
+                                <input type="number" id="bloodPressure" class="form-control" min="0" max="200" value="85">
+                                <div class="info-text">Normal: < 120/80 mm Hg</div>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="skinThickness">Skin Thickness (mm):</label>
+                                <input type="number" id="skinThickness" class="form-control" min="0" max="100" value="28">
+                                <div class="info-text">Triceps skin fold thickness</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="insulin">Insulin (mu U/ml):</label>
+                                <input type="number" id="insulin" class="form-control" min="0" max="1000" value="120">
+                                <div class="info-text">Normal: 2.6-24.9 μU/mL</div>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="bmi">BMI:</label>
+                                <input type="number" id="bmi" class="form-control" min="10" max="70" step="0.1" value="33.6">
+                                <div class="info-text">Normal: 18.5-24.9</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="diabetesPedigree">Diabetes Pedigree Function:</label>
+                                <input type="number" id="diabetesPedigree" class="form-control" min="0" max="3" step="0.001" value="0.627">
+                                <div class="info-text">Diabetes family history likelihood</div>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="age">Age:</label>
+                                <input type="number" id="age" class="form-control" min="1" max="120" value="30">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" id="assessBtn" class="btn btn-block">Assess Diabetes Risk</button>
+                </form>
+                
+                <div class="loading" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <p>Analyzing patient data...</p>
+                </div>
+                
+                <div class="result-container" id="resultContainer">
+                    <div class="risk-title">Assessment Results</div>
+                    <div class="risk-value" id="riskValue">Low Risk</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="riskProgress" style="width: 20%; background-color: var(--success);"></div>
+                    </div>
+                    <div class="risk-description" id="riskDescription">
+                        Based on the provided data, this patient shows a low probability of diabetes. 
+                        Continue to monitor glucose levels and maintain a healthy lifestyle.
+                    </div>
+                    <div class="divider"></div>
+                    <div>
+                        <p><strong>Recommendations:</strong></p>
+                        <ul id="recommendations">
+                            <li>Maintain regular physical activity</li>
+                            <li>Follow a balanced diet with controlled carbohydrate intake</li>
+                            <li>Schedule annual check-ups for glucose monitoring</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">About This Tool</div>
+            <div class="card-body">
+                <p>This system uses machine learning and clinical algorithms to assess diabetes risk based on established medical parameters.</p>
+                <p>The prediction model analyzes multiple factors including glucose levels, BMI, age, and family history to provide a risk assessment.</p>
+                <p><strong>Note:</strong> This tool is for clinical decision support only and should not replace professional medical diagnosis.</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Diabetes Risk Assessment Tool &copy; 2023 | For Clinical Use</p>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('assessBtn').addEventListener('click', function() {
+            // Show loading indicator
+            document.getElementById('loadingIndicator').style.display = 'block';
+            document.getElementById('resultContainer').style.display = 'none';
+            
+            // Get form values
+            const pregnancies = parseInt(document.getElementById('pregnancies').value);
+            const glucose = parseInt(document.getElementById('glucose').value);
+            const bloodPressure = parseInt(document.getElementById('bloodPressure').value);
+            const skinThickness = parseInt(document.getElementById('skinThickness').value);
+            const insulin = parseInt(document.getElementById('insulin').value);
+            const bmi = parseFloat(document.getElementById('bmi').value);
+            const diabetesPedigree = parseFloat(document.getElementById('diabetesPedigree').value);
+            const age = parseInt(document.getElementById('age').value);
+            
+            // Simulate API call with timeout
+            setTimeout(function() {
+                // Hide loading indicator
+                document.getElementById('loadingIndicator').style.display = 'none';
+                
+                // Calculate risk (this is a simplified simulation)
+                let riskScore = calculateRisk(
+                    pregnancies, glucose, bloodPressure, skinThickness, 
+                    insulin, bmi, diabetesPedigree, age
+                );
+                
+                // Display results
+                displayResults(riskScore);
+                
+                // Show result container
+                document.getElementById('resultContainer').style.display = 'block';
+            }, 1500);
+        });
+        
+        function calculateRisk(pregnancies, glucose, bloodPressure, skinThickness, insulin, bmi, diabetesPedigree, age) {
+            // This is a simplified risk calculation for demonstration
+            // In a real application, this would be done by the ML model on the server
+            
+            let risk = 0;
+            
+            // Glucose level contribution (most significant factor)
+            if (glucose > 180) risk += 0.4;
+            else if (glucose > 140) risk += 0.3;
+            else if (glucose > 100) risk += 0.15;
+            
+            // BMI contribution
+            if (bmi > 35) risk += 0.2;
+            else if (bmi > 30) risk += 0.15;
+            else if (bmi > 25) risk += 0.1;
+            
+            // Age contribution
+            if (age > 50) risk += 0.15;
+            else if (age > 40) risk += 0.1;
+            else if (age > 30) risk += 0.05;
+            
+            // Diabetes pedigree function
+            risk += diabetesPedigree * 0.1;
+            
+            // Pregnancies (for female patients)
+            if (pregnancies > 3) risk += 0.05;
+            
+            return Math.min(risk, 1.0); // Cap at 1.0
+        }
+        
+        function displayResults(riskScore) {
+            const resultContainer = document.getElementById('resultContainer');
+            const riskValue = document.getElementById('riskValue');
+            const riskProgress = document.getElementById('riskProgress');
+            const riskDescription = document.getElementById('riskDescription');
+            const recommendations = document.getElementById('recommendations');
+            
+            // Remove previous risk classes
+            resultContainer.classList.remove('risk-low', 'risk-medium', 'risk-high');
+            
+            if (riskScore < 0.3) {
+                // Low risk
+                resultContainer.classList.add('risk-low');
+                riskValue.textContent = 'Low Risk';
+                riskValue.style.color = 'var(--success)';
+                riskProgress.style.width = (riskScore * 100) + '%';
+                riskProgress.style.backgroundColor = 'var(--success)';
+                riskDescription.textContent = 'Based on the provided data, this patient shows a low probability of diabetes. Continue to monitor glucose levels and maintain a healthy lifestyle.';
+                
+                recommendations.innerHTML = `
+                    <li>Maintain regular physical activity</li>
+                    <li>Follow a balanced diet with controlled carbohydrate intake</li>
+                    <li>Schedule annual check-ups for glucose monitoring</li>
+                `;
+            } else if (riskScore < 0.7) {
+                // Medium risk
+                resultContainer.classList.add('risk-medium');
+                riskValue.textContent = 'Medium Risk';
+                riskValue.style.color = 'var(--warning)';
+                riskProgress.style.width = (riskScore * 100) + '%';
+                riskProgress.style.backgroundColor = 'var(--warning)';
+                riskDescription.textContent = 'This patient shows moderate risk factors for diabetes. Further evaluation and lifestyle modifications are recommended.';
+                
+                recommendations.innerHTML = `
+                    <li>Implement dietary changes to reduce sugar and refined carbohydrates</li>
+                    <li>Increase physical activity to at least 150 minutes per week</li>
+                    <li>Monitor blood glucose levels regularly</li>
+                    <li>Consider consultation with an endocrinologist</li>
+                `;
+            } else {
+                // High risk
+                resultContainer.classList.add('risk-high');
+                riskValue.textContent = 'High Risk';
+                riskValue.style.color = 'var(--danger)';
+                riskProgress.style.width = (riskScore * 100) + '%';
+                riskProgress.style.backgroundColor = 'var(--danger)';
+                riskDescription.textContent = 'This patient shows significant risk factors for diabetes. Immediate medical evaluation and intervention are strongly recommended.';
+                
+                recommendations.innerHTML = `
+                    <li>Schedule immediate consultation with healthcare provider</li>
+                    <li>Begin glucose monitoring program</li>
+                    <li>Implement comprehensive lifestyle changes</li>
+                    <li>Consider pharmacological intervention if indicated</li>
+                `;
+            }
+        }
+        
+        // Initialize with default values
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default BMI value if empty
+            if (!document.getElementById('bmi').value) {
+                document.getElementById('bmi').value = '33.6';
+            }
+        });
+    </script>
+</body>
+</html>

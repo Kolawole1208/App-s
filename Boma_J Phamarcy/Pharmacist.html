@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy Consultation Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2a9d8f;
+            --primary-light: #76c7ba;
+            --primary-dark: #1d7873;
+            --patient-color: #4cc9f0;
+            --pharmacist-color: #4361ee;
+            --system-color: #7209b7;
+            --warning-color: #f94144;
+            --info-color: #3a86ff;
+            --safety-green: #d4edda;
+            --safety-green-dark: #155724;
+            --nav-color: #1a4d5e;
+            --nav-light: #2a7c8c;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1585435557343-3b092031d5ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            position: relative;
+            min-height: 100vh;
+            padding-top: 70px; /* For fixed navbar */
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.94);
+            z-index: -1;
+        }
+
+        /* Professional Navigation Bar */
+        .main-navbar {
+            background: linear-gradient(135deg, var(--nav-color), var(--nav-light));
+            color: white;
+            padding: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            height: 70px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .nav-brand .logo-icon {
+            font-size: 28px;
+            color: var(--primary-light);
+        }
+
+        .nav-brand h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(90deg, #fff, var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 5px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .nav-links li {
+            position: relative;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: var(--primary-color);
+            box-shadow: 0 3px 10px rgba(42, 157, 143, 0.3);
+        }
+
+        .nav-badge {
+            background: var(--warning-color);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 5px;
+            font-weight: bold;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .notification-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--warning-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            cursor: pointer;
+            padding: 5px 15px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .user-profile:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(rgba(42, 157, 143, 0.9), rgba(42, 157, 143, 0.85)), 
+                        url('https://images.unsplash.com/photo-1585435557343-3b092031d5ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80') center/cover;
+            color: white;
+            padding: 25px 0;
+            margin-bottom: 25px;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .container-fluid {
+            padding: 0 20px;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 70vh;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+
+        .chat-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-header .status {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            max-width: 85%;
+        }
+
+        .message-patient {
+            align-self: flex-end;
+            align-items: flex-end;
+        }
+
+        .message-pharmacist {
+            align-self: flex-start;
+            align-items: flex-start;
+        }
+
+        .message-system {
+            align-self: center;
+            align-items: center;
+            max-width: 90%;
+        }
+
+        .message-bubble {
+            padding: 12px 16px;
+            border-radius: 18px;
+            position: relative;
+            word-wrap: break-word;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .patient-bubble {
+            background: var(--patient-color);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .pharmacist-bubble {
+            background: var(--pharmacist-color);
+            color: white;
+            border-bottom-left-radius: 5px;
+        }
+
+        .system-bubble {
+            background: var(--system-color);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .message-sender {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .message-patient .message-sender {
+            color: var(--patient-color);
+        }
+
+        .message-pharmacist .message-sender {
+            color: var(--pharmacist-color);
+        }
+
+        /* Drug Recommendation Card */
+        .drug-recommendation {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--primary-color);
+            max-width: 100%;
+        }
+
+        .drug-recommendation h6 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .drug-category {
+            display: inline-block;
+            background: var(--info-color);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+
+        .drug-details {
+            margin: 10px 0;
+        }
+
+        .drug-details p {
+            margin: 8px 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .drug-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+
+        .drug-alternatives {
+            background: #e7f5ff;
+            border: 1px solid #a5d8ff;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+
+        .safety-note {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #721c24;
+        }
+
+        /* OTC SAFETY RULES - GREEN BACKGROUND */
+        .safety-rules {
+            background: var(--safety-green);
+            border: 2px solid #c3e6cb;
+            border-left: 6px solid var(--safety-green-dark);
+            border-radius: 10px;
+            padding: 18px;
+            margin: 15px 0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            color: var(--safety-green-dark);
+            max-width: 100%;
+        }
+
+        .safety-rules strong {
+            color: var(--safety-green-dark);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid rgba(21, 87, 36, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .safety-rules strong i {
+            color: var(--safety-green-dark);
+        }
+
+        .safety-rules ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .safety-rules li {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            padding-left: 5px;
+        }
+
+        .safety-rules li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Chat Input */
+        .chat-input-container {
+            padding: 15px 20px;
+            background: white;
+            border-top: 1px solid #eee;
+        }
+
+        .input-group {
+            background: #f8f9fa;
+            border-radius: 25px;
+            padding: 5px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .form-control {
+            border: none;
+            background: transparent;
+            border-radius: 25px;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+        }
+
+        .btn-send {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .btn-send:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        /* Quick Symptoms */
+        .symptoms-quick {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .symptom-tag {
+            background: #e9ecef;
+            border: 1px solid #dee2e6;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .symptom-tag:hover {
+            background: var(--primary-light);
+            color: white;
+            border-color: var(--primary-light);
+        }
+
+        /* Sidebar */
+        .pharmacy-sidebar {
+            background: linear-gradient(rgba(42, 157, 143, 0.9), rgba(42, 157, 143, 0.8));
+            color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            height: 100%;
+            box-shadow: var(--box-shadow);
+        }
+
+        .pharmacy-sidebar h5 {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .pharmacy-sidebar ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .pharmacy-sidebar li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .pharmacy-sidebar li:last-child {
+            border-bottom: none;
+        }
+
+        /* Info Cards */
+        .info-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--box-shadow);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        /* Scrollbar Styling */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        /* Professional Information Styling */
+        .info-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--info-color);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin: 5px;
+        }
+
+        .warning-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--warning-color);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin: 5px;
+        }
+
+        .consultation-note {
+            background: #e7f5ff;
+            border-left: 4px solid var(--info-color);
+            padding: 10px 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .main-footer {
+            background: linear-gradient(135deg, var(--nav-color), var(--nav-light));
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 40px;
+            border-top: 3px solid var(--primary-color);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h5 {
+            color: var(--primary-light);
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-section li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-section a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Modal Styling */
+        .modal-header {
+            background: var(--primary-color);
+            color: white;
+            border-bottom: none;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #dee2e6;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: var(--nav-color);
+                flex-direction: column;
+                padding: 10px 0;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links a {
+                border-radius: 0;
+                padding: 15px 20px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .chat-container {
+                height: 60vh;
+            }
+            
+            .message {
+                max-width: 95%;
+            }
+            
+            .drug-recommendation {
+                font-size: 0.85rem;
+                padding: 10px;
+            }
+            
+            .safety-rules {
+                padding: 15px;
+            }
+            
+            .safety-rules li {
+                font-size: 0.9rem;
+            }
+
+            .nav-brand h1 {
+                font-size: 1.5rem;
+            }
+
+            .nav-actions {
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-container {
+                padding: 0 10px;
+            }
+
+            .nav-brand h1 {
+                font-size: 1.3rem;
+            }
+
+            .user-profile span {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Professional Navigation Bar -->
+    <nav class="main-navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="#" class="nav-brand">
+                    <i class="fas fa-hospital-alt logo-icon"></i>
+                    <h1>BomaJ Pharmacy</h1>
+                </a>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#" id="helpBtn"><i class="fas fa-question-circle"></i> Help</a></li>
+                <li><a href="Orders.html" id="ordersBtn"><i class="fas fa-shopping-cart"></i> Orders <span class="nav-badge">3</span></a></li>
+                <li><a href="#" id="prescriptionsBtn"><i class="fas fa-prescription"></i> Prescriptions</a></li>
+                <li><a href="Doctor.html" id="doctorsBtn"><i class="fas fa-user-md"></i> Doctors</a></li>
+                <li><a href="#" id="pharmacyBtn"><i class="fas fa-clinic-medical"></i> Pharmacy</a></li>
+                <li><a href="#" id="settingsBtn"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
+            
+            <div class="nav-actions">
+                <button class="notification-btn" id="notificationBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notificationCount">3</span>
+                </button>
+                
+                <div class="user-profile" id="userProfile">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span>Patient</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="header">
+        <div class="container">
+            <h1><i class="fas fa-comments-medical"></i> Pharmacy Consultation Chat</h1>
+            <p class="lead">Describe your symptoms. Get professional drug recommendations from our pharmacists.</p>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Main Chat Area -->
+            <div class="col-lg-9">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <div>
+                            <h5 class="mb-1"><i class="fas fa-user-md"></i> Chat with Pharmacist</h5>
+                            <div class="status"><i class="fas fa-circle text-success"></i> Online - Dr. Smart Christian</div>
+                        </div>
+                        <div>
+                            <button class="btn btn-light btn-sm" id="endChatBtn">
+                                <i class="fas fa-phone-slash"></i> End Chat
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- Messages will be added here dynamically -->
+                    </div>
+
+                    <div class="chat-input-container">
+                        <!-- Quick Symptoms -->
+                        <div class="symptoms-quick" id="quickSymptoms">
+                            <div class="symptom-tag" data-symptom="headache">Headache</div>
+                            <div class="symptom-tag" data-symptom="fever">Fever</div>
+                            <div class="symptom-tag" data-symptom="cough">Cough</div>
+                            <div class="symptom-tag" data-symptom="sore throat">Sore Throat</div>
+                            <div class="symptom-tag" data-symptom="body pain">Body Pain</div>
+                            <div class="symptom-tag" data-symptom="allergy">Allergy</div>
+                            <div class="symptom-tag" data-symptom="stomach pain">Stomach Pain</div>
+                            <div class="symptom-tag" data-symptom="cold">Cold & Flu</div>
+                        </div>
+
+                        <!-- Chat Input -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="messageInput" 
+                                   placeholder="Describe your symptoms or ask a question...">
+                            <button class="btn btn-send" id="sendMessageBtn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        <small class="text-muted mt-2 d-block">
+                            <i class="fas fa-info-circle"></i> This is for consultation only. Always follow your doctor's advice.
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Drug Information Section -->
+                <div class="info-card">
+                    <h5><i class="fas fa-pills"></i> Medication Information</h5>
+                    <div class="consultation-note">
+                        <i class="fas fa-exclamation-circle"></i> <strong>Important:</strong> This information is for educational purposes only. Always consult with a healthcare professional before taking any medication.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-3">
+                <div class="pharmacy-sidebar">
+                    <h5><i class="fas fa-hospital"></i> BomaJ Pharmacy</h5>
+                    <ul class="mb-4">
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Medical Center Drive, Ilesa</li>
+                        <li><i class="fas fa-phone"></i> +234 706 633 2626</li>
+                        <li><i class="fas fa-clock"></i> Mon-Sat: 8am-10pm</li>
+                        <li><i class="fas fa-user-md"></i> Licensed Pharmacists Online</li>
+                    </ul>
+
+                    <h5><i class="fas fa-user-injured"></i> Patient Info</h5>
+                    <div class="mb-3">
+                        <input type="text" class="form-control form-control-sm mb-2" id="patientName" placeholder="Your Name (Optional)">
+                        <input type="number" class="form-control form-control-sm" id="patientAge" placeholder="Age (Optional)">
+                    </div>
+
+                    <h5 class="mt-4"><i class="fas fa-history"></i> Chat History</h5>
+                    <div id="chatHistory">
+                        <small>No previous consultations</small>
+                    </div>
+
+                    <div class="mt-4">
+                        <button class="btn btn-outline-light btn-sm w-100 mb-2" id="clearChatBtn">
+                            <i class="fas fa-trash"></i> Clear Chat
+                        </button>
+                        <button class="btn btn-light btn-sm w-100" id="saveChatBtn">
+                            <i class="fas fa-save"></i> Save Consultation
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-links">
+                <div class="footer-section">
+                    <h5>Quick Links</h5>
+                    <ul>
+                        <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Services</a></li>
+                        <li><a href="Pharmacist.html"><i class="fas fa-chevron-right"></i> Pharmacists</a></li>
+                        <li><a href="Doctor.html"><i class="fas fa-chevron-right"></i> Doctors</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h5>Services</h5>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Online Consultation</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Prescription Refill</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Medicine Delivery</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Lab Tests</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h5>Support</h5>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Help Center</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h5>Contact Info</h5>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Medical Center Drive, Ilesa</li>
+                        <li><i class="fas fa-phone"></i> +234 706 633 2626</li>
+                        <li><i class="fas fa-envelope"></i> visitabel4real@yahoo.com</li>
+                        <li><i class="fas fa-clock"></i> 24/7 Emergency Support</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 BomaJ Pharmacy International. All rights reserved. | Designed for better healthcare</p>
+                <div class="social-icons mt-3">
+                    <a href="#" class="text-white mx-2"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-white mx-2"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white mx-2"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-white mx-2"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal for Notifications -->
+    <div class="modal fade" id="notificationsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-bell"></i> Notifications</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="notification-item">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h6><i class="fas fa-prescription text-primary"></i> Prescription Ready</h6>
+                                <p class="mb-0">Your prescription for Amoxicillin is ready for pickup</p>
+                                <small class="text-muted">2 hours ago</small>
+                            </div>
+                            <span class="badge bg-primary">New</span>
+                        </div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h6><i class="fas fa-calendar-check text-success"></i> Appointment Reminder</h6>
+                                <p class="mb-0">You have a follow-up appointment tomorrow at 10:00 AM</p>
+                                <small class="text-muted">Yesterday</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6><i class="fas fa-shipping-fast text-warning"></i> Order Shipped</h6>
+                                <p class="mb-0">Your order #ORD-2024-001 has been shipped</p>
+                                <small class="text-muted">2 days ago</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="markAllRead">Mark All as Read</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Help -->
+    <div class="modal fade" id="helpModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-question-circle"></i> Help & Support</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <h6><i class="fas fa-comments-medical text-primary"></i> Chat Help</h6>
+                            <p>How to use the consultation chat:</p>
+                            <ul>
+                                <li>Describe your symptoms in detail</li>
+                                <li>Click on symptom tags for quick input</li>
+                                <li>Provide your medical history if asked</li>
+                                <li>Follow pharmacist recommendations</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <h6><i class="fas fa-phone-alt text-success"></i> Contact Support</h6>
+                            <p><strong>24/7 Emergency:</strong> +234 706 633 2626</p>
+                            <p><strong>Email:</strong> visitabel4real@yahoo.com</p>
+                            <p><strong>Live Chat:</strong> Available 8AM-10PM</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <h6><i class="fas fa-exclamation-triangle text-warning"></i> Emergency Information</h6>
+                            <div class="alert alert-warning">
+                                <strong>For Medical Emergencies:</strong> Call 911 or go to the nearest emergency room immediately.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // DOM Elements
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendMessageBtn = document.getElementById('sendMessageBtn');
+        const quickSymptoms = document.getElementById('quickSymptoms');
+        const patientName = document.getElementById('patientName');
+        const patientAge = document.getElementById('patientAge');
+        const clearChatBtn = document.getElementById('clearChatBtn');
+        const saveChatBtn = document.getElementById('saveChatBtn');
+        const endChatBtn = document.getElementById('endChatBtn');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        const notificationBtn = document.getElementById('notificationBtn');
+        const helpBtn = document.getElementById('helpBtn');
+        const ordersBtn = document.getElementById('ordersBtn');
+        const prescriptionsBtn = document.getElementById('prescriptionsBtn');
+        const doctorsBtn = document.getElementById('doctorsBtn');
+        const pharmacyBtn = document.getElementById('pharmacyBtn');
+        const settingsBtn = document.getElementById('settingsBtn');
+        const userProfile = document.getElementById('userProfile');
+        const notificationCount = document.getElementById('notificationCount');
+        const markAllReadBtn = document.getElementById('markAllRead');
+
+        // Bootstrap Modals
+        const notificationsModal = new bootstrap.Modal(document.getElementById('notificationsModal'));
+        const helpModal = new bootstrap.Modal(document.getElementById('helpModal'));
+
+        // Comprehensive Drug Database with detailed information
+        const drugDatabase = [
+            {
+                id: 1,
+                name: 'Acetaminophen (Paracetamol)',
+                category: 'Analgesic/Antipyretic',
+                symptoms: ['headache', 'fever', 'body pain', 'sore throat'],
+                description: 'Common OTC medication for pain and fever relief.',
+                brands: ['Tylenol', 'Panadol', 'Calpol'],
+                keyPoints: [
+                    'Effective for mild to moderate pain and fever',
+                    'Generally well-tolerated with few side effects',
+                    'Available in tablet, capsule, liquid, and suppository forms'
+                ],
+                safetyNotes: [
+                    'Do not exceed 4000mg per day in adults',
+                    'Avoid if you have severe liver disease',
+                    'Check other medications for hidden acetaminophen content'
+                ],
+                dosing: 'Adults: 325-650mg every 4-6 hours as needed (max 4000mg/24h)',
+                whenToSeeDoctor: 'If fever persists beyond 3 days or pain worsens'
+            },
+            {
+                id: 2,
+                name: 'Ibuprofen',
+                category: 'NSAID (Non-Steroidal Anti-Inflammatory)',
+                symptoms: ['headache', 'fever', 'body pain', 'inflammation'],
+                description: 'Anti-inflammatory medication for pain, fever, and inflammation.',
+                brands: ['Advil', 'Motrin', 'Nurofen'],
+                keyPoints: [
+                    'Reduces inflammation in addition to pain and fever',
+                    'Onset of action: 30-60 minutes',
+                    'Duration: 6-8 hours'
+                ],
+                safetyNotes: [
+                    'Take with food or milk to prevent stomach upset',
+                    'Avoid if you have kidney problems, stomach ulcers, or are on blood thinners',
+                    'Not recommended during pregnancy (especially third trimester)'
+                ],
+                dosing: 'Adults: 200-400mg every 4-6 hours as needed (max 1200mg/24h)',
+                whenToSeeDoctor: 'If stomach pain, black stools, or swelling occurs'
+            },
+            {
+                id: 3,
+                name: 'Cetirizine',
+                category: 'Antihistamine (Second Generation)',
+                symptoms: ['allergy', 'itching', 'hives', 'runny nose'],
+                description: 'Non-drowsy antihistamine for allergy symptoms.',
+                brands: ['Zyrtec', 'Reactine'],
+                keyPoints: [
+                    'Minimal sedation compared to first-generation antihistamines',
+                    'Suitable for daytime use',
+                    'Works within 1 hour, lasts 24 hours'
+                ],
+                safetyNotes: [
+                    'Generally well-tolerated',
+                    'May cause mild drowsiness in some individuals',
+                    'Safe for most adults and children over 6 years'
+                ],
+                dosing: 'Adults: 10mg once daily',
+                whenToSeeDoctor: 'If difficulty breathing or swelling of face/lips occurs'
+            },
+            {
+                id: 4,
+                name: 'Diphenhydramine',
+                category: 'Antihistamine (First Generation)',
+                symptoms: ['allergy', 'itching', 'insomnia', 'motion sickness'],
+                description: 'Sedating antihistamine with multiple uses.',
+                brands: ['Benadryl', 'Sominex'],
+                keyPoints: [
+                    'Causes significant drowsiness - avoid driving or operating machinery',
+                    'Also used as a sleep aid',
+                    'Anticholinergic effects: dry mouth, blurred vision'
+                ],
+                safetyNotes: [
+                    'Not recommended for elderly patients due to confusion risk',
+                    'Avoid alcohol and other CNS depressants',
+                    'Not for long-term use'
+                ],
+                dosing: 'Adults: 25-50mg every 4-6 hours as needed',
+                whenToSeeDoctor: 'If irregular heartbeat or difficulty urinating occurs'
+            },
+            {
+                id: 5,
+                name: 'Guaifenesin',
+                category: 'Expectorant',
+                symptoms: ['cough', 'chest congestion', 'thick mucus'],
+                description: 'Thins and loosens mucus in the airways.',
+                brands: ['Mucinex', 'Robitussin Chest Congestion'],
+                keyPoints: [
+                    'Helps make coughs more productive',
+                    'Drink plenty of water to enhance effectiveness',
+                    'Available in immediate and extended-release formulations'
+                ],
+                safetyNotes: [
+                    'Generally safe with few side effects',
+                    'May cause nausea or vomiting in high doses',
+                    'Not for dry, non-productive coughs'
+                ],
+                dosing: 'Adults: 200-400mg every 4 hours (max 2400mg/24h)',
+                whenToSeeDoctor: 'If cough lasts more than 7 days or is accompanied by fever'
+            },
+            {
+                id: 6,
+                name: 'Dextromethorphan',
+                category: 'Cough Suppressant',
+                symptoms: ['cough', 'dry cough'],
+                description: 'Suppresses the cough reflex in the brain.',
+                brands: ['Robitussin DM', 'Delsym'],
+                keyPoints: [
+                    'For dry, non-productive coughs',
+                    'Different formulations: immediate and extended release',
+                    'Onset: 15-30 minutes; Duration: 3-6 hours'
+                ],
+                safetyNotes: [
+                    'Do not use with MAO inhibitors',
+                    'Avoid in patients with chronic bronchitis or emphysema',
+                    'May cause dizziness or drowsiness'
+                ],
+                dosing: 'Adults: 10-20mg every 4 hours or 30mg every 6-8 hours',
+                whenToSeeDoctor: 'If cough persists beyond 7 days or produces colored mucus'
+            },
+            {
+                id: 7,
+                name: 'Loperamide',
+                category: 'Anti-diarrheal',
+                symptoms: ['diarrhea', 'stomach pain'],
+                description: 'Slows intestinal movement to control diarrhea.',
+                brands: ['Imodium', 'Diamode'],
+                keyPoints: [
+                    'Not for infectious diarrhea with fever',
+                    'Helps control symptoms but does not treat underlying cause',
+                    'Should not be used for more than 2 days without medical advice'
+                ],
+                safetyNotes: [
+                    'Do not use if you have bloody stools or high fever',
+                    'May cause constipation',
+                    'Avoid in children under 6 years'
+                ],
+                dosing: 'Adults: 4mg initially, then 2mg after each loose stool (max 16mg/24h)',
+                whenToSeeDoctor: 'If diarrhea persists beyond 48 hours or with fever >101°F'
+            },
+            {
+                id: 8,
+                name: 'Omeprazole',
+                category: 'Proton Pump Inhibitor (PPI)',
+                symptoms: ['heartburn', 'acid reflux', 'stomach pain'],
+                description: 'Reduces stomach acid production.',
+                brands: ['Prilosec', 'Losec'],
+                keyPoints: [
+                    'Takes 1-4 days for full effect',
+                    'For frequent heartburn (2+ times per week)',
+                    'Should be taken before meals'
+                ],
+                safetyNotes: [
+                    'Not for immediate relief of heartburn',
+                    'Long-term use may affect nutrient absorption',
+                    'Consult doctor before use if pregnant'
+                ],
+                dosing: 'Adults: 20mg once daily for up to 14 days',
+                whenToSeeDoctor: 'If symptoms persist beyond 14 days or worsen'
+            }
+        ];
+
+        // Chat Messages Array
+        let messages = [];
+
+        // Initialize Chat with Welcome Message
+        function initializeChat() {
+            addMessage('system', 'Welcome to BomaJ Pharmacy Consultation. Please describe your symptoms to get professional medication recommendations.');
+            addMessage('pharmacist', 'Hello! I\'m Dr. Smart Christian, your consulting pharmacist. How can I help you today?');
+            
+            // Add educational message
+            setTimeout(() => {
+                addMessage('system', 'Tip: Click on symptoms above or describe your symptoms in detail for personalized recommendations.');
+            }, 1000);
+        }
+
+        // Add Message to Chat
+        function addMessage(sender, content, drugInfo = null) {
+            const message = {
+                id: Date.now(),
+                sender,
+                content,
+                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                drugInfo
+            };
+            
+            messages.push(message);
+            renderMessage(message);
+            
+            // Auto-scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // If patient sends message, simulate pharmacist response
+            if (sender === 'patient') {
+                setTimeout(() => {
+                    generatePharmacistResponse(content);
+                }, 1500);
+            }
+        }
+
+        // Render Message in Chat
+        function renderMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message message-${message.sender}`;
+            
+            let bubbleClass = '';
+            if (message.sender === 'patient') bubbleClass = 'patient-bubble';
+            else if (message.sender === 'pharmacist') bubbleClass = 'pharmacist-bubble';
+            else bubbleClass = 'system-bubble';
+            
+            let senderName = '';
+            if (message.sender === 'patient') senderName = patientName.value || 'You';
+            else if (message.sender === 'pharmacist') senderName = 'Dr. Smart Christian';
+            else senderName = 'System';
+            
+            // Format the message content
+            let contentHTML = message.content;
+            
+            if (message.drugInfo) {
+                contentHTML += createDrugRecommendationHTML(message.drugInfo);
+            }
+            
+            messageDiv.innerHTML = `
+                <div class="message-sender">${senderName}</div>
+                <div class="message-bubble ${bubbleClass}">
+                    ${contentHTML}
+                </div>
+                <div class="message-time">${message.timestamp}</div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+        }
+
+        // Create Drug Recommendation HTML
+        function createDrugRecommendationHTML(drug) {
+            return `
+                <div class="drug-recommendation">
+                    <h6><i class="fas fa-capsules"></i> ${drug.name}</h6>
+                    <div class="drug-category">${drug.category}</div>
+                    
+                    <div class="drug-details">
+                        <p><strong>Description:</strong> ${drug.description}</p>
+                        
+                        <p><strong>Common Brands:</strong> ${drug.brands.join(', ')}</p>
+                        
+                        <p><strong>Key Points:</strong></p>
+                        <ul>
+                            ${drug.keyPoints.map(point => `<li>${point}</li>`).join('')}
+                        </ul>
+                        
+                        <p><strong>Safety Notes:</strong></p>
+                        <ul>
+                            ${drug.safetyNotes.map(note => `<li>${note}</li>`).join('')}
+                        </ul>
+                        
+                        <p><strong>Typical Dosing:</strong> ${drug.dosing}</p>
+                        
+                        <div class="safety-note">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>When to See a Doctor:</strong> ${drug.whenToSeeDoctor}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Create Safety Rules HTML
+        function createSafetyRulesHTML() {
+            return `
+                <div class="safety-rules">
+                    <strong><i class="fas fa-shield-alt"></i> OTC Medication Safety Rules</strong>
+                    <ol>
+                        <li><strong>Read labels carefully</strong> - check active ingredients and warnings</li>
+                        <li><strong>Avoid "double-dosing"</strong> - don't take multiple medications with the same active ingredient</li>
+                        <li><strong>Follow age and dosage instructions</strong> exactly</li>
+                        <li><strong>Be aware of your medical conditions</strong> and medication interactions</li>
+                        <li><strong>See a doctor</strong> if symptoms are severe, persistent, or worsening</li>
+                    </ol>
+                </div>
+            `;
+        }
+
+        // Generate Pharmacist Response
+        function generatePharmacistResponse(patientMessage) {
+            const lowerMessage = patientMessage.toLowerCase();
+            let recommendedDrugsList = [];
+            
+            // Analyze symptoms and recommend drugs
+            drugDatabase.forEach(drug => {
+                drug.symptoms.forEach(symptom => {
+                    if (lowerMessage.includes(symptom)) {
+                        recommendedDrugsList.push(drug);
+                    }
+                });
+            });
+            
+            // Remove duplicates
+            recommendedDrugsList = [...new Set(recommendedDrugsList)];
+            
+            let response = '';
+            
+            if (recommendedDrugsList.length > 0) {
+                // If we have specific recommendations
+                response = `Based on your symptoms, I recommend considering the following OTC medications. Please read all safety information carefully:`;
+                
+                // Add OTC Safety Rules with green background
+                response += createSafetyRulesHTML();
+                
+                // Add first drug recommendation as detailed
+                const primaryDrug = recommendedDrugsList[0];
+                addMessage('pharmacist', response, primaryDrug);
+                
+                // Add additional recommendations as simple mentions
+                if (recommendedDrugsList.length > 1) {
+                    setTimeout(() => {
+                        let altResponse = `<strong>Alternative Options:</strong><br><br>`;
+                        recommendedDrugsList.slice(1).forEach(drug => {
+                            altResponse += `<strong>${drug.name}</strong> (${drug.category}): ${drug.description}<br>`;
+                        });
+                        altResponse += `<br><div class="safety-note"><i class="fas fa-exclamation-circle"></i> Remember: This is general information. Always consult with a healthcare provider for personal medical advice.</div>`;
+                        addMessage('pharmacist', altResponse);
+                    }, 1000);
+                }
+            } else {
+                // General guidance response
+                response = `Thank you for describing your symptoms. To help me provide better recommendations, could you please provide more details about:<br><br>`;
+                response += `1. <strong>Duration:</strong> How long have you had these symptoms?<br>`;
+                response += `2. <strong>Severity:</strong> On a scale of 1-10, how would you rate your discomfort?<br>`;
+                response += `3. <strong>Additional Symptoms:</strong> Any other symptoms you're experiencing?<br>`;
+                response += `4. <strong>Medical History:</strong> Any existing conditions or allergies?<br><br>`;
+                response += `This information helps ensure any recommendations are appropriate for your specific situation.`;
+                
+                addMessage('pharmacist', response);
+            }
+        }
+
+        // Ask about specific drug
+        function askAboutDrug(drugName) {
+            const drug = drugDatabase.find(d => d.name.includes(drugName));
+            if (drug) {
+                addMessage('patient', `Tell me more about ${drug.name}`);
+            } else {
+                addMessage('patient', `I'd like information about medications for ${drugName}`);
+            }
+        }
+
+        // Navigation Functions
+        function showNotification(message, type = 'info') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                z-index: 9999;
+                min-width: 300px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            `;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                if (alertDiv.parentElement) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+
+        // Event Listeners for Navigation
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        notificationBtn.addEventListener('click', () => {
+            notificationsModal.show();
+        });
+
+        helpBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            navLinks.classList.remove('active');
+            helpModal.show();
+        });
+
+        ordersBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            navLinks.classList.remove('active');
+            showNotification('Please go to Orders page to process your order!', 'info');
+        });
+
+        prescriptionsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            navLinks.classList.remove('active');
+            addMessage('patient', 'I need to refill my prescription.');
+        });
+
+        doctorsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            navLinks.classList.remove('active');
+            addMessage('patient', 'I would like to speak with a doctor.');
+        });
+
+        pharmacyBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            navLinks.classList.remove('active');
+            showNotification('Pharmacy services page loaded.', 'success');
+        });
+
+        settingsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            navLinks.classList.remove('active');
+            showNotification('Settings page is under development.', 'info');
+        });
+
+        userProfile.addEventListener('click', () => {
+            showNotification('Patient profile options would appear here.', 'info');
+        });
+
+        if (markAllReadBtn) {
+            markAllReadBtn.addEventListener('click', () => {
+                notificationCount.textContent = '0';
+                notificationCount.style.display = 'none';
+                notificationsModal.hide();
+                showNotification('All notifications marked as read.', 'success');
+            });
+        }
+
+        // Chat Event Listeners
+        sendMessageBtn.addEventListener('click', function() {
+            const message = messageInput.value.trim();
+            if (message) {
+                addMessage('patient', message);
+                messageInput.value = '';
+                messageInput.focus();
+            }
+        });
+
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessageBtn.click();
+            }
+        });
+
+        // Quick Symptoms Click
+        quickSymptoms.addEventListener('click', function(e) {
+            if (e.target.classList.contains('symptom-tag')) {
+                const symptom = e.target.getAttribute('data-symptom');
+                addMessage('patient', `I have ${symptom}`);
+            }kii50
+        });
+
+        // Clear Chat
+        clearChatBtn.addEventListener('click', function() {
+            if (confirm('Clear all chat messages?')) {
+                chatMessages.innerHTML = '';
+                messages = [];
+                initializeChat();
+            }
+        });
+
+        // Save Chat
+        saveChatBtn.addEventListener('click', function() {
+            const consultation = {
+                date: new Date().toLocaleString(),
+                patient: patientName.value || 'Anonymous',
+                age: patientAge.value || 'Not specified',
+                messages: messages
+            };
+            
+            localStorage.setItem('lastConsultation', JSON.stringify(consultation));
+            addMessage('system', 'Consultation saved successfully! You can access this information in your chat history.');
+        });
+
+        // End Chat
+        endChatBtn.addEventListener('click', function() {
+            addMessage('system', '<strong>Consultation Ended</strong><br>Thank you for consulting with BomaJ Pharmacy. Remember:<br><br>1. Always follow dosage instructions carefully<br>2. Consult a doctor if symptoms persist or worsen<br>3. Keep medications out of reach of children<br><br>Get well soon!');
+            this.disabled = true;
+            messageInput.disabled = true;
+            sendMessageBtn.disabled = true;
+            
+            // Add safety reminders
+            setTimeout(() => {
+                addMessage('system', '<strong>Safety Reminder:</strong> If you experience difficulty breathing, chest pain, severe allergic reactions, or any other emergency symptoms, seek immediate medical attention or call emergency services.');
+            }, 2000);
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.nav-container') && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // Initialize
+        initializeChat();
+    </script>
+</body>
+</html>

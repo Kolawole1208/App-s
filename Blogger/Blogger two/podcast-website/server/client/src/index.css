@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Basic layout tweaks */
+body {
+  @apply bg-gray-50 text-gray-900;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial;
+  margin: 0;
+  padding-top: 1.25rem;
+}
+
+/* Container override to match layout */
+.app-container {
+  @apply max-w-5xl mx-auto px-4;
+}
+
+/* Podcast card */
+.podcast-card {
+  @apply bg-white rounded-lg shadow p-4 mb-4;
+}
+
+/* Navbar helpers */
+.site-navbar {
+  @apply bg-gray-900 text-white;
+}
+.site-navbar .brand {
+  @apply font-bold text-lg;
+}
+
+/* Simple utility classes for pages */
+.hidden { display: none !important; }
+.mt-6 { margin-top: 1.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+
+/* Fallback styles if Tailwind isn't built yet */
+@layer base {
+  html, body { height: 100%; }
+  .podcast-card { background: #fff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 1rem; margin-bottom: 1rem; }
+}
+
+/* Added content */
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary-500 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary-600;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 
+           transition duration-200 font-medium focus:outline-none focus:ring-2 
+           focus:ring-primary-500 focus:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-primary-600 border border-primary-600 px-4 py-2 
+           rounded-lg hover:bg-primary-50 transition duration-200 font-medium 
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow 
+           duration-200 overflow-hidden;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none 
+           focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+  }
+
+  .podcast-card {
+    @apply card transform hover:-translate-y-1 transition-transform duration-200;
+  }
+
+  .audio-player {
+    @apply w-full h-12 bg-gray-100 rounded-lg overflow-hidden;
+  }
+}
